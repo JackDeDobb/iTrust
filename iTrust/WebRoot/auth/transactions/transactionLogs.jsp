@@ -26,9 +26,46 @@ No transactions to display.
 <%
 } else {
 %>
+<form method="post" action="transactionLogs.jsp">
+	<label for="select-role">Role: </label>
+	<select name="select-role" id="select-role">
+		<option value="all">*</option>
+		<option value="patient">Patient</option>
+	  	<option value="er">ER</option>
+	  	<option value="hcp">HCP</option>
+	  	<option value="uap">UAP</option>
+	  	<option value="lt">LT</option>
+	  	<option value="admin">Admin</option>
+	  	<option value="pha">PHA</option>
+	  	<option value="tester">Tester</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<label for="select-tx-type">Transaction Type:</label> 
+	<select name="select-tx-type" id="select-tx-type">
+		<option value="all">*</option>
+		<option value="patient">Patient</option>
+	  	<option value="er">ER</option>
+	  	<option value="hcp">HCP</option>
+	  	<option value="uap">UAP</option>
+	  	<option value="lt">LT</option>
+	  	<option value="admin">Admin</option>
+	  	<option value="pha">PHA</option>
+	  	<option value="tester">Tester</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<label for="start-date">Start Date: </label>
+	<input id="start-date" type="date" value="*">
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<label for="end-date">End Date: </label>
+	<input id="end-date" type="date" value="*">
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="submit" value="Filter" />
+</form>
+<br/>
+
 <table class="fTable" align="center">
-    <tr>
-        <th>ID></th>
+	<tr>
+        <th>ID</th>
         <th>Time Logged</th>
         <th>Type</th>
         <th>Code</th>
