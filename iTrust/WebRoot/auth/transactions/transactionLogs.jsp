@@ -17,15 +17,6 @@
 
 <%@include file="/header.jsp" %>
 
-<%
-    List<TransactionBean> list = DAOFactory.getProductionInstance().getTransactionDAO().getAllTransactions();
-
-    if(list.size() == 0){
-%>
-No transactions to display.
-<%
-} else {
-%>
 <form method="post" action="transactionLogs.jsp">
 	<label for="select-role">Role: </label>
 	<select name="select-role" id="select-role">
@@ -80,6 +71,15 @@ No transactions to display.
 </form>
 <br/>
 
+<%
+    List<TransactionBean> list = DAOFactory.getProductionInstance().getTransactionDAO().getAllTransactions();
+
+    if(true){
+%>
+<b>No transactions to display.</b>
+<%
+} else {
+%>
 <table class="fTable" align="center">
 	<tr>
         <th>ID</th>
