@@ -36,7 +36,7 @@ public class SendRemindersAction {
             List<ApptBean> list = adao.getApptForReminders(n);
             for (ApptBean item: list){
                 MessageBean email = new MessageBean();
-                email.setFrom(9000000001L);
+                email.setFrom(9000000009L);
                 email.setTo(item.getPatient());
                 Date date = new Date(item.getDate().getTime());
                 Date now = new Date();
