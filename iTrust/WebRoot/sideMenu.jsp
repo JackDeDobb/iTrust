@@ -52,6 +52,9 @@ if (userRole.equals("hcp")) {
 	<a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a><br />
 	<a href="/iTrust/auth/hcp/viewPrescriptionRenewalNeeds.jsp">Potential Prescription-Renewals</a><br />
 </div>
+<div class = "menu_category">
+	<span>Biosurveillance</span>
+</div>
 <%
 }
 %>
