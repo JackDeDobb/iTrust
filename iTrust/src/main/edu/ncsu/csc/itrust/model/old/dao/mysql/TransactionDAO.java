@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.logger.TransactionLogger;
@@ -14,6 +16,7 @@ import edu.ncsu.csc.itrust.model.old.beans.TransactionBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.OperationalProfileLoader;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.TransactionBeanLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
+import edu.ncsu.csc.itrust.model.old.enums.Role;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 
 /**
@@ -45,6 +48,116 @@ public class TransactionDAO {
 	public TransactionDAO(DAOFactory factory) {
 		this.factory = factory;
 	}
+
+	public static class DateRange {
+	    String startDate;
+	    String endDate;
+
+        public DateRange(String startDate, String endDate) {
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
+
+        public Optional<DateRange> getOptional() {
+            System.out.println("Start Date: " + startDate);
+            System.out.println("End Date: " + endDate);;
+            if ((this.startDate == null || this.startDate.equals("*"))
+                    || (this.endDate == null || this.endDate.equals("*"))) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(this);
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+    }
+
+    private interface ParamSetter {
+	    void set(PreparedStatement ps) throws SQLException;
+    }
+
+	public List<TransactionBean> getTransactionsWithFilter(Optional<Role> primaryRole,
+                                                           Optional<Role> secondaryRole,
+                                                           Optional<TransactionType> transactionType, Optional<DateRange> dateRange) throws DBException {
+	    List<ParamSetter> setters = new ArrayList<>();
+	    List<String> clauses = new ArrayList<>();
+
+	    StringBuilder sqlForm = new StringBuilder();
+	    sqlForm.append("SELECT DISTINCT transactionID, loggedInMID, secondaryMID, transactionCode, timeLogged, " +
+                "addedInfo FROM " +
+                "transactionlog as tl, users as users ");
+
+	    int index = 1;
+	    if (primaryRole.isPresent()) {
+	        clauses.add("users.MID = tl.loggedInMID AND users.role = ?");
+	        int roleInd = index;
+	        setters.add((ps) -> ps.setString(roleInd, primaryRole.get().getUserRolesString()));
+	        index++;
+        }
+
+        if (secondaryRole.isPresent()) {
+            clauses.add("users.MID = tl.secondaryMID and users.role = ?");
+            int secUserInd = index;
+            setters.add((ps) -> ps.setString(secUserInd, secondaryRole.get().getUserRolesString()));
+            index++;
+        }
+
+        if (dateRange.isPresent()) {
+            clauses.add("tl.timeLogged > ? AND tl.timeLogged < ?");
+            int dateRangeBaseInd = index;
+            setters.add((ps) -> {
+                ps.setString(dateRangeBaseInd, dateRange.get().getStartDate());
+                ps.setString(dateRangeBaseInd + 1, dateRange.get().getEndDate());
+            });
+            index += 2;
+        }
+
+        if (transactionType.isPresent()) {
+            clauses.add("transactionCode = ?");
+            int transTypeInd = index;
+            setters.add((ps) -> ps.setInt(transTypeInd, transactionType.get().getCode()));
+            index++;
+        }
+
+        if (!clauses.isEmpty())
+            sqlForm.append("WHERE ");
+
+        sqlForm.append(String.join(" AND ", clauses));
+        sqlForm.append(" ORDER BY timeLogged DESC");
+
+        String sqlFinalForm = sqlForm.toString();
+        System.out.println("ASSEMBLED QUERY: " + sqlFinalForm);
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+	    try {
+            conn = factory.getConnection();
+            ps = conn.prepareStatement(sqlFinalForm);
+            for (ParamSetter setter : setters) {
+                setter.set(ps);
+            }
+            ResultSet rs = ps.executeQuery();
+            List<TransactionBean> loadList = loader.loadList(rs);
+            return loadList;
+        } catch (SQLException e) {
+	        throw new DBException(e);
+        } finally {
+	        try {
+	            if (ps != null)
+	                ps.close();
+	            if (conn != null)
+	                conn.close();
+            } catch (SQLException e) {
+	            // Switch to logger.
+                System.err.printf("Failed to close connection resources.");
+            }
+        }
+    }
 
 	/**
 	 * Returns the whole transaction log

@@ -5,6 +5,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.TransactionBean"%>
 <%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="java.util.List"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.enums.Role"%>
+<%@page import="java.util.Optional"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.TransactionDAO.DateRange"%>
 
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld" %>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
@@ -16,7 +19,6 @@
 %>
 
 <%@include file="/header.jsp" %>
-
 <form method="post" action="transactionLogs.jsp">
 	<label for="select-role">Role: </label>
 	<select name="select-role" id="select-role">
@@ -58,10 +60,10 @@
 	</select>
 	&nbsp;&nbsp;
 	<label for="start-date">Start Date: </label>
-	<input id="start-date" type="date" value="*">
+	<input id="start-date" name="start-date" type="date" value="*">
 	&nbsp;&nbsp;
 	<label for="end-date">End Date: </label>
-	<input id="end-date" type="date" value="*">
+	<input id="end-date" name="end-date" type="date" value="*">
 	&nbsp;&nbsp;
 	<input type="submit" value="Filter" />
 </form>
@@ -72,9 +74,44 @@
 <br/>
 
 <%
-    List<TransactionBean> list = DAOFactory.getProductionInstance().getTransactionDAO().getAllTransactions();
+    // Parse role input string.
+    String roleString = request.getParameter("select-role");
+    Optional<String> roleStringOpt = Optional.ofNullable(roleString);
+    Optional<Role> role;
+    if ((roleStringOpt.isPresent() && roleStringOpt.get().equals("all")) || !roleStringOpt.isPresent())
+        role = Optional.empty();
+    else
+        role = Optional.ofNullable(Role.parse(roleString));
 
-    if(true){
+    // Parse second role input string.
+    String secondRoleString = request.getParameter("select-second-role");
+    Optional<String> secondRoleStringOpt = Optional.ofNullable(secondRoleString);
+    Optional<Role> secondRole;
+    if ((secondRoleStringOpt.isPresent() && secondRoleStringOpt.get().equals("all")) ||
+            !secondRoleStringOpt.isPresent())
+        secondRole = Optional.empty();
+    else
+        secondRole = Optional.ofNullable(Role.parse(secondRoleString));
+
+    // Parse transaction type input string.
+    String transactionTypeString = request.getParameter("select-tx-type");
+    Optional<TransactionType> transactionType;
+    try {
+        transactionType = Optional.ofNullable(TransactionType.parse(Integer.parseInt(transactionTypeString)));
+    } catch (NumberFormatException e) {
+        transactionType = Optional.empty();
+    }
+
+    // Parse date range strings.
+    String startDate = request.getParameter("start-date");
+    String endDate = request.getParameter("end-date");
+    Optional<DateRange> dateRange = new DateRange(startDate, endDate).getOptional();
+
+    List<TransactionBean> list = DAOFactory.getProductionInstance().getTransactionDAO().getTransactionsWithFilter(
+            role, secondRole, transactionType, dateRange
+    );
+
+    if(list.size() == 0){
 %>
 <b>No transactions to display.</b>
 <%

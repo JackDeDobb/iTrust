@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import edu.ncsu.csc.itrust.model.old.dao.mysql.TransactionDAO.DateRange;
 
 import edu.ncsu.csc.itrust.model.old.beans.TransactionBean;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
