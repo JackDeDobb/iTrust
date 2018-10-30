@@ -43,14 +43,14 @@ No transactions to display.
 	<label for="select-tx-type">Transaction Type:</label> 
 	<select name="select-tx-type" id="select-tx-type">
 		<option value="all">*</option>
-		<option value="patient">Patient</option>
-	  	<option value="er">ER</option>
-	  	<option value="hcp">HCP</option>
-	  	<option value="uap">UAP</option>
-	  	<option value="lt">LT</option>
-	  	<option value="admin">Admin</option>
-	  	<option value="pha">PHA</option>
-	  	<option value="tester">Tester</option>
+		<%
+			for (TransactionType type : TransactionType.values()) {
+				int code = type.getCode();
+		%>
+			<option value="<%= code %>"><%= code %></option>
+		<%
+			}
+		%>
 	</select>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<label for="start-date">Start Date: </label>
@@ -60,6 +60,9 @@ No transactions to display.
 	<input id="end-date" type="date" value="*">
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<input type="submit" value="Filter" />
+</form>
+<form>
+	<input type="submit" value="Summarize" />
 </form>
 <br/>
 
