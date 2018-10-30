@@ -1,13 +1,15 @@
 <%@page import="com.mysql.jdbc.StringUtils"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.TransactionType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.TransactionBean"%>
 <%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="java.util.List"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Role"%>
 <%@page import="java.util.Optional"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.TransactionDAO.DateRange"%>
+<%@ page import="com.google.gson.Gson"%>
+<%@ page import="com.google.gson.JsonObject"%>
 
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld" %>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
@@ -19,6 +21,52 @@
 %>
 
 <%@include file="/header.jsp" %>
+
+<%
+Gson gsonObj = new Gson();
+Map<Object,Object> map = null;
+List<Map<Object,Object>> points = new ArrayList<Map<Object,Object>>();
+
+for(Role role: Role.values()){
+	map = new HashMap<Object,Object>();
+	map.put("label",role.getUserRolesString());
+	Optional<Role> optRole = Optional.ofNullable(role);
+	List<TransactionBean> transPerRole = DAOFactory.getProductionInstance().getTransactionDAO().getTransactionsWithFilter(
+			optRole, Optional.empty(), Optional.empty(), Optional.empty()
+    );
+	System.out.println(transPerRole.size());
+	map.put("y", transPerRole.size());
+	points.add(map);
+}
+String dataPoints = gsonObj.toJson(points);
+System.out.println(dataPoints);
+
+%>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+	var renderGraph = function() { 
+	 
+		var chart = new CanvasJS.Chart("chartContainer", {
+			animationEnabled: true,
+			exportEnabled: true,
+			title: {
+				text: "Transactions per role"
+			},
+			data: [{
+				type: "column", //change type to bar, line, area, pie, etc
+				//indexLabel: "{y}", //Shows y value on all Data Points
+				indexLabelFontColor: "#5A5757",
+				indexLabelPlacement: "outside",
+				dataPoints: <%out.print(dataPoints);%>
+			}]
+		});
+		chart.render();
+	 
+	}
+</script>
+
+
 <form method="post" action="transactionLogs.jsp">
 	<label for="select-role">Role: </label>
 	<select name="select-role" id="select-role">
@@ -68,9 +116,7 @@
 	<input type="submit" value="Filter" />
 </form>
 <br/>
-<form>
-	<input type="submit" value="Summarize" />
-</form>
+<input type="submit" onclick="renderGraph()" value="Summarize" />
 <br/>
 
 <%
@@ -148,4 +194,5 @@
 <%
     }
 %>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
 <%@include file="/footer.jsp" %>
