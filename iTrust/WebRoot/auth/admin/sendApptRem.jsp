@@ -1,43 +1,35 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Yucheng Wang
-  Date: 10/30/2018
-  Time: 6:47 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
-<%@page errorPage="/auth/exceptionHandler.jsp" %>
-<%@page import="java.net.URLEncoder" %>
-<%@page import="java.util.List"%>
+<%@page import="edu.ncsu.csc.itrust.action.base.SendRemindersAction"%>
+<%@page import="java.lang.NumberFormatException"%>
+<%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@include file="/global.jsp" %>
 <%
     pageTitle = "iTrust - Send Appointment Reminders";
 %>
-
 <%@include file="/header.jsp" %>
 
 <%
-    if(request.getParameter("days") == null) {
+    if(request.getParameter("days") != null) {
         String para = request.getParameter("days");
+        SendRemindersAction action = new SendRemindersAction(prodDAO);
         try {
             int days = Integer.parseInt(para);
             if(days < 0) {
 %> <h1 align="center">Please input a positive number</h1> <%
-            } else {
-                DAOFactory.getProductionInstance().getFakeEmailDAO()
-            }
-        } catch (NumberFormatException e) {
+} else {
+    action.sendReminders(days);
+%><h1 align="center">Reminders Sent</h1><%
+    }
+} catch (NumberFormatException e) {
 %> <h1 align="center">Please input a number</h1> <%
         }
     }
-
 %>
-
 <div align="center">
     <br />
 
-    <form name="mainForm" action="sendApptRem.jsp.jsp" id="mainForm" method="post">
+    <form name="mainForm" action="sendApptRem.jsp" id="mainForm" method="post">
         <table class="fTable" align="center">
             <tr>
                 <td colspan="3">Send Appointment Reminders By </td>
@@ -51,6 +43,4 @@
     </form>
 </div>
 <br />
-
-
 <%@include file="/footer.jsp" %>

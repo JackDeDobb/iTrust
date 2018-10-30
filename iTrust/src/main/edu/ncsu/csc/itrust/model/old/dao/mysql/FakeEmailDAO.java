@@ -1,9 +1,9 @@
 package edu.ncsu.csc.itrust.model.old.dao.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.exception.DBException;
@@ -115,5 +115,4 @@ public class FakeEmailDAO {
 			throw new DBException(e);
 		}
 	}
-
 }

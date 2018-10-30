@@ -12,7 +12,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#edit-menu">
 			<h2 class="panel-title">Edit</h2>
@@ -27,7 +27,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#codes-menu">
 			<h2 class="panel-title">Codes</h2>
@@ -42,7 +42,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#other-menu">
 			<h2 class="panel-title">Other</h2>
@@ -55,16 +55,6 @@
 				<li><a href="/iTrust/auth/admin/sessionTimeout.jsp">Change Global Session Timeout </a></li>
 				<li><a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a></li>
 				<li><a href="/iTrust/auth/admin/activatePatient.jsp">Activate Patient</a></li>
-			</ul>
-		</div>
-	</div>
-
-	<div class="panel panel-default">
-		<div class="panel-heading" anim-type="collapse" anim-target="#mail-menu">
-			<h2 class="panel-title">Mail</h2>
-		</div>
-		<div class="panel-body" id="mail-menu">
-			<ul class="nav nav-sidebar">
 				<li><a href="/iTrust/auth/admin/sendApptRem.jsp">Send Appointment Reminders</a></li>
 				<li><a href="/iTrust/auth/admin/outbox.jsp">Outbox</a></li>
 			</ul>
