@@ -28,7 +28,7 @@
 %>
 <div align="center">
     <br />
-
+    <h1>Send Appointment Reminders</h1>
     <form name="mainForm" action="sendApptRem.jsp" id="mainForm" method="post">
         <table class="fTable" align="center">
             <tr>
