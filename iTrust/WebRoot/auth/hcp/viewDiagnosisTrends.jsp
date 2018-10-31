@@ -19,7 +19,7 @@
 <% 
 	//log the page view
 	loggingAction.logEvent(TransactionType.DIAGNOSIS_TRENDS_VIEW, loggedInMID.longValue(), 0, "");
-	ViewDiagnosisStatisticsAction diagnoses = new ViewDiagnosisStatisticsAction(prodDAO);
+	//ViewDiagnosisStatisticsAction diagnoses = new ViewDiagnosisStatisticsAction(prodDAO);
 	DiagnosisStatisticsBean dsBean = null;
 	//get form data
 	String startDate = request.getParameter("startDate");
@@ -47,18 +47,18 @@
 		Date date = calendar.getTime();
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		//try to get the statistics. If there's an error, print it. If null is returned, it's the first page load
-		try {
-			weeks.add(diagnoses.getDiagnosisStatistics(df.format(date), startDate, icdCode, zipCode));
+		//try {
+			//weeks.add(diagnoses.getDiagnosisStatistics(df.format(date), startDate, icdCode, zipCode));
 			for (int g = 0; g < 7; g++) {
 				calendar.add(Calendar.DATE, -1);
 			    String end = df.format(calendar.getTime());
 				calendar.add(Calendar.DATE, -6);
 				date = calendar.getTime();
-				weeks.add(diagnoses.getDiagnosisStatistics( df.format(date), end, icdCode, zipCode));
+				//weeks.add(diagnoses.getDiagnosisStatistics( df.format(date), end, icdCode, zipCode));
 			}
-		} catch (FormValidationException e) {
-			e.printHTML(pageContext.getOut());
-		}
+// 		} catch (FormValidationException e) {
+// 			e.printHTML(pageContext.getOut());
+// 		}
 	}
 	if (startDate == null)
 		startDate = "";
@@ -88,15 +88,15 @@
 		<td>
 			<select name="icdCode" style="font-size:10" >
 			<option value="">-- None Selected --</option>
-			<%for(DiagnosisBean diag : diagnoses.getDiagnosisCodes()) { %>
-				<%if (diag.getICDCode().equals(icdCode)) { %>
-					<option selected="selected" value="<%=diag.getICDCode()%>"><%= StringEscapeUtils.escapeHtml("" + (diag.getICDCode())) %>
-					- <%= StringEscapeUtils.escapeHtml("" + (diag.getDescription())) %></option>
-				<% } else { %>
-					<option value="<%=diag.getICDCode()%>"><%= StringEscapeUtils.escapeHtml("" + (diag.getICDCode())) %>
-					- <%= StringEscapeUtils.escapeHtml("" + (diag.getDescription())) %></option>
-				<% } %>
-			<%}%>
+<%-- 			<%for(DiagnosisBean diag : diagnoses.getDiagnosisCodes()) { %> --%>
+<%-- 				<%if (diag.getICDCode().equals(icdCode)) { %> --%>
+<%-- 					<option selected="selected" value="<%=diag.getICDCode()%>"><%= StringEscapeUtils.escapeHtml("" + (diag.getICDCode())) %> --%>
+<%-- 					- <%= StringEscapeUtils.escapeHtml("" + (diag.getDescription())) %></option> --%>
+<%-- 				<% } else { %> --%>
+<%-- 					<option value="<%=diag.getICDCode()%>"><%= StringEscapeUtils.escapeHtml("" + (diag.getICDCode())) %> --%>
+<%-- 					- <%= StringEscapeUtils.escapeHtml("" + (diag.getDescription())) %></option> --%>
+<%-- 				<% } %> --%>
+<%-- 			<%}%> --%>
 			</select>
 		</td>
 		<td>Zip Code:</td>

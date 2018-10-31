@@ -42,7 +42,7 @@
 		userNameCol="MID"
 		userCredCol="Password"
 		userRoleTable="users"
-		roleNameCol="Role" />
+		roleNameCol="Role" ></Realm>
 		
 	<!-- Cache size increased to remove caching errors
 		Default is 10240 -->	

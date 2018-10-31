@@ -14,7 +14,7 @@
 <% 
 	//log the page view
 	loggingAction.logEvent(TransactionType.DIAGNOSIS_EPIDEMICS_VIEW, loggedInMID.longValue(), 0, "");
-	ViewDiagnosisStatisticsAction diagnoses = new ViewDiagnosisStatisticsAction(prodDAO);
+	//ViewDiagnosisStatisticsAction diagnoses = new ViewDiagnosisStatisticsAction(prodDAO);
 	ArrayList<DiagnosisStatisticsBean> dsList = new ArrayList<DiagnosisStatisticsBean>();
 	DiagnosisStatisticsBean dsBean = null;
 	DiagnosisStatisticsBean avgBean = null;
@@ -33,16 +33,16 @@
 	
 	//try to get the statistics. If there's an error, print it. If null is returned, it's the first page load
 	
-	try{
-		dsList = diagnoses.getEpidemicStatistics(startDate, icdCode, zipCode, threshold);
+	//try{
+		dsList = null;//diagnoses.getEpidemicStatistics(startDate, icdCode, zipCode, threshold);
 		
 		if (dsList != null) {
 			dsBean = dsList.get(0);
 			avgBean = dsList.get(1);
 		}
-	} catch(FormValidationException e){
-		e.printHTML(pageContext.getOut());
-	}
+// 	} catch(FormValidationException e){
+// 		e.printHTML(pageContext.getOut());
+// 	}
 	
 	if (startDate == null)
 		startDate = "";
@@ -108,9 +108,9 @@
 <%
 	boolean isEp = false;
 	if (icdCode.equals("84.50")) {
-		isEp = diagnoses.isMalariaEpidemic(startDate, zipCode, threshold);
+		isEp = false;//diagnoses.isMalariaEpidemic(startDate, zipCode, threshold);
 	} else if (icdCode.equals("487.00")) {
-		isEp = diagnoses.isFluEpidemic(startDate, zipCode);
+		isEp = false;//diagnoses.isFluEpidemic(startDate, zipCode);
 	}
 	
 %>
