@@ -58,6 +58,24 @@ for(Role role: Role.values()){
 	points.add(map);
 }
 String dataPoints2 = gsonObj.toJson(points);
+
+//Load data for graph 3
+gsonObj = new Gson();
+map = null;
+points = new ArrayList<Map<Object,Object>>();
+
+for(TransactionType type: TransactionType.values()){
+	map = new HashMap<Object,Object>();
+	map.put("label", type.getCode());
+	Optional<TransactionType> optType = Optional.ofNullable(type);
+	List<TransactionBean> transPerType = DAOFactory.getProductionInstance().getTransactionDAO().getTransactionsWithFilter(
+			Optional.empty(), Optional.empty(), optType, Optional.empty()
+ );
+	System.out.println(transPerType.size());
+	map.put("y", transPerType.size());
+	points.add(map);
+}
+String dataPoints3 = gsonObj.toJson(points);
 %>
 
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -67,7 +85,7 @@ String dataPoints2 = gsonObj.toJson(points);
 			animationEnabled: true,
 			exportEnabled: true,
 			title: {
-				text: "Transactions for Role (for logged-in user)"
+				text: "# Transactions per Role (for logged-in user)"
 			},
 			data: [{
 				type: "column",
@@ -85,7 +103,7 @@ String dataPoints2 = gsonObj.toJson(points);
 			animationEnabled: true,
 			exportEnabled: true,
 			title: {
-				text: "Transactions for Role (for secondary user)"
+				text: "# Transactions per Role (for secondary user)"
 			},
 			data: [{
 				type: "column",
@@ -93,6 +111,24 @@ String dataPoints2 = gsonObj.toJson(points);
 				indexLabelFontColor: "#5A5757",
 				indexLabelPlacement: "outside",
 				dataPoints: <%out.print(dataPoints2);%>
+			}]
+		});
+		chart.render();
+	}
+	
+	var renderGraph3 = function() { 
+		var chart = new CanvasJS.Chart("chartContainer3", {
+			animationEnabled: true,
+			exportEnabled: true,
+			title: {
+				text: "Transactions per Transaction Type"
+			},
+			data: [{
+				type: "column",
+				//indexLabel: "{y}", //Shows y value on all Data Points
+				indexLabelFontColor: "#5A5757",
+				indexLabelPlacement: "outside",
+				dataPoints: <%out.print(dataPoints3);%>
 			}]
 		});
 		chart.render();
@@ -237,7 +273,6 @@ String dataPoints2 = gsonObj.toJson(points);
     <br/><br/>
     <div id="chartContainer3" style="height:370px; width:100%"></div>
     <br/><br/>
-    <div id="chartContainer4" style="height:370px; width:100%"></div>
   </div>
 
 </div>
@@ -249,6 +284,7 @@ var close = document.getElementById('closeModal');
 summarize.onclick = function() {
 	renderGraph1();
 	renderGraph2();
+	renderGraph3();
 	modal.style.display = "block";
 }
 
