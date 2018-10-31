@@ -19,7 +19,8 @@
 <div align=center>
     <h2>Sent Reminders</h2>
     <%
-        loggingAction.logEvent(TransactionType.OUTBOX_VIEW, loggedInMID.longValue(), loggedInMID.longValue(), "");
+        //sorts messages by time
+    	loggingAction.logEvent(TransactionType.OUTBOX_VIEW, loggedInMID.longValue(), loggedInMID.longValue(), "");
         ViewMyMessagesAction action = new ViewMyMessagesAction(prodDAO, 9000000009L);
         List<MessageBean> messages = null;
         if(request.getParameter("sortby") != null) {
@@ -40,8 +41,10 @@
         else {
             messages = action.getAllMySentMessages();
         }
+        //Organizes the messages(stored in the session attribute) into a table
         session.setAttribute("messages", messages);
         if (messages.size() > 0) { %>
+    
     <br />
     <table class="fancyTable">
         <tr>

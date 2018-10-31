@@ -45,10 +45,8 @@ public class ReminderUseCaseTest extends iTrustSeleniumTest {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date date = new Date();
 		String stamp = dateFormat.format(date);
-		//assertTrue(driver.getPageSource().contains("My Sent Messages"));
 		driver.findElement(By.linkText("Outbox")).click();
 		assertTrue(driver.getPageSource().contains("Reminder: upcoming appointment in 7day(s)"));
-		//assertTrue(driver.getPageSource().contains("Andy Programmer"));
 		assertTrue(driver.getPageSource().contains(stamp));
 		//assertLogged(TransactionType.OUTBOX_VIEW, 9000000000L, 0L, "");
 
