@@ -1,6 +1,6 @@
 <%@page errorPage="/auth/exceptionHandler.jsp" %>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
-<%@page import="edu.ncsu.csc.itrust.action.base.SendRemindersAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.SendRemindersAction"%>
 <%@page import="java.lang.NumberFormatException"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@include file="/global.jsp" %>

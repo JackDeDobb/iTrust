@@ -1,4 +1,4 @@
-package edu.ncsu.csc.itrust.action.base;
+package edu.ncsu.csc.itrust.action;
 
 import cucumber.api.java.ca.Cal;
 import edu.ncsu.csc.itrust.action.SendMessageAction;
