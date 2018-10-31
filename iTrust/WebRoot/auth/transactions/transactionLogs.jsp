@@ -23,13 +23,14 @@
 <%@include file="/header.jsp" %>
 
 <%
+// Load data for graph 1
 Gson gsonObj = new Gson();
 Map<Object,Object> map = null;
 List<Map<Object,Object>> points = new ArrayList<Map<Object,Object>>();
 
 for(Role role: Role.values()){
 	map = new HashMap<Object,Object>();
-	map.put("label",role.getUserRolesString());
+	map.put("label", role.getUserRolesString());
 	Optional<Role> optRole = Optional.ofNullable(role);
 	List<TransactionBean> transPerRole = DAOFactory.getProductionInstance().getTransactionDAO().getTransactionsWithFilter(
 			optRole, Optional.empty(), Optional.empty(), Optional.empty()
@@ -38,35 +39,65 @@ for(Role role: Role.values()){
 	map.put("y", transPerRole.size());
 	points.add(map);
 }
-String dataPoints = gsonObj.toJson(points);
-System.out.println(dataPoints);
+String dataPoints1 = gsonObj.toJson(points);
 
+// Load data for graph 2
+gsonObj = new Gson();
+map = null;
+points = new ArrayList<Map<Object,Object>>();
+
+for(Role role: Role.values()){
+	map = new HashMap<Object,Object>();
+	map.put("label", role.getUserRolesString());
+	Optional<Role> optRole = Optional.ofNullable(role);
+	List<TransactionBean> transPerRole = DAOFactory.getProductionInstance().getTransactionDAO().getTransactionsWithFilter(
+			Optional.empty(), optRole, Optional.empty(), Optional.empty()
+    );
+	System.out.println(transPerRole.size());
+	map.put("y", transPerRole.size());
+	points.add(map);
+}
+String dataPoints2 = gsonObj.toJson(points);
 %>
 
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script type="text/javascript">
-	var renderGraph = function() { 
-	 
-		var chart = new CanvasJS.Chart("chartContainer", {
+	var renderGraph1 = function() { 
+		var chart = new CanvasJS.Chart("chartContainer1", {
 			animationEnabled: true,
 			exportEnabled: true,
 			title: {
-				text: "Transactions per role"
+				text: "Transactions for Role (for logged-in user)"
 			},
 			data: [{
-				type: "column", //change type to bar, line, area, pie, etc
+				type: "column",
 				//indexLabel: "{y}", //Shows y value on all Data Points
 				indexLabelFontColor: "#5A5757",
 				indexLabelPlacement: "outside",
-				dataPoints: <%out.print(dataPoints);%>
+				dataPoints: <%out.print(dataPoints1);%>
 			}]
 		});
 		chart.render();
-	 
+	}
+	
+	var renderGraph2 = function() { 
+		var chart = new CanvasJS.Chart("chartContainer2", {
+			animationEnabled: true,
+			exportEnabled: true,
+			title: {
+				text: "Transactions for Role (for secondary user)"
+			},
+			data: [{
+				type: "column",
+				//indexLabel: "{y}", //Shows y value on all Data Points
+				indexLabelFontColor: "#5A5757",
+				indexLabelPlacement: "outside",
+				dataPoints: <%out.print(dataPoints2);%>
+			}]
+		});
+		chart.render();
 	}
 </script>
-
-
 <form method="post" action="transactionLogs.jsp">
 	<label for="select-role">Role: </label>
 	<select name="select-role" id="select-role">
@@ -116,8 +147,8 @@ System.out.println(dataPoints);
 	<input type="submit" value="Filter" />
 </form>
 <br/>
-<input type="submit" onclick="renderGraph()" value="Summarize" />
-<br/>
+<input type="submit" id="summarize" value="Summarize" />
+<br/><br/>
 
 <%
     // Parse role input string.
@@ -194,5 +225,35 @@ System.out.println(dataPoints);
 <%
     }
 %>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<div id="graphModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <br/><br/>
+    <div id="chartContainer1" style="height:370px; width:100%;"></div>
+    <br/><br/>
+    <div id="chartContainer2" style="height:370px; width:100%"></div>
+    <br/><br/>
+    <div id="chartContainer3" style="height:370px; width:100%"></div>
+    <br/><br/>
+    <div id="chartContainer4" style="height:370px; width:100%"></div>
+  </div>
+
+</div>
+<script type="text/javascript">
+var summarize = document.getElementById('summarize');
+var modal = document.getElementById('graphModal');
+var close = document.getElementById('closeModal');
+
+summarize.onclick = function() {
+	renderGraph1();
+	renderGraph2();
+	modal.style.display = "block";
+}
+
+close.onclick = function() {
+	modal.style.display = "none";
+}
+</script>
 <%@include file="/footer.jsp" %>
