@@ -13,7 +13,7 @@
 <%@include file="/header.jsp" %>
 
 <%
-
+	//Receives messages from the ViewMyMessages object and then redirects to messageOutbox.jsp
     ViewMyMessagesAction action = new ViewMyMessagesAction(prodDAO, loggedInMID.longValue());
     MessageBean original = null;
 
