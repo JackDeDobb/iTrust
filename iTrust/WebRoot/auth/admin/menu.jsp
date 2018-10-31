@@ -56,7 +56,7 @@
 				<li><a href="/iTrust/auth/surveyResults.jsp">Satisfaction Survey Results</a></li>
 				<li><a href="/iTrust/auth/admin/activatePatient.jsp">Activate Patient</a></li>
 				<li><a href="/iTrust/auth/admin/sendApptRem.jsp">Send Appointment Reminders</a></li>
-				<li><a href="/iTrust/auth/admin/outbox.jsp">Outbox</a></li>
+				<li><a href="/iTrust/auth/admin/messageOutbox.jsp">Outbox</a></li>
 			</ul>
 		</div>
 	</div>
