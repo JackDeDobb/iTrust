@@ -31,6 +31,14 @@ public class SendRemindersAction {
         this.factory = factory;
     }
 
+    /**Send reminders to patients who have appointment in n days.
+     *
+     * @param n days
+     * @throws DBException
+     * @throws ITrustException
+     * @throws SQLException
+     * @throws FormValidationException
+     */
     public void sendReminders(int n) throws DBException, ITrustException, SQLException, FormValidationException {
         try {
             List<ApptBean> list = adao.getApptForReminders(n);

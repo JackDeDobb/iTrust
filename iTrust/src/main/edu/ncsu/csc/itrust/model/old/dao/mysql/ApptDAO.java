@@ -246,6 +246,13 @@ public class ApptDAO {
 
 	}
 
+	/**Select appointments in n days.
+	 *
+	 * @param n days
+	 * @return List of appointments
+	 * @throws SQLException
+	 * @throws DBException
+	 */
 	public  List<ApptBean> getApptForReminders(int n) throws SQLException, DBException{
 		try {
 			Connection conn = factory.getConnection();
