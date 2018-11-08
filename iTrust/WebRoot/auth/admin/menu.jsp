@@ -12,7 +12,7 @@
 			</ul>
 		</div>
 	</div>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#edit-menu">
 			<h2 class="panel-title">Edit</h2>
@@ -27,7 +27,7 @@
 			</ul>
 		</div>
 	</div>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#codes-menu">
 			<h2 class="panel-title">Codes</h2>
@@ -42,7 +42,7 @@
 			</ul>
 		</div>
 	</div>
-
+	
 	<div class="panel panel-default">
 		<div class="panel-heading" anim-type="collapse" anim-target="#other-menu">
 			<h2 class="panel-title">Other</h2>
