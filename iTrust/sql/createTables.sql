@@ -503,3 +503,20 @@ CREATE TABLE medicalProcedure
 	FOREIGN KEY (visitId) 	REFERENCES officeVisit(visitID),
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
 ) ENGINE=MyISAM;
+
+CREATE TABLE ultrasoundRecord
+(
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId BIGINT(20) UNSIGNED NOT NULL,
+	crownRumpLength FLOAT,
+	biparietalDiameter FLOAT,
+	headCircumference FLOAT,
+	femurLength FLOAT,
+	occipitofrontalDiameter FLOAT,
+	abdominalCircumference FLOAT,
+	humerusLength FLOAT,
+	estimatedFetalWeight FLOAT,
+	imagePath VARCHAR(100),
+	PRIMARY KEY (id),
+	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+) ENGINE=MyISAM;
