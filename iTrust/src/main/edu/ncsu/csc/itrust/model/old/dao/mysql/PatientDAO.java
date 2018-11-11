@@ -163,7 +163,7 @@ public class PatientDAO {
 								+ "DateOfDeath=?,CauseOfDeath=?,MotherMID=?,FatherMID=?,"
 								+ "BloodType=?,Ethnicity=?,Gender=?,TopicalNotes=?, CreditCardType=?, CreditCardNumber=?, "
 								+ "DirectionsToHome=?, Religion=?, Language=?, SpiritualPractices=?, "
-								+ "AlternateName=?, DateOfDeactivation=? WHERE MID=?"), p)) {
+								+ "AlternateName=?, DateOfDeactivation=?, RH=?, RHImmunization=? WHERE MID=?"), p)) {
 			ps.setLong(37, p.getMID());
 			ps.executeUpdate();
 		} catch (SQLException e) {
