@@ -62,7 +62,8 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 	private String spiritualPractices = "";
 	private String alternateName = "";
 	private String dateOfDeactivationStr = "";
-
+	private boolean RH = false;
+	private boolean RHImmunization = false;
 
 	public BloodType getBloodType() {
 		return bloodType;
@@ -484,6 +485,22 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 
 	public void setDateOfDeactivationStr(String dateOfDeactivationStr) {
 		this.dateOfDeactivationStr = dateOfDeactivationStr;
+	}
+	
+	public boolean isRH() {
+		return RH;
+	}
+
+	public void setRH(boolean rH) {
+		RH = rH;
+	}
+
+	public boolean isRHImmunization() {
+		return RHImmunization;
+	}
+
+	public void setRHImmunization(boolean rHImmunization) {
+		RHImmunization = rHImmunization;
 	}
 
 	@Override
