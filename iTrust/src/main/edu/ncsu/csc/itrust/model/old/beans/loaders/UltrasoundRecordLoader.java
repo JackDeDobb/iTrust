@@ -41,7 +41,7 @@ public class UltrasoundRecordLoader implements BeanLoader<UltrasoundRecordBean> 
 		ur.setAbdominalCircumference(rs.getFloat("abdominalCircumference"));
 		ur.setHumerusLength(rs.getFloat("humerusLength"));
 		ur.setEstimatedFetalWeight(rs.getFloat("estimatedFetalWeight"));
-		ur.setImagePath(rs.getString("imagePath"));;
+		ur.setImagePath(rs.getString("imagePath"));
 	}
 	
 	/**
