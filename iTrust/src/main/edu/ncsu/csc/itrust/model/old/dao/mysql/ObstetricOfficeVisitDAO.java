@@ -5,17 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Vector;
 
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.exception.DBException;
-import edu.ncsu.csc.itrust.exception.ITrustException;
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
-import edu.ncsu.csc.itrust.model.old.beans.PatientBean;
-import edu.ncsu.csc.itrust.model.old.beans.PersonnelBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.ObstetricOfficeVisitLoader;
-import edu.ncsu.csc.itrust.model.old.beans.loaders.PatientLoader;
-import edu.ncsu.csc.itrust.model.old.beans.loaders.PersonnelLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 
 
