@@ -56,7 +56,11 @@ public class AddObstetricOfficeVisitAction {
     private void scheduleNextOfficeVisit() {
         // TODO: Replace
         int numberOfWeeksPregnant = 5; // Stubbed value for UC-93 feature.
+        long hcpMID = 0L; // Stubbed doctor.
 
-        // Write the rest of the code.
+        // Given number of weeks pregnant,
+        // find next appt date.
+
+        // Make a call to ApptDAO.scheduleNextAvailableAppt.
     }
 }
