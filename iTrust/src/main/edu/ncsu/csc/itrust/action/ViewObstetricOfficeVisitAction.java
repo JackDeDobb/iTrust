@@ -23,10 +23,12 @@ public class ViewObstetricOfficeVisitAction {
 	}
 	
 	public boolean isObstetricsEligible() {
+		//TODO: using self.loggedInMID
 		return true;
 	}
 	
 	public boolean isCurrentObstetricsPatient() {
+		//TODO using self.loggedInMID
 		return true;
 	}
 	
@@ -38,6 +40,15 @@ public class ViewObstetricOfficeVisitAction {
 		} catch (DBException e) {
 			return null;
 		}
+	}
+	
+	public ObstetricOfficeVisitBean getObstetricOfficeVisitRecord(String index) {
+		int idx = Integer.parseInt(index);
+		List<ObstetricOfficeVisitBean> visitList = getObstetricOfficeVisitRecords();
+		if(visitList.size() > idx) {
+			return visitList.get(idx);
+		}
+		return null;
 	}
 
 	public List<UltrasoundRecordBean> getUltrasoundRecords() {
