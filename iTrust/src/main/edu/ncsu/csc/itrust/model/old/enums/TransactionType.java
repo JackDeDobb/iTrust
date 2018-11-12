@@ -498,6 +498,19 @@ public enum TransactionType {
 	/**EDIT_OPHTHALMOLOGY_SURGERY**/
 	EDIT_OPHTHALMOLOGY_SURGERY(8602, "Edit Ophthalmology Surgery", "Edit Ophthalmology Surgery", true),
 	/**PATIENT_VIEW_OPHTHALMOLOGY_SURGERY**/
+	
+	/**CREATE_OBSTETRIC_OFFICE_VISIT**/
+	CREATE_OBSTETRIC_OFFICE_VISIT(9400, "Create Obstetric Office Visit", "Create Obstetric Office Visit", true),
+	/**VIEW_OBSTETRIC_OFFICE_VISIT**/
+	VIEW_OBSTETRIC_OFFICE_VISIT(9401, "View Obstetric Office Visit", "View Obstetric Office Visit", true),
+	/**EDIT_OBSTETRIC_OFFICE_VISIT**/
+	EDIT_OBSTETRIC_OFFICE_VISIT(9402, "Edit Obstetric Office Visit", "Edit Obstetric Office Visit", true),
+	/**ULTRASOUND**/
+	ULTRASOUND(9403, "Ultrasound", "Ultrasound", true),
+	/**SCHEDULE_NEXT_OFFICE_VISIT**/
+	SCHEDULE_NEXT_OFFICE_VISIT(9404, "Schedule Next Office Visit", "Schedule Next Office Visit", true),
+	/**SCHEDULE_CHILDBIRTH**/
+	SCHEDULE_CHILDBIRTH(9405, "Schedule Childbirth", "Schedule Childbirth", true)
 	;
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
