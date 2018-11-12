@@ -1,16 +1,19 @@
 package edu.ncsu.csc.itrust.model.old.beans;
 
+import java.sql.Timestamp;
+
 public class ObstetricOfficeVisitBean {
 	
 	private long visitId;
+	private long patientMID; // Patient's MID;
+	private long hcpMID; // Doctor's MID.
 	private long obstetricRecordID;
 	private float weight;
 	private float bloodPressure;
 	private float fetalHeartRate;
 	private int lowLyingPlacentaObserved;
 	private int numberOfBabies;
-	private long hcpMID; // Doctor's MID.
-	private long patientMID; // Patient's MID;
+	private Timestamp visitDate;
 	
 	public ObstetricOfficeVisitBean() {
 	}
@@ -85,5 +88,13 @@ public class ObstetricOfficeVisitBean {
 
 	public void setPatientMID(long patientMID) {
 		this.patientMID = patientMID;
+	}
+	
+	public Timestamp getVisitDate() {
+		return visitDate;
+	}
+	
+	public void setVisitDate(Timestamp visitDate) {
+		this.visitDate = visitDate;
 	}
 }
