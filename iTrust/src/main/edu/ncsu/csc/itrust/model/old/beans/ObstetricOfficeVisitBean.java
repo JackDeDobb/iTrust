@@ -9,6 +9,8 @@ public class ObstetricOfficeVisitBean {
 	private float fetalHeartRate;
 	private int lowLyingPlacentaObserved;
 	private int numberOfBabies;
+	private long hcpMID; // Doctor's MID.
+	private long patientMID; // Patient's MID;
 	
 	public ObstetricOfficeVisitBean() {
 	}
@@ -67,5 +69,21 @@ public class ObstetricOfficeVisitBean {
 
 	public void setNumberOfBabies(int numberOfBabies) {
 		this.numberOfBabies = numberOfBabies;
+	}
+
+	public long getHcpMID() {
+		return hcpMID;
+	}
+
+	public void setHcpMID(long hcpMID) {
+		this.hcpMID = hcpMID;
+	}
+
+	public long getPatientMID() {
+		return patientMID;
+	}
+
+	public void setPatientMID(long patientMID) {
+		this.patientMID = patientMID;
 	}
 }
