@@ -56,8 +56,8 @@ public class ObstetricOfficeVisitDAO {
 				PreparedStatement ps = ObsVisitLoader.loadParameters(
 						conn.prepareStatement(
 								"INSERT INTO obstetricOfficeVisit "
-									+"(visitId,obstetricRecordID,weight,bloodPressure, "
-									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies) "
+									+"(visitId,patientMID,hcpMID,obstetricRecordID,weight,bloodPressure, "
+									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies,visitDate) "
 									+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean))
 		{
 			ps.executeUpdate();
@@ -81,8 +81,8 @@ public class ObstetricOfficeVisitDAO {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = ObsVisitLoader.loadParameters(
 						conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-							+"visitId=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
-							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=? "
+							+"visitId=?, patientMID=?, hcpMID=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
+							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
 							+"WHERE visitId=?"), ObsVisitBean))
 		{
 			ps.executeUpdate();

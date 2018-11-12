@@ -32,12 +32,15 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 
 	private void loadCommon(ResultSet rs, ObstetricOfficeVisitBean oov) throws SQLException{
 		oov.setVisitId(rs.getLong("visitId"));
+		oov.setPatientMID(rs.getLong("patientMID"));
+		oov.setHcpMID(rs.getLong("hcpMID"));
 		oov.setObstetricRecordID(rs.getLong("obstetricRecordID"));
 		oov.setWeight(rs.getFloat("weight"));
 		oov.setBloodPressure(rs.getFloat("bloodPressure"));
 		oov.setFetalHeartRate(rs.getFloat("fetalHeartRate"));
 		oov.setLowLyingPlacentaObserved(rs.getInt("lowLyingPlacentaObserved"));
 		oov.setNumberOfBabies(rs.getInt("numberOfBabies"));
+		oov.setVisitDate(rs.getTimestamp("visitDate"));
 	}
 	
 	/**
@@ -61,12 +64,15 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 	public PreparedStatement loadParameters(PreparedStatement ps, ObstetricOfficeVisitBean oov) throws SQLException {
 		int i = 1;
 		ps.setLong(i++, oov.getVisitId());
+		ps.setLong(i++, oov.getPatientMID());
+		ps.setLong(i++, oov.getHcpMID());
 		ps.setLong(i++, oov.getObstetricRecordID());
 		ps.setFloat(i++, oov.getWeight());
 		ps.setFloat(i++, oov.getBloodPressure());
 		ps.setFloat(i++, oov.getFetalHeartRate());
 		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
 		ps.setInt(i++, oov.getNumberOfBabies());
+		ps.setTimestamp(i++, oov.getVisitDate());
 		return ps;
 	}
 
