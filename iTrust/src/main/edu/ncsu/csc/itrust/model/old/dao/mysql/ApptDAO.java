@@ -89,7 +89,7 @@ public class ApptDAO {
 	/**
 	 * Schedules next available appointment for a given HCP.
 	 */
-	public void scheduleSoonestAvailableAppt(final ApptBean appt) throws SQLException,
+	public void scheduleNextAvailableAppt(final ApptBean appt) throws SQLException,
 			DBException {
 
 	}
