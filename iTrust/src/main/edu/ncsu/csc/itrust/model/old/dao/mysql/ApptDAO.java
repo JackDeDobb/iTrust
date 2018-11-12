@@ -10,6 +10,7 @@ import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.ApptBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.ApptBeanLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
+import edu.ncsu.csc.itrust.model.personnel.Speciality;
 
 public class ApptDAO {
 
@@ -83,6 +84,14 @@ public class ApptDAO {
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
+	}
+
+	/**
+	 * Schedules next available appointment for a given HCP.
+	 */
+	public void scheduleSoonestAvailableAppt(final ApptBean appt) throws SQLException,
+			DBException {
+
 	}
 
 	public void editAppt(final ApptBean appt) throws SQLException, DBException {
