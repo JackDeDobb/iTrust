@@ -111,7 +111,9 @@ public enum ValidationFormat {
 	TRIGLYCERIDE_OV("^(?:[1-5][0-9]{2}|600)$", "integer between 100 and 600"),
 	LDL_OV("^(?:[1-5]?[0-9]{1,2}|600)$", "integer between 0 and 600"),
 	HSS_OV("^[1-3]$","1, 2, or 3, representing household smoking status"),
-	PSS_OV("^[1-59]$","1-5 or 9, representing patient smoking status")
+	PSS_OV("^[1-59]$","1-5 or 9, representing patient smoking status"),
+	POSITIVE_NONZERO_INT("^[1-9][0-9]*$","whole number greater than 0"),
+	POSITIVE_NONZERO_FLOAT("^([0-9]*[1-9][0-9]*(\\.[0-9]+)?|[0]+\\.[0-9]*[1-9][0-9]*)$","float greater than 0")
 	;
 
 	private Pattern regex;
