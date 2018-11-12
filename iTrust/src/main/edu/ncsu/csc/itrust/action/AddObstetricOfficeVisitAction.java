@@ -9,7 +9,12 @@ import edu.ncsu.csc.itrust.model.old.dao.mysql.AuthDAO;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.GregorianCalendar;
 
 public class AddObstetricOfficeVisitAction {
     private ObstetricOfficeVisitDAO obstetricOfficeVisitDAO;
@@ -38,7 +43,8 @@ public class AddObstetricOfficeVisitAction {
                 newLoggedInMID);
     }
 
-    public void addObstreticOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException, FormValidationException {
+    public void addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
+            FormValidationException {
 
         // Validate office visit bean.
         this.validator.validate(obsOfficeVisit);
@@ -62,5 +68,7 @@ public class AddObstetricOfficeVisitAction {
         // find next appt date.
 
         // Make a call to ApptDAO.scheduleNextAvailableAppt.
+
+
     }
 }
