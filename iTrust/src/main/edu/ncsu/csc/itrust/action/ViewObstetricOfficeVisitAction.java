@@ -1,8 +1,12 @@
 package edu.ncsu.csc.itrust.action;
 
+import java.util.List;
+
 import edu.ncsu.csc.itrust.exception.ITrustException;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO;
+import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
+import edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean;
 
 public class ViewObstetricOfficeVisitAction {
 	
@@ -16,5 +20,20 @@ public class ViewObstetricOfficeVisitAction {
 		this.loggedInMID = loggedInMID;
 		this.patientMID = patientMID;
 	}
+	
+	public long isObstetricsEligible() {
+		return 0;
+	}
+	
+	public boolean isCurrentObstetricsPatient() {
+		return false;
+	}
+	
+	public List<ObstetricOfficeVisitBean> getObstetricOfficeVisitRecords() {
+		return null;
+	}
 
+	public List<UltrasoundRecordBean> getUltrasoundRecords() {
+		return null;
+	}
 }
