@@ -245,4 +245,8 @@ public class ApptDAO {
 		}
 
 	}
+	
+	public ApptBean getNextPossibleAppt(final long mid) throws SQLException, DBException {
+		return null;
+	}
 }
