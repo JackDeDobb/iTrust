@@ -45,6 +45,13 @@ public class UltrasoundRecordDAO {
 	}
 	
 	
+	/**
+	 * Adds a ultrasound record into the ultrasoundRecord table
+	 * 
+	 * @param ultrasoundBean
+	 *            The ultrasoundBean bean representing the new information to be added
+	 * @throws DBException
+	 */
 	public void addUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
@@ -60,14 +67,22 @@ public class UltrasoundRecordDAO {
 	}
 	
 	
-	public void editUltrasoundRecord(UltrasoundRecordBean ObsVisitBean) throws DBException {
+	/**
+	 * Updates a ultrasoundRecord information for the given id
+	 * 
+	 * @param ultrasoundBean
+	 *            The ultrasoundRecord bean representing the new information for the
+	 *            ultrasoundRecord.
+	 * @throws DBException
+	 */
+	public void editUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = ultrasoundLoader.loadParameters(conn.prepareStatement("UPDATE ultrasoundRecord SET "
 																							+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
 																							+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
 																							+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
-																							+"WHERE id=?"), ObsVisitBean)) {
+																							+"WHERE id=?"), ultrasoundBean)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -75,6 +90,14 @@ public class UltrasoundRecordDAO {
 	}
 	
 	
+	/**
+	 * Returns a list of UltrasoundRecords given by the visitID
+	 * 
+	 * @param visitID
+	 *            The visitID of the ultrasoundRecords in question.
+	 * @return A java.util.List of Personnel Beans.
+	 * @throws DBException
+	 */
 	public List<UltrasoundRecordBean> getUltrasoundRecordsByVisitID(long visitID) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM ultrasoundRecord "
