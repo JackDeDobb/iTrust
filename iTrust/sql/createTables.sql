@@ -509,13 +509,18 @@ CREATE TABLE medicalProcedure
 CREATE TABLE obstetricOfficeVisit
 (
 	visitId BIGINT(20) UNSIGNED NOT NULL,
+	patientMID BIGINT(20) UNSIGNED NOT NULL,
+	hcpMID BIGINT(20) UNSIGNED NOT NULL,
 	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
 	weight FLOAT,
 	bloodPressure FLOAT,
 	fetalHeartRate FLOAT,
 	lowLyingPlacentaObserved INT,
 	numberOfBabies INT,
+	visitDate DATE,
 	FOREIGN KEY (visitID) REFERENCES officeVisit(visitID),
+	FOREIGN KEY (patientMID) REFERENCES patients(MID),
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID),
 	FOREIGN KEY (obstetricRecordID) REFERENCES ultrasoundRecord(id)
 ) ENGINE=MyISAM;
 

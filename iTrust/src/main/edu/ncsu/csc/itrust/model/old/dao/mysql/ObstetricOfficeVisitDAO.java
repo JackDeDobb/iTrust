@@ -56,8 +56,8 @@ public class ObstetricOfficeVisitDAO {
 				PreparedStatement ps = ObsVisitLoader.loadParameters(
 						conn.prepareStatement(
 								"INSERT INTO obstetricOfficeVisit "
-									+"(visitId,obstetricRecordID,weight,bloodPressure, "
-									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies) "
+									+"(visitId,patientMID,hcpMID,obstetricRecordID,weight,bloodPressure, "
+									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies,visitDate) "
 									+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean))
 		{
 			ps.executeUpdate();
@@ -81,8 +81,8 @@ public class ObstetricOfficeVisitDAO {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = ObsVisitLoader.loadParameters(
 						conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-							+"visitId=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
-							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=? "
+							+"visitId=?, patientMID=?, hcpMID=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
+							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
 							+"WHERE visitId=?"), ObsVisitBean))
 		{
 			ps.executeUpdate();
@@ -136,6 +136,30 @@ public class ObstetricOfficeVisitDAO {
 			ObstetricOfficeVisitBean obsVisitBean = rs.next() ? ObsVisitLoader.loadSingle(rs) : null;
 			rs.close();
 			return obsVisitBean;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}	
+	}
+	
+	/**
+	 * Returns all visits for a given patient
+	 * 
+	 * @param patientMID
+	 *            The patientMID of the ObstetricOfficeVisits to retrieve
+	 * @return A list of ObstetricOfficeVisitBeans 
+	 * @throws DBException
+	 */
+	public List<ObstetricOfficeVisitBean> getObstetricOfficeVisitsByPatientMID(long patientMID) throws DBException {
+		
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT * FROM obstetricOfficeVisit WHERE patientMID = ?"))
+		{
+			ps.setLong(1, patientMID);
+			ResultSet rs = ps.executeQuery();
+			List<ObstetricOfficeVisitBean> loadlist = ObsVisitLoader.loadList(rs);
+			rs.close();
+			return loadlist;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}	

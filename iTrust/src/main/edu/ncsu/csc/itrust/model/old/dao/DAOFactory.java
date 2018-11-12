@@ -234,10 +234,18 @@ public class DAOFactory {
 
 	/**
 	 * Creates a DAO for obstetrics office visits.
-	 * @return this DAOFactory's ObstetricOfficeVisit
+	 * @return this DAOFactory's ObstetricOfficeVisitDAO
 	 */
 	public ObstetricOfficeVisitDAO getObstetricsOfficeVisitDAO() {
 		return new ObstetricOfficeVisitDAO(this);
+	}
+	
+	/**
+	 * Creates a DAO for ultrasound records.
+	 * @return this DAOFactory's UltrasoundRecordDAO
+	 */
+	public UltrasoundRecordDAO getUltrasoundRecordDAO() {
+		return new UltrasoundRecordDAO(this);
 	}
 	
 
