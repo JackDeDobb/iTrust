@@ -38,24 +38,25 @@ public class AddObstetricOfficeVisitAction {
                 newLoggedInMID);
     }
 
-    public void addObstreticsOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException, FormValidationException {
+    public void addObstreticOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException, FormValidationException {
 
         // Validate office visit bean.
         this.validator.validate(obsOfficeVisit);
 
         // Add obstetric office visit to DB.
         this.visitID = Optional.ofNullable(this.obstetricOfficeVisitDAO.addObstetricOfficeVisit(obsOfficeVisit));
-        
 
         // Schedule next visit.
         scheduleNextOfficeVisit();
-
     }
 
     /**
      * XCXC: Stubbed, need to implement.
      */
     private void scheduleNextOfficeVisit() {
+        // TODO: Replace
+        int numberOfWeeksPregnant = 5; // Stubbed value for UC-93 feature.
 
+        // Write the rest of the code.
     }
 }
