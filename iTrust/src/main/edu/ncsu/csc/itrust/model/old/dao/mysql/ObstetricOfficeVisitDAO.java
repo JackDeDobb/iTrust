@@ -140,4 +140,28 @@ public class ObstetricOfficeVisitDAO {
 			throw new DBException(e);
 		}	
 	}
+	
+	/**
+	 * Returns all visits for a given patient
+	 * 
+	 * @param patientMID
+	 *            The patientMID of the ObstetricOfficeVisits to retrieve
+	 * @return A list of ObstetricOfficeVisitBeans 
+	 * @throws DBException
+	 */
+	public List<ObstetricOfficeVisitBean> getObstetricOfficeVisitsByPatientMID(long patientMID) throws DBException {
+		
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT * FROM obstetricOfficeVisit WHERE patientMID = ?"))
+		{
+			ps.setLong(1, patientMID);
+			ResultSet rs = ps.executeQuery();
+			List<ObstetricOfficeVisitBean> loadlist = ObsVisitLoader.loadList(rs);
+			rs.close();
+			return loadlist;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}	
+	}
 }
