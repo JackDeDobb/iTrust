@@ -231,6 +231,14 @@ public class DAOFactory {
 	public ReviewsDAO getReviewsDAO() {
 		return new ReviewsDAO(this);
 	}
+
+	/**
+	 * Creates a DAO for obstetrics office visits.
+	 * @return this DAOFactory's ObstetricOfficeVisit
+	 */
+	public ObstetricOfficeVisitDAO getObstetricsOfficeVisitDAO() {
+		return new ObstetricOfficeVisitDAO(this);
+	}
 	
 
 }

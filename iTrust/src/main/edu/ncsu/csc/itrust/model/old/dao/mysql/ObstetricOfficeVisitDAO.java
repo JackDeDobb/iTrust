@@ -53,10 +53,13 @@ public class ObstetricOfficeVisitDAO {
 	public long addObstetricOfficeVisit(ObstetricOfficeVisitBean ObsVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(conn.prepareStatement("INSERT INTO obstetricOfficeVisit"
-																							+"(visitId,obstetricRecordID,weight,bloodPressure,"
-																							+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies)"
-																							+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean)) {
+				PreparedStatement ps = ObsVisitLoader.loadParameters(
+						conn.prepareStatement(
+								"INSERT INTO obstetricOfficeVisit "
+									+"(visitId,obstetricRecordID,weight,bloodPressure, "
+									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies) "
+									+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean))
+		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
 		} catch (SQLException e) {
@@ -76,10 +79,12 @@ public class ObstetricOfficeVisitDAO {
 	public void editObstetricOfficeVisit(ObstetricOfficeVisitBean ObsVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-																							+"visitId=?, obstetricRecordID=?, weight=?, bloodPressure=?,"
-																							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?"
-																							+"WHERE visitId=?"), ObsVisitBean)) {
+				PreparedStatement ps = ObsVisitLoader.loadParameters(
+						conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
+							+"visitId=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
+							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=? "
+							+"WHERE visitId=?"), ObsVisitBean))
+		{
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -97,8 +102,10 @@ public class ObstetricOfficeVisitDAO {
 	 */
 	public List<ObstetricOfficeVisitBean> getObstetricOfficeVisitByInitRecord(long obstetricInitID) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricOfficeVisit "
-						+ "WHERE obstetricRecordID=?")) {
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT * FROM obstetricOfficeVisit "
+						+ "WHERE obstetricRecordID=?"))
+		{
 			ps.setLong(1, obstetricInitID);
 			ResultSet rs = ps.executeQuery();
 			List<ObstetricOfficeVisitBean> loadlist = ObsVisitLoader.loadList(rs);
@@ -121,7 +128,9 @@ public class ObstetricOfficeVisitDAO {
 	public ObstetricOfficeVisitBean getObstetricOfficeVisitByID(long visitID) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricOfficeVisit WHERE visitId = ?")) {
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT * FROM obstetricOfficeVisit WHERE visitId = ?"))
+		{
 			ps.setLong(1, visitID);
 			ResultSet rs = ps.executeQuery();
 			ObstetricOfficeVisitBean obsVisitBean = rs.next() ? ObsVisitLoader.loadSingle(rs) : null;

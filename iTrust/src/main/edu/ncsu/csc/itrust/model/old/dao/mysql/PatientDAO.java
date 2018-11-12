@@ -110,7 +110,7 @@ public class PatientDAO {
 
 	/**
 	 * Adds an empty patient to the table, returns the new MID
-	 * 
+	 *
 	 * @return The MID of the patient as a long.
 	 * @throws DBException
 	 */
