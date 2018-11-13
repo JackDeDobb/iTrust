@@ -508,15 +508,15 @@ CREATE TABLE medicalProcedure
 CREATE TABLE obstetricsInfo
 (
 	MID BIGINT unsigned,
-	lastName varchar(20)  default '', 
-	firstName varchar(20)  default '', 
-
+	recordId BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	yearsOfConception		BIGINT(20),
-	weeksPregnant			BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType			VARCHAR(30),
-	estimatedDueDate        DATE,
-	PRIMARY KEY (MID)
+	deliveryType ENUM ('Vaginal', 'VaginalVacuum', 'VaginalForceps', 'CSection', 'Miscarriage'),
+	numBirths             BIGINT(20),
+	LMP                     DATE,
+	EDD                     DATE,
+	initDate                DATE,
+	PRIMARY KEY (recordId)
 
 ) ENGINE=MyISAM;

@@ -52,9 +52,8 @@
 		%>
 			<div>
 				<h1>THIS PATIENT IS NOT ELIGIBLE</h1>
-				<a href="/iTrust/auth/hcp-uap/obstetricCare.jsp">Try Again</a>
-				<form action="/iTrust/auth/hcp-uap/obstetricCare.jsp"><input type="submit" style="font-size: 10pt; font-weight: bold;" value="Try Again"/></form>
 				<input type="submit" name="eligibilityAction" style="font-size: 10pt; font-weight: bold;" value="Change Eligibility">
+				<form action="/iTrust/auth/hcp-uap/obstetricCare.jsp"><input type="submit" style="font-size: 10pt; font-weight: bold;" value="Try Again"/></form>
 			</div>
 		
 		<%
