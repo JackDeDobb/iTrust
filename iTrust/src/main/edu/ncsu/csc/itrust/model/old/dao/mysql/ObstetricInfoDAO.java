@@ -23,7 +23,8 @@ public class ObstetricInfoDAO {
 	
 	public List<ObstetricInfoBean> getObstetricInfoForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE MID = ? ORDER BY initDate DESC")) {
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE MID = ? ORDER BY " +
+						"recordID DESC")) {
 			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			List<ObstetricInfoBean> records = rs.next() ? loader.loadList(rs) : null;
@@ -34,24 +35,23 @@ public class ObstetricInfoDAO {
 		}
 	}
 	
-	public void addObstetricInfo(ObstetricInfoBean info) 
-	{
+	public void addObstetricInfo(ObstetricInfoBean info) throws DBException{
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("INSERT INTO obstetricsInfo(MID, yearsOfConception, "
-						+ "numberOfHoursInLabor, WeightGainDuringPregnancy, deliveryType, numBirths, LMP, EDD, "
-						+ "initDate VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())"), info)) {
+				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("INSERT INTO obstetricsInfo(MID, " +
+						"yearsOfConception, numberOfHoursInLabor, WeightGainDuringPregnancy, deliveryType, numBirths, " +
+						"LMP, EDD, initDate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())"), info)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new DBException(e);
 		}
 	}
 	 
 	public void updateObstetricInfo(ObstetricInfoBean info) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = loader
-						.loadParameters(conn.prepareStatement("UPDATE obstetricsInfo SET MID=?,yearsOfConception=?,numberOfHoursInLabor=?,"
-								+ "WeightGainDuringPregnancy=?,deliveryType=?,numBirths=?,LMP=?,EDD=?,initDate=? WHERE recordId=?"), info)) {
-			ps.setLong(10, info.getRecordId());
+				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("UPDATE obstetricsInfo SET" +
+						" MID = ?, yearsOfConception = ?, numberOfHoursInLabor = ?, WeightGainDuringPregnancy = ?, " +
+						"deliveryType=  ?, numBirths = ?, LMP=?, EDD = ? WHERE recordId=?"), info)) {
+			ps.setLong(9, info.getRecordId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);

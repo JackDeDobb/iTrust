@@ -507,16 +507,16 @@ CREATE TABLE medicalProcedure
 
 CREATE TABLE obstetricsInfo
 (
-	MID BIGINT unsigned,
+	MID BIGINT unsigned NOT NULL,
 	recordId BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	yearsOfConception		BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType ENUM ('Vaginal', 'VaginalVacuum', 'VaginalForceps', 'CSection', 'Miscarriage'),
+	deliveryType VARCHAR(20) ,
 	numBirths             BIGINT(20),
-	LMP                     DATE,
-	EDD                     DATE,
-	initDate                DATE,
+	LMP                     DATE NOT NULL,
+	EDD                     DATE NOT NULL,
+	initDate                DATE NOT NULL,
 	PRIMARY KEY (recordId)
 
 ) ENGINE=MyISAM;

@@ -18,6 +18,7 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 	@Override
 	public List<ObstetricInfoBean> loadList(ResultSet rs) throws SQLException {
 		List<ObstetricInfoBean> list = new ArrayList<ObstetricInfoBean>();
+		list.add(loadSingle(rs));
 		while (rs.next())
 			list.add(loadSingle(rs));
 		return list;
@@ -54,50 +55,26 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 	public PreparedStatement loadParameters(PreparedStatement ps, ObstetricInfoBean p) throws SQLException {
 		int i = 1;
 		ps.setLong(i++, p.getMID());
-		ps.setLong(i++, p.getRecordId());
 		ps.setLong(i++, p.getYearsOfConception());
 		ps.setLong(i++, p.getNumberOfHoursInLabor());
 		ps.setLong(i++, p.getWeightGainDuringPregnancy());
 		ps.setString(i++, p.getDeliveryType().getName());
 		ps.setLong(i++, p.getNumBirths());
-		Date date = null;
+		Date LMP = null;
 		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getLMP().toString())
-					.getTime());
-		} catch (ParseException e) {
-			if ("".equals(p.getLMP().toString())){
-				date = null;
-			}
+			LMP = new java.sql.Date(p.getLMP().getTime());
+		} catch (NullPointerException e) {
+			LMP = new java.sql.Date((new java.util.Date()).getTime());
 		}
-		ps.setDate(i++, date);
+		ps.setDate(i++, LMP);
 		
-		date = null;
+		Date EDD = null;
 		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getEDD().toString())
-					.getTime());
-		} catch (ParseException e) {
-			if ("".equals(p.getEDD().toString())){
-				date = null;
-			}
+			EDD = new java.sql.Date(p.getEDD().getTime());
+		} catch (NullPointerException e) {
+			LMP = new java.sql.Date((new java.util.Date()).getTime());
 		}
-		ps.setDate(i++, date);
-		
-		date = null;
-		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getInitDate().toString())
-					.getTime());
-		} catch (ParseException e) {
-			if ("".equals(p.getInitDate().toString())){
-				date = null;
-			}
-		}catch (NullPointerException e) {
-			if ("".equals(p.getInitDate().toString())){
-				date = null;
-			}else{
-				
-			}
-		}
-		ps.setDate(i++, date);
+		ps.setDate(i++, EDD);
 		return ps;
 	}
 	
