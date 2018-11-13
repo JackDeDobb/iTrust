@@ -11,7 +11,7 @@ public class ObstetricInfoBean {
 	private long yearOfConception;
 	private long hoursInLabor;
 	private long weightGain;
-	private DeliveryType dType;
+	private DeliveryType dType = DeliveryType.NS;
 	private long numBirths;
 	private Date lmp;
 	private Date edd;
@@ -52,6 +52,9 @@ public class ObstetricInfoBean {
 	}
 	public void setDeliveryType(DeliveryType dType) {
 		this.dType = dType;
+	}
+	public void setDeliveryType(String dType) {
+		this.dType = DeliveryType.parse(dType);
 	}
 	public long getNumBirths() {
 		return numBirths;

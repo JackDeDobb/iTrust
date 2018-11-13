@@ -22,7 +22,7 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 			list.add(loadSingle(rs));
 		return list;
 	}
-	@Override
+
 	private void loadCommon(ResultSet rs, ObstetricInfoBean p) throws SQLException{
 		p.setMID(rs.getInt("MID"));
 		p.setRecordId(rs.getInt("recordId"));
@@ -34,10 +34,7 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 		Date LMP = rs.getDate("LMP");
 		if(LMP != null) {
 			p.setLMP(LMP);
-		}
-		Date EDD = rs.getDate("EDD");
-		if(EDD != null) {
-			p.setEDD(EDD);
+			p.setEDD();
 		}
 		Date initDate = rs.getDate("initDate");
 		if(initDate != null) {
@@ -56,19 +53,19 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 	@Override
 	public PreparedStatement loadParameters(PreparedStatement ps, ObstetricInfoBean p) throws SQLException {
 		int i = 1;
-		ps.setString(i++, p.getMID());
-		ps.setString(i++, p.getRecordId());
-		ps.setString(i++, p.getYearsOfConception());
-		ps.setString(i++, p.getNumberOfHoursInLabor());
-		ps.setString(i++, p.getWeightGainDuringPregnancy());
-		ps.setString(i++, p.getDeliveryType());
-		ps.setString(i++, p.getNumBirths());
+		ps.setLong(i++, p.getMID());
+		ps.setLong(i++, p.getRecordId());
+		ps.setLong(i++, p.getYearsOfConception());
+		ps.setLong(i++, p.getNumberOfHoursInLabor());
+		ps.setLong(i++, p.getWeightGainDuringPregnancy());
+		ps.setString(i++, p.getDeliveryType().getName());
+		ps.setLong(i++, p.getNumBirths());
 		Date date = null;
 		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getLMP())
+			date = new java.sql.Date(DATE_FORMAT.parse(p.getLMP().toString())
 					.getTime());
 		} catch (ParseException e) {
-			if ("".equals(p.getLMP())){
+			if ("".equals(p.getLMP().toString())){
 				date = null;
 			}
 		}
@@ -76,10 +73,10 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 		
 		date = null;
 		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getEDD())
+			date = new java.sql.Date(DATE_FORMAT.parse(p.getEDD().toString())
 					.getTime());
 		} catch (ParseException e) {
-			if ("".equals(p.getEDD())){
+			if ("".equals(p.getEDD().toString())){
 				date = null;
 			}
 		}
@@ -87,14 +84,14 @@ public class ObstetricInfoLoader implements BeanLoader<ObstetricInfoBean> {
 		
 		date = null;
 		try {
-			date = new java.sql.Date(DATE_FORMAT.parse(p.getInitDate())
+			date = new java.sql.Date(DATE_FORMAT.parse(p.getInitDate().toString())
 					.getTime());
 		} catch (ParseException e) {
-			if ("".equals(p.getInitDate())){
+			if ("".equals(p.getInitDate().toString())){
 				date = null;
 			}
 		}catch (NullPointerException e) {
-			if ("".equals(p.getInitDate())){
+			if ("".equals(p.getInitDate().toString())){
 				date = null;
 			}else{
 				

@@ -41,10 +41,17 @@
 	PatientBean p = action.getPatient();
 	boolean obstEligibility = p.getObstetricEligibility();
 	
-	if(request.getParameter("Try Again") != null){
+	if(request.getParameter("eligibilityAction") != null){
+		p.setObstetricEligibility(true);
+		action.updateInformation(p);
 		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
-		return;
 	}
+	
+	if(request.getParameter("Try") != null){
+		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	}
+	
+	
 	
 	//if patient is eligibile for care, display record
 	
@@ -52,10 +59,15 @@
 		%>
 			<div>
 				<h1>THIS PATIENT IS NOT ELIGIBLE</h1>
-				<input type="submit" name="eligibilityAction" style="font-size: 10pt; font-weight: bold;" value="Change Eligibility">
-				<form action="/iTrust/auth/hcp-uap/obstetricCare.jsp"><input type="submit" style="font-size: 10pt; font-weight: bold;" value="Try Again"/></form>
+				<form action = "obstetricCare.jsp" method="POST">
+					<input type="submit" name="eligibilityAction" style="font-size: 10pt; font-weight: bold;" value="Change Eligibility">
+				</form>
+				
+				<form action="obstetricCare.jsp" method="POST">
+					<input type="submit" style="font-size: 10pt; font-weight: bold;" name="Try" value="Try Again"/>
+				</form>
+				
 			</div>
-		
 		<%
 	}
 	//if not eligible, 

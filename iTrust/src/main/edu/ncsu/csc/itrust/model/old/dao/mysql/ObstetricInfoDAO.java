@@ -21,7 +21,7 @@ public class ObstetricInfoDAO {
 		this.loader = new ObstetricInfoLoader();
 	}
 	
-	public List<ObstetricInfoBean> getObstetricInfoForMID(long mid) {
+	public List<ObstetricInfoBean> getObstetricInfoForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE MID = ? ORDER BY initDate DESC")) {
 			ps.setLong(1, mid);
@@ -39,14 +39,14 @@ public class ObstetricInfoDAO {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("INSERT INTO obstetricsInfo(MID, yearsOfConception, "
 						+ "numberOfHoursInLabor, WeightGainDuringPregnancy, deliveryType, numBirths, LMP, EDD, "
-						+ "initDate VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"), info)) {
+						+ "initDate VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())"), info)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	 
-	public void updateObstetricInfo(ObstetricInfoBean info) {
+	public void updateObstetricInfo(ObstetricInfoBean info) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = loader
 						.loadParameters(conn.prepareStatement("UPDATE obstetricsInfo SET MID=?,yearsOfConception=?,numberOfHoursInLabor=?,"

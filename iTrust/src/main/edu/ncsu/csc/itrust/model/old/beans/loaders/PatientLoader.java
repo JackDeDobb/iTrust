@@ -157,7 +157,6 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		ps.setString(i++, p.getLanguage());
 		ps.setString(i++, p.getSpiritualPractices());
 		ps.setString(i++, p.getAlternateName());
-		ps.setBoolean(i++, p.getObstetricEligibility());
 		date = null;
 		try {
 			date = new java.sql.Date(DATE_FORMAT.parse(p.getDateOfDeactivationStr())
@@ -176,6 +175,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 			}
 		}
 		ps.setDate(i++, date);
+		ps.setBoolean(i++, p.getObstetricEligibility());
 		return ps;
 	}
 }
