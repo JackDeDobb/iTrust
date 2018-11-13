@@ -1,9 +1,9 @@
 package edu.ncsu.csc.itrust.model.old.dao.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.exception.DBException;
@@ -66,7 +66,7 @@ public class FakeEmailDAO {
 	public List<Email> getEmailsByPerson(String email) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = conn
-						.prepareStatement("SELECT * FROM fakeemail WHERE ToAddr LIKE ? ORDER BY AddedDate DESC");) {
+						.prepareStatement("SELECT * FROM fakeemail WHERE ToAddr LIKE ? ORDER BY AddedDate DESC")) {
 			stmt.setString(1, "%" + email + "%");
 			ResultSet rs = stmt.executeQuery();
 			List<Email> loadlist = emailBeanLoader.loadList(rs);
@@ -115,5 +115,4 @@ public class FakeEmailDAO {
 			throw new DBException(e);
 		}
 	}
-
 }
