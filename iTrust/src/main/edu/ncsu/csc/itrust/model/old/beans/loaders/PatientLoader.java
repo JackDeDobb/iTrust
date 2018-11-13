@@ -81,6 +81,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		if (dateOfDeactivation != null){
 			p.setDateOfDeactivationStr(DATE_FORMAT.format(dateOfDeactivation));
 		}
+		p.setObstetricEligibility(rs.getBoolean("ObstetricEligibility"));
 	}
 	
 	/**
@@ -156,6 +157,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		ps.setString(i++, p.getLanguage());
 		ps.setString(i++, p.getSpiritualPractices());
 		ps.setString(i++, p.getAlternateName());
+		ps.setBoolean(i++, p.getObstetricEligibility());
 		date = null;
 		try {
 			date = new java.sql.Date(DATE_FORMAT.parse(p.getDateOfDeactivationStr())
