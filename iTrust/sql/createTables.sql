@@ -90,6 +90,7 @@ CREATE TABLE patients(
 	SpiritualPractices varchar(512) default '',
 	AlternateName varchar(32) default '',
 	DateOfDeactivation DATE default NULL,
+	ObstetricEligibility BOOLEAN default false,
 	PRIMARY KEY (MID)
 ) ENGINE=MyISAM;
 
@@ -502,4 +503,20 @@ CREATE TABLE medicalProcedure
 	PRIMARY KEY (id),
 	FOREIGN KEY (visitId) 	REFERENCES officeVisit(visitID),
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
+) ENGINE=MyISAM;
+
+CREATE TABLE obstetricsInfo
+(
+	MID BIGINT unsigned NOT NULL,
+	recordId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	yearsOfConception		BIGINT(20),
+	numberOfHoursInLabor    BIGINT(20),
+	weightGainDuringPregnancy BIGINT(20),
+	deliveryType VARCHAR(20) ,
+	numBirths             BIGINT(20),
+	LMP                     DATE NOT NULL,
+	EDD                     DATE NOT NULL,
+	initDate                DATE NOT NULL,
+	PRIMARY KEY (recordId)
+
 ) ENGINE=MyISAM;

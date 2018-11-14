@@ -81,6 +81,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		if (dateOfDeactivation != null){
 			p.setDateOfDeactivationStr(DATE_FORMAT.format(dateOfDeactivation));
 		}
+		p.setObstetricEligibility(rs.getBoolean("ObstetricEligibility"));
 	}
 	
 	/**
@@ -174,6 +175,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 			}
 		}
 		ps.setDate(i++, date);
+		ps.setBoolean(i++, p.getObstetricEligibility());
 		return ps;
 	}
 }
