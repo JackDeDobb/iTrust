@@ -54,20 +54,13 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	boolean obstEligibility = p.getObstetricEligibility();
 	
 
-	long recordId = 0;
-	if (request.getParameter("msg") != null) {
-        String msgParameter = request.getParameter("msg");
-        try {
-            recordId = Long.parseLong(msgParameter);
-        } catch (NumberFormatException nfe) {
-            response.sendRedirect("obstetricCare.jsp");
-        }
+
 	
 	
-	ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
-	ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
+	//ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
+	//ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
 	
-	if(request.getParameter("editRecordAction") != null) {
+/* 	if(request.getParameter("editRecordAction") != null) {
 		try {
 			ObstetricInfoBean info = new ObstetricInfoBean();
 	        info.setMID(r.getMID());
@@ -86,7 +79,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 		} catch(Exception  e) {
 			e.printStackTrace();
 		}
-	}
+	} */
 
 
 %>
@@ -100,8 +93,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			<tr>
 				<th colspan=2>Patient Information</th>
 			</tr>		
-			<tr>
-			
+			<tr>		
 				<td class="subHeaderVertical">First Name:</td>
 				<td><input name="firstName" value="<%= StringEscapeUtils.escapeHtml("" + (p.getFirstName())) %>" type="text"></td>
 			</tr>
@@ -110,40 +102,26 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				<td><input name="lastName" value="<%= StringEscapeUtils.escapeHtml("" + (p.getLastName())) %>" type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Initialization Date:</td>
-				<td><input name="init" value="<%= StringEscapeUtils.escapeHtml("" + (r.getInitDate())) %>" type="text"></td>
-			</tr>
-			<tr>
 				<td class="subHeaderVertical">Last Menstrual Period:</td>
-				<td><input name="lmp" value="<%= StringEscapeUtils.escapeHtml("" + (r.getLMP())) %>" type="text"></td>
-			</tr>
-			<tr>
-				<td class="subHeaderVertical">Estimated Delivery Date:</td>
-				<td><input name="edd" value="<%= StringEscapeUtils.escapeHtml("" + (new java.sql.Date(r.getEDD().getTime()))) %>" type="text"></td>
+				<td><input name="lmp" type="date"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Year of Conception:</td>
-				<td><input name="years" value="<%= StringEscapeUtils.escapeHtml("" + (r.getYearsOfConception())) %>" type="text"></td>
-			</tr>
-			<tr>
-				<td class="subHeaderVertical">Number of Weeks, Days Pregnant:</td>
-				<td><input name="weeks" value="<%= StringEscapeUtils.escapeHtml("" + (r.getTimePregnant())) %>" type="text"></td>
+				<td><input name="years"  type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Number of Hours in Labor:</td>
-				<td><input name="hours" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumberOfHoursInLabor())) %>" type="text"></td>
+				<td><input name="hours"  type="text"></td>
 			</tr>
-			<tr>
-				<td class="subHeaderVertical">Weight Gained During Pregnancy:</td>
-				<td><input name="weight" value="<%= StringEscapeUtils.escapeHtml("" + (r.getWeightGainDuringPregnancy())) %>" type="text"></td>
-			</tr>
+			
+			
 			<tr>
 				<td class="subHeaderVertical">Delivery Type:</td>
 				<td><select name="deliveryTypeStr">
 					<%
 						String selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
-							selected = (dt.equals(r.getDeliveryType())) ? "selected=selected"
+							selected = (dt.equals(DeliveryType.NS)) ? "selected=selected"
 									: "";
 					%>
 					<option value="<%=dt.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (dt.getName())) %></option>
@@ -152,9 +130,17 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 					%>
 				</select>
 			</tr>
+			
+			
+			
+			<tr>
+				<td class="subHeaderVertical">Weight Gained During Pregnancy:</td>
+				<td><input name="weight" type="text"></td>
+			</tr>
+
 			<tr>
 				<td class="subHeaderVertical">Number Infants Born:</td>
-				<td><input name="number" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumBirths())) %>" type="text"></td>
+				<td><input name="number"  type="text"></td>
 			</tr>
 		</table>
 		<br />
@@ -169,7 +155,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	<%
 		if(isOBGYN){
 	%>
-		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Edit Obstetric Record">
+		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Add Obstetrics Record">
 	<%
 	}
 	%>
@@ -181,8 +167,6 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 <br />
 <itrust:patientNav thisTitle="Demographics" />
 
-
-<% }  %>
 
 
 <%@include file="/footer.jsp"%>

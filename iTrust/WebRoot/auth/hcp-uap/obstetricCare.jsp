@@ -118,7 +118,7 @@
 	    
 	    
 	    <%	if (isOBGYN) { %>
-	    	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetric Record">
+	    	<a href="addNewObstetricRecord.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
 	    <%	} %>
 	    
 	    
