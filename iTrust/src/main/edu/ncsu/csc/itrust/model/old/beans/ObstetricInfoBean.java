@@ -5,6 +5,7 @@ import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ObstetricInfoBean {
 	private long MID;
@@ -83,5 +84,13 @@ public class ObstetricInfoBean {
 	}
 	public void setInitDate(Date initDate) {
 		this.initDate = initDate;
+	}
+	public String getTimePregnant() {
+		Date date = new Date();
+		long diff = date.getTime() - this.lmp.getTime();
+		long daysDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+		long weeks = daysDiff / 7;
+		long days = daysDiff % 7;
+		return String.valueOf(weeks) + " weeks, " + String.valueOf(days) + " days";
 	}
 }

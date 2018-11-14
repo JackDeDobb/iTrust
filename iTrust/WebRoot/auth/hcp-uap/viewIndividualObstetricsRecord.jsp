@@ -6,7 +6,8 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 <%@page import="java.util.Calendar"%>
-<%@page import="java.util.Date"%>
+
+<%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
 
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
@@ -109,12 +110,24 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				<td><input name="lastName" value="<%= StringEscapeUtils.escapeHtml("" + (p.getLastName())) %>" type="text"></td>
 			</tr>
 			<tr>
+				<td class="subHeaderVertical">Initialization Date:</td>
+				<td><input name="init" value="<%= StringEscapeUtils.escapeHtml("" + (r.getInitDate())) %>" type="text"></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Last Menstrual Period:</td>
+				<td><input name="lmp" value="<%= StringEscapeUtils.escapeHtml("" + (r.getLMP())) %>" type="text"></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Estimated Delivery Date:</td>
+				<td><input name="edd" value="<%= StringEscapeUtils.escapeHtml("" + (new java.sql.Date(r.getEDD().getTime()))) %>" type="text"></td>
+			</tr>
+			<tr>
 				<td class="subHeaderVertical">Year of Conception:</td>
 				<td><input name="years" value="<%= StringEscapeUtils.escapeHtml("" + (r.getYearsOfConception())) %>" type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Number of Weeks Pregnant:</td>
-				<td><input name="weeks" value="<%= StringEscapeUtils.escapeHtml("" + (5)) %>" type="text"></td>
+				<td class="subHeaderVertical">Number of Weeks, Days Pregnant:</td>
+				<td><input name="weeks" value="<%= StringEscapeUtils.escapeHtml("" + (r.getTimePregnant())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Number of Hours in Labor:</td>
