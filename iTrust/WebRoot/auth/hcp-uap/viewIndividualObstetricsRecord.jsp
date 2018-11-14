@@ -29,7 +29,7 @@
     pageTitle = "iTrust - View Message";
 %>
 
-<%@include file="/header.jsp" %>
+<%@include file="/header2.jsp" %>
 
 
 <%	
@@ -66,7 +66,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 	ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
 	
-	if(request.getParameter("action") != null) {
+	if(request.getParameter("editRecordAction") != null) {
 		try {
 			ObstetricInfoBean info = new ObstetricInfoBean();
 	        info.setMID(r.getMID());
@@ -80,19 +80,18 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        info.setEDD();
 	        info.setInitDate(r.getInitDate());
 	        obstetricInfoAction.updateRecord(info);
-			response.sendRedirect("");
+			r = obstetricInfoAction.getRecordById(recordId);
+			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
 		} catch(Exception  e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 
 %>
 
 
-<form id="editForm" action="viewIndividualObstetricsRecord.jsp" method="post"><input type="hidden"
-	name="formIsFilled" value="true"> <br />
+<form action="" method="post">
 <table cellspacing=0 align=center cellpadding=0>
 	<tr>
 		<td valign=top>
@@ -154,9 +153,13 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 <br />
 
 <div align=center>
-	<% if(isOBGYN){ %>
-	<a href="viewIndividualObstetricsRecord.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( recordId )) %>" style="font-size: 16pt; font-weight: bold;">Edit Obstetric Record</a>
-	<% } %>
+	<%
+		if(isOBGYN){
+	%>
+		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Edit Patient Record">
+	<%
+	}
+	%>
 	<br /><br />
 	
 </div>
