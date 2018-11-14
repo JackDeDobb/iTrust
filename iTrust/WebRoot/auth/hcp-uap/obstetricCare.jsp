@@ -1,17 +1,23 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.List"%>
 
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.DeliveryType"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Gender"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO"%>
 
 <%@include file="/global.jsp"%>
 
@@ -21,7 +27,7 @@
 
 <%@include file="/header.jsp"%>
 <itrust:patientNav thisTitle="Demographics" />
-<%
+<%	
 	/* Require a Patient ID first */
 	String pidString = (String) session.getAttribute("pid");
 	if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
@@ -72,6 +78,23 @@
 	}
 	//if not eligible, 
 	else{
+		
+		
+		ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
+		List<ObstetricInfoBean> list = obstetricInfoAction.getAllRecords(pidString);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 %>

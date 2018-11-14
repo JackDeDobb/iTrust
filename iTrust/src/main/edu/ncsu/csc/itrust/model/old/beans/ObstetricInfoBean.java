@@ -2,6 +2,7 @@ package edu.ncsu.csc.itrust.model.old.beans;
 
 import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
 
+
 import java.util.Calendar;
 import java.util.Date;
 
