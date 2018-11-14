@@ -16,7 +16,7 @@ pageTitle = "iTrust - Edit Obsetrics Office Visit";
 <%
 	ObstetricsOfficeVisitDAO oovDAO = prodDAO.getObstetricsOfficeVisitDAO();
 	AuthDAO authDAO = prodDAO.getAuthDAO();
-	ApptRequestDAO apptrDAO = prodDAO.getApptRequesetDAO();
+	ApptRequestDAO apptrDAO = prodDAO.getApptRequestDAO();
 	EditObstetricsOfficeVisitAction editOOVisitAction = new EditObstetricsOfficeVisitAction(
 			oovDAO, authDAO, apptrDAO, loggedInMID);
 	List<ObstetricOfficeVisitBean> visits = editOOVisitAction.getObstetricOfficeVisitRecords();
