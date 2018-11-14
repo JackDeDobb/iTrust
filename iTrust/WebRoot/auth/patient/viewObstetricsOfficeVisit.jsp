@@ -15,7 +15,7 @@ pageTitle = "iTrust - View Obsetrics Office Visit";
 
 <%
 	ViewObstetricsOfficeVisitAction viewOOVisitAction = new ViewObstetricsOfficeVisitAction(
-			loggedInMID, prodDAO);
+			prodDAO, loggedInMID, loggedInMID); //loggedinMID used twice if it's only patient accessing this form
 	List<ObstetricOfficeVisitBean> visits = viewOOVisitAction.getObstetricOfficeVisitRecords();
 	PatientDAO pDAO = prodDAO.getPatientDAO();
 %>
