@@ -15,11 +15,6 @@ import java.util.List;
 public class AddRecordTest extends TestCase {
     private ObstetricInfoDAO obstetricInfoDAO = TestDAOFactory.getTestInstance().getObstetricInfoDAO();
 
-    @Override
-    protected void setUp() throws Exception {
-        TestDataGenerator gen = new TestDataGenerator();
-        gen.clearAllTables();
-    }
 
     public void testAddRecord() throws Exception {
         ObstetricInfoBean info = new ObstetricInfoBean();

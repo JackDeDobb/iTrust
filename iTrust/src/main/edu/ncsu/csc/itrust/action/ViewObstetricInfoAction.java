@@ -61,6 +61,19 @@ public class ViewObstetricInfoAction extends PatientBaseAction {
 	
 	
 	
+	public ObstetricInfoBean getRecordById(long input) throws ITrustException{
+		ObstetricInfoBean result;
+		try {
+			result = obstetricInfoDAO.getRecordById(input);
+		} catch (DBException e) {
+			throw new ITrustException("Invalid Record");
+		}
+		return result;
+	}
+	
+	
+	
+	
 	
 	
 

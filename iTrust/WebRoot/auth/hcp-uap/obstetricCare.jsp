@@ -102,7 +102,7 @@
 	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getRecordId())) %></td>
 	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getInitDate())) %></td>
 	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getLMP())) %></td>
-	            <td><a href="viewIndividualObstetricsRecord.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">View</a></td>
+	            <td><a href="viewIndividualObstetricsRecord.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( record.getRecordId() )) %>">View</a></td>
 	        </tr>
 	        <%			index ++; %>
 	        <%		} %>

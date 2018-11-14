@@ -57,4 +57,17 @@ public class ObstetricInfoDAO {
 			throw new DBException(e);
 		}
 	}
+	
+	public ObstetricInfoBean getRecordById(long recordId) throws DBException {
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE recordId = ?")) {
+			ps.setLong(1, recordId);
+			ResultSet rs = ps.executeQuery();
+			ObstetricInfoBean record = rs.next() ? loader.loadSingle(rs) : null;
+			rs.close();
+			return record;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
 }
