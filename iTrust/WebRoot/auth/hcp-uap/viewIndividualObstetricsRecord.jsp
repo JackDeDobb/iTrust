@@ -155,7 +155,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 
 <div align=center>
 	<% if(isOBGYN){ %>
-	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Edit Patient Record">
+	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Edit Obstetric Record">
 	<% } %>
 	<br /><br />
 	

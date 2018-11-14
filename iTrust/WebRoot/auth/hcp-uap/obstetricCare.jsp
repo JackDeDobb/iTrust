@@ -113,6 +113,18 @@
 	    </div>
 	    <%	} %>
 	    <br />
+	    
+	    
+	    
+	    
+	    <%	if (isOBGYN) { %>
+	    	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Add Obstetric Record">
+	    <%	} %>
+	    
+	    
+	    
+	    
+	    
 		</div>
 		
 
