@@ -66,14 +66,32 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 	ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
 	
-	
+	if(request.getParameter("action") != null) {
+		try {
+			ObstetricInfoBean info = new ObstetricInfoBean();
+	        info.setMID(r.getMID());
+	        info.setRecordId(r.getRecordId());
+	        info.setYearsOfConception(Long.valueOf(request.getParameter("years")));
+	        info.setNumberOfHoursInLabor(Long.valueOf(request.getParameter("hours")));
+	        info.setWeightGainDuringPregnancy(Long.valueOf(request.getParameter("weight")));
+	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
+	        info.setNumBirths(Long.valueOf(request.getParameter("number")));
+	        info.setLMP(r.getLMP());
+	        info.setEDD();
+	        info.setInitDate(r.getInitDate());
+	        obstetricInfoAction.updateRecord(info);
+			response.sendRedirect("");
+		} catch(Exception  e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 
 %>
 
 
-<form id="editForm" action="editPatient.jsp" method="post"><input type="hidden"
+<form id="editForm" action="viewIndividualObstetricsRecord.jsp" method="post"><input type="hidden"
 	name="formIsFilled" value="true"> <br />
 <table cellspacing=0 align=center cellpadding=0>
 	<tr>
@@ -93,19 +111,19 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Year of Conception:</td>
-				<td><input name="email" value="<%= StringEscapeUtils.escapeHtml("" + (r.getYearsOfConception())) %>" type="text"></td>
+				<td><input name="years" value="<%= StringEscapeUtils.escapeHtml("" + (r.getYearsOfConception())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Number of Weeks Pregnant:</td>
-				<td><input name="email" value="<%= StringEscapeUtils.escapeHtml("" + (5)) %>" type="text"></td>
+				<td><input name="weeks" value="<%= StringEscapeUtils.escapeHtml("" + (5)) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Number of Hours in Labor:</td>
-				<td><input name="email" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumberOfHoursInLabor())) %>" type="text"></td>
+				<td><input name="hours" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumberOfHoursInLabor())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Weight Gained During Pregnancy:</td>
-				<td><input name="email" value="<%= StringEscapeUtils.escapeHtml("" + (r.getWeightGainDuringPregnancy())) %>" type="text"></td>
+				<td><input name="weight" value="<%= StringEscapeUtils.escapeHtml("" + (r.getWeightGainDuringPregnancy())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Delivery Type:</td>
@@ -124,7 +142,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Number Infants Born:</td>
-				<td><input name="email" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumBirths())) %>" type="text"></td>
+				<td><input name="number" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNumBirths())) %>" type="text"></td>
 			</tr>
 		</table>
 		<br />
@@ -134,16 +152,13 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	</tr>
 </table>
 <br />
+
 <div align=center>
-	<% if(p.getDateOfDeactivationStr().equals("")){ %>
+	<% if(isOBGYN){ %>
 	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Edit Patient Record">
-	<% } else { %>
-	<span style="font-size: 16pt; font-weight: bold;">Patient is deactivated.  Cannot edit.</span>
 	<% } %>
 	<br /><br />
-	<span style="font-size: 14px;">
-		Note: in order to set the password for this user, use the "Reset Password" link at the login page.
-	</span>
+	
 </div>
 </form>
 <br />

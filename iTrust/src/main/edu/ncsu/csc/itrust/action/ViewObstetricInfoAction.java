@@ -53,7 +53,7 @@ public class ViewObstetricInfoAction extends PatientBaseAction {
 		try {
 			result = obstetricInfoDAO.getObstetricInfoForMID(Long.valueOf(input));
 		} catch (DBException e) {
-			throw new ITrustException("Invalid User");
+			throw new ITrustException("Invalid Record");
 		}
 		return result;
 	}
@@ -72,7 +72,13 @@ public class ViewObstetricInfoAction extends PatientBaseAction {
 	}
 	
 	
-	
+	public void updateRecord(ObstetricInfoBean info) throws ITrustException{
+		try {
+			obstetricInfoDAO.updateObstetricInfo(info);
+		} catch (DBException e) {
+			throw new ITrustException("Invalid Record");
+		}
+	}
 	
 	
 	
