@@ -49,10 +49,10 @@ public class EditObstetricOfficeVisitAction  {
 
 	 */
 	public void updateInformation(ObstetricOfficeVisitBean v) {
-		v.setVisitId(this.visitID);
-		validator.validate(v);
-		obstetricOfficeVisitDAO.editObstetricOfficeVisit(v);
-		scheduleNextOfficeVisit();
+//		v.setVisitId(this.visitID);
+//		validator.validate(v);
+//		obstetricOfficeVisitDAO.editObstetricOfficeVisit(v);
+//		scheduleNextOfficeVisit();
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class EditObstetricOfficeVisitAction  {
 	 * @throws DBException
 	 */
 	public ObstetricOfficeVisitBean getObstetricOfficeVisit() throws DBException {
-		return obstetricOfficeVisitDAO.getObstetricOfficeVisit(this.visitID);
+		return null;
+//		return obstetricOfficeVisitDAO.getObstetricOfficeVisit(this.visitID);
 	}
 	
     /**

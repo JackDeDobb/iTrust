@@ -21,7 +21,7 @@ public class ApptTypeDAO {
 		this.atLoader = new ApptTypeBeanLoader();
 	}
 
-	public List<ApptTypeBean> getApptTypes() throws SQLException, DBException {
+	public List<ApptTypeBean> getApptTypes() throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement("SELECT * FROM appointmenttype")) {
 			final ResultSet results = stmt.executeQuery();
@@ -34,7 +34,7 @@ public class ApptTypeDAO {
 		}
 	}
 
-	public boolean addApptType(final ApptTypeBean apptType) throws SQLException, DBException {
+	public boolean addApptType(final ApptTypeBean apptType) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement("INSERT INTO appointmenttype (appt_type, duration) " + "VALUES (?, ?)")) {
 			this.atLoader.loadParameters(stmt, apptType);
@@ -45,7 +45,7 @@ public class ApptTypeDAO {
 		}
 	}
 
-	public boolean editApptType(final ApptTypeBean apptType) throws SQLException, DBException {
+	public boolean editApptType(final ApptTypeBean apptType) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement("UPDATE appointmenttype SET duration=? WHERE appt_type=?")) {
 			stmt.setInt(1, apptType.getDuration());
@@ -59,7 +59,7 @@ public class ApptTypeDAO {
 
 	}
 
-	public ApptTypeBean getApptType(final String apptType) throws SQLException, DBException {
+	public ApptTypeBean getApptType(final String apptType) throws DBException {
 		ApptTypeBean bean = null;
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = conn.prepareStatement("SELECT * FROM appointmenttype WHERE appt_type=?")) {

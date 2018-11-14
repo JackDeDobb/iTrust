@@ -24,6 +24,15 @@ public enum Speciality {
         this.repr = repr;
     }
 
+    public static Speciality fromString(String s) {
+        for (Speciality speciality : Speciality.values()) {
+            if (speciality.repr.equals(s)) {
+                return speciality;
+            }
+        }
+        throw new IllegalArgumentException("Unable to match specialty");
+    }
+
     @Override
     public String toString() {
         return this.repr;
