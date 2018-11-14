@@ -118,15 +118,18 @@ public class ApptDAO {
 			// Otherwise accept and schedule.
 
 			Timestamp startAppt = appt.getDate();
-			Timestamp endAppt = addTime(startAppt, 1, ChronoUnit.HOURS);
+			int apptDurationInMinutes = apptTypeDAO.getApptType(appt.getApptType()).getDuration();
+			Timestamp endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
 			while (rs.next()) {
 				Timestamp curStartTime = rs.getTimestamp("start_time");
 				Timestamp curEndTime = rs.getTimestamp("end_time");
-				if (endAppt.before(curStartTime) && startAppt.after(curEndTime)) {
+				if (endAppt.before(curStartTime)) {
 					break;
 				} else {
 					startAppt = curEndTime;
-					endAppt = addTime(startAppt, 1,  ChronoUnit.HOURS);
+					int curApptDurationInMinutes = apptTypeDAO.
+							getApptType(rs.getString("appt_type")).getDuration();
+					endAppt = addTime(startAppt, curApptDurationInMinutes,  ChronoUnit.MINUTES);
 				}
 				LocalDateTime ldt = endAppt.toLocalDateTime();
 				if (ldt.getHour() > 16 ||
@@ -136,12 +139,12 @@ public class ApptDAO {
 					LocalDateTime nextDay = ldt.plusDays(1);
 					LocalDateTime firstTimeNextDay = nextDay.minusHours(nextDay.getHour() - 9);
 					startAppt = Timestamp.valueOf(firstTimeNextDay);
-					endAppt = addTime(startAppt, 1, ChronoUnit.HOURS);
+					endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
 				} else if (ldt.getHour() < 9) {
 					// Current time state is before 9am.
 					// Move forward to 9am.
 					startAppt = Timestamp.valueOf(ldt.plusMinutes(9 - ldt.getHour()));
-					endAppt = addTime(startAppt, 1, ChronoUnit.HOURS);
+					endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
 				}
 			}
 

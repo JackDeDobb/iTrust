@@ -2,10 +2,7 @@ package edu.ncsu.csc.itrust.action;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
-import edu.ncsu.csc.itrust.model.old.beans.ApptBean;
-import edu.ncsu.csc.itrust.model.old.beans.ApptTypeBean;
-import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
-import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
+import edu.ncsu.csc.itrust.model.old.beans.*;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
@@ -21,11 +18,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Calendar;
 
+/**
+ * Class that defines the new obstetric office visit `document` action.
+ */
 public class AddObstetricOfficeVisitAction {
     private ObstetricOfficeVisitDAO obstetricOfficeVisitDAO;
     private ApptDAO apptDAO;
     private AuthDAO authDAO;
     private ApptTypeDAO apptTypeDAO;
+    private UltrasoundRecordDAO ultrasoundRecordDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
     private ObstetricOfficeVisitValidator validator;
     private long loggedInMID;
@@ -36,6 +37,7 @@ public class AddObstetricOfficeVisitAction {
         this.apptDAO = factory.getApptDAO();
         this.apptTypeDAO = factory.getApptTypeDAO();
         this.authDAO = factory.getAuthDAO();
+        this.ultrasoundRecordDAO = factory.getUltrasoundRecordDAO();
         this.obstetricInfoDAO = factory.getObstetricInfoDAO();
         this.loggedInMID = loggedInMID;
         this.visitID = Optional.empty();
@@ -49,6 +51,10 @@ public class AddObstetricOfficeVisitAction {
         DAY_OFFSET.put(DayOfWeek.FRIDAY, 3);
     }
 
+    /**
+     * Add obstetric office visit,
+     * and schedules next office visit.
+     */
     public void addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
             FormValidationException {
 
@@ -65,8 +71,15 @@ public class AddObstetricOfficeVisitAction {
         scheduleNextOfficeVisit(obsOfficeVisit, patientInfo);
     }
 
+    public void addUltrasoundRecord(UltrasoundRecordBean ultrasoundRecord) throws DBException {
+        ultrasoundRecord.setVisitID(visitID.orElseThrow(() -> {
+            throw new IllegalArgumentException("No visit");
+        }));
+        ultrasoundRecordDAO.addUltrasoundRecord(ultrasoundRecord);
+    }
+
     /**
-     *
+     * Get number of weeks between two dates.
      */
     private int getNumberOfWeeksBetween(Date before, Date after) {
         if (before.after(after)) {
@@ -85,7 +98,7 @@ public class AddObstetricOfficeVisitAction {
     }
 
     /**
-     * XCXC: Stubbed, need to implement.
+     * Schedule next office visit.
      */
     private void scheduleNextOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit, ObstetricInfoBean patientInfo) throws DBException {
 
