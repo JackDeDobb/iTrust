@@ -85,19 +85,39 @@
 		
 		
 		
+		if (list != null && list.size() > 0) { 
+		%>
+		
+	    <br />
+	    <table class="fancyTable">
+	        <tr>
+	            <th>Record ID</th>
+	            <th>Date Created</th>
+	            <th>Last Menstrual Period</th>
+	            <th></th>
+	        </tr>
+	        <%		int index = 0; %>
+	        <%		for(ObstetricInfoBean record : list) { %>
+	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getRecordId())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getInitDate())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getLMP())) %></td>
+	            <td><a href="viewMessageOutbox.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">View</a></td>
+	        </tr>
+	        <%			index ++; %>
+	        <%		} %>
+	    </table>
+	    <%	} else { %>
+	    <div>
+	        <i>You have no obstetric records for this patient!</i>
+	    </div>
+	    <%	} %>
+	    <br />
 		
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-%>
+
 
 <form id="editForm" action="editPatient.jsp" method="post"><input type="hidden"
 	name="formIsFilled" value="true"> <br />
