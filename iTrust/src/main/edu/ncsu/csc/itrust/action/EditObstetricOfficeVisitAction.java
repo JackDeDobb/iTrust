@@ -1,4 +1,4 @@
-package src.main.edu.ncsu.csc.itrust.action;
+package edu.ncsu.csc.itrust.action;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
@@ -49,10 +49,19 @@ public class EditObstetricOfficeVisitAction  {
 
 	 */
 	public void updateInformation(ObstetricOfficeVisitBean v) {
-//		v.setVisitId(this.visitID);
-//		validator.validate(v);
-//		obstetricOfficeVisitDAO.editObstetricOfficeVisit(v);
-//		scheduleNextOfficeVisit();
+		v.setVisitId(this.visitID.get());
+		try {
+			validator.validate(v);
+		} catch (FormValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try{
+			obstetricOfficeVisitDAO.editObstetricOfficeVisit(v);
+		}
+		catch(DBException ex){
+			System.out.println(ex.getMessage());
+		}
 	}
 
 	/**
@@ -62,16 +71,9 @@ public class EditObstetricOfficeVisitAction  {
 	 * @throws DBException
 	 */
 	public ObstetricOfficeVisitBean getObstetricOfficeVisit() throws DBException {
-		return null;
-//		return obstetricOfficeVisitDAO.getObstetricOfficeVisit(this.visitID);
+		return obstetricOfficeVisitDAO.getObstetricOfficeVisitByID(this.visitID.get());
 	}
-	
-    /**
-     * XCXC: Stubbed, need to implement.
-     */
-    private void scheduleNextOfficeVisit() {
 
-    }
 	
 }
 
