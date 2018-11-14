@@ -72,16 +72,60 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			ObstetricInfoBean info = new ObstetricInfoBean();
 	        info.setMID(r.getMID());
 	        info.setRecordId(r.getRecordId());
-	        info.setYearsOfConception(Long.valueOf(request.getParameter("years")));
-	        info.setNumberOfHoursInLabor(Long.valueOf(request.getParameter("hours")));
-	        info.setWeightGainDuringPregnancy(Long.valueOf(request.getParameter("weight")));
-	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
-	        info.setNumBirths(Long.valueOf(request.getParameter("number")));
+	        boolean invalid = false;
+				
+			
+			try {
+	        	info.setYearsOfConception(Long.valueOf(request.getParameter("years")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("years").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Years <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setNumberOfHoursInLabor(Long.valueOf(request.getParameter("hours")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("hours").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Hours <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setWeightGainDuringPregnancy(Long.valueOf(request.getParameter("weight")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("weight").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Weight <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setNumBirths(Long.valueOf(request.getParameter("number")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("number").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Number Births <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
 	        info.setLMP(r.getLMP());
 	        info.setEDD();
 	        info.setInitDate(r.getInitDate());
-	        obstetricInfoAction.updateRecord(info);
-			r = obstetricInfoAction.getRecordById(recordId);
+	        
+	        
+	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
+	        if(!invalid) {
+		        obstetricInfoAction.updateRecord(info);
+				r = obstetricInfoAction.getRecordById(recordId);
+	        }
+			
+			
+			
+			
+
 			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
 		} catch(Exception  e) {
 			e.printStackTrace();

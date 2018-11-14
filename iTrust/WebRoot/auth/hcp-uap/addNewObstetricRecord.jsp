@@ -6,7 +6,8 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 <%@page import="java.util.Calendar"%>
-
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
 
@@ -24,6 +25,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO"%>
+<%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
 <%@include file="/global.jsp" %>
 
 <%
@@ -57,29 +59,75 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 
 	
 	
-	//ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
+	ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 	//ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
 	
-/* 	if(request.getParameter("editRecordAction") != null) {
+	if(request.getParameter("editRecordAction") != null) {
 		try {
 			ObstetricInfoBean info = new ObstetricInfoBean();
-	        info.setMID(r.getMID());
-	        info.setRecordId(r.getRecordId());
-	        info.setYearsOfConception(Long.valueOf(request.getParameter("years")));
-	        info.setNumberOfHoursInLabor(Long.valueOf(request.getParameter("hours")));
-	        info.setWeightGainDuringPregnancy(Long.valueOf(request.getParameter("weight")));
+	        info.setMID(p.getMID());
+	        
+	        boolean invalid = false;
+
+	        try {
+	        	String lmpdate = request.getParameter("lmp");
+		        DateFormat formatter;
+		        java.util.Date date;
+		        formatter = new SimpleDateFormat("YYYY-MM-DD");
+		        date = formatter.parse(lmpdate);
+		        info.setLMP(date);
+		        info.setEDD();
+	        } catch(Exception e) {
+	        	out.println("<span class=\"font_failure\">" + "Invalid LMP Date <br>");
+	        	invalid = true;
+	        }
+	        try {
+	        	info.setYearsOfConception(Long.valueOf(request.getParameter("years")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("years").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Years <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setNumberOfHoursInLabor(Long.valueOf(request.getParameter("hours")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("hours").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Hours <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setWeightGainDuringPregnancy(Long.valueOf(request.getParameter("weight")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("weight").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Weight <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	        try {
+	        	info.setNumBirths(Long.valueOf(request.getParameter("number")));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("number").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid Number Births <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        
+	   		
+	        
 	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
-	        info.setNumBirths(Long.valueOf(request.getParameter("number")));
-	        info.setLMP(r.getLMP());
-	        info.setEDD();
-	        info.setInitDate(r.getInitDate());
-	        obstetricInfoAction.updateRecord(info);
-			r = obstetricInfoAction.getRecordById(recordId);
-			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        if(!invalid) {
+	        	obstetricInfoAction.addNewRecord(info);
+				response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        }
 		} catch(Exception  e) {
 			e.printStackTrace();
 		}
-	} */
+	} 
 
 
 %>
@@ -167,6 +215,8 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 <br />
 <itrust:patientNav thisTitle="Demographics" />
 
-
+<%
+	
+	%>
 
 <%@include file="/footer.jsp"%>

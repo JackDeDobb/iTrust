@@ -81,6 +81,14 @@ public class ViewObstetricInfoAction extends PatientBaseAction {
 	}
 	
 	
+	public void addNewRecord(ObstetricInfoBean info) throws ITrustException{
+		try {
+			obstetricInfoDAO.addObstetricInfo(info);
+		} catch (DBException e) {
+			throw new ITrustException("Invalid Record");
+		}
+	}
+	
 	
 
 	public void logViewDemographics(Long mid, Long secondaryMID) {
