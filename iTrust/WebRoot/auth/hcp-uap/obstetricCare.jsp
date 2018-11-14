@@ -63,7 +63,7 @@
 	
 	if(!obstEligibility){
 		%>
-			<div>
+			<div align=center>
 				<h1>THIS PATIENT IS NOT ELIGIBLE</h1>
 				<form action = "obstetricCare.jsp" method="POST">
 					<input type="submit" name="eligibilityAction" style="font-size: 10pt; font-weight: bold;" value="Change Eligibility">
@@ -87,7 +87,7 @@
 		
 		if (list != null && list.size() > 0) { 
 		%>
-		
+		<div align=center>
 	    <br />
 	    <table class="fancyTable">
 	        <tr>
@@ -108,12 +108,12 @@
 	        <%		} %>
 	    </table>
 	    <%	} else { %>
-	    <div>
+	    <div align=center>
 	        <i>You have no obstetric records for this patient!</i>
 	    </div>
 	    <%	} %>
 	    <br />
-		
+		</div>
 		
 		
 		
