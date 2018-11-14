@@ -17,11 +17,8 @@ pageTitle = "iTrust - Add Obsetrics Office Visit";
 <%@include file="/header.jsp"%>
 
 <%
-	ObstetricOfficeVisitDAO oovDAO = prodDAO.getObstetricsOfficeVisitDAO();
-	authDAO = prodDAO.getAuthDAO();
-	ApptDAO apptDAO = prodDAO.getApptDAO();
 	AddObstetricOfficeVisitAction addOOVisitAction = new AddObstetricOfficeVisitAction(
-			oovDAO, authDAO, apptDAO, loggedInMID);
+			prodDAO, loggedInMID);
 %>
 <%
 	boolean formIsFilled = request.getParameter("formIsFilled") != null

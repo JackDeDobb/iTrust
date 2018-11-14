@@ -31,7 +31,7 @@ public class AddObstetricOfficeVisitAction {
     private long loggedInMID;
     private Optional<Long> visitID;
 
-    private AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
+    public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
         this.obstetricOfficeVisitDAO = factory.getObstetricsOfficeVisitDAO();
         this.apptDAO = factory.getApptDAO();
         this.apptTypeDAO = factory.getApptTypeDAO();
