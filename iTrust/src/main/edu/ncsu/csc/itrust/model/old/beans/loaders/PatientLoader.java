@@ -83,6 +83,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		}
 		p.setRH(rs.getBoolean("RH"));
 		p.setRHImmunization(rs.getBoolean("RHImmunization"));
+		p.setObstetricEligibility(rs.getBoolean("ObstetricEligibility"));
 	}
 	
 	/**
@@ -178,6 +179,7 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 		ps.setDate(i++, date);
 		ps.setBoolean(i++, p.isRH());
 		ps.setBoolean(i++, p.isRHImmunization());
+		ps.setBoolean(i++, p.getObstetricEligibility());
 		return ps;
 	}
 }

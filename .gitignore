@@ -1,2 +1,6 @@
-.DS_Store
 iTrust/.classpath
+iTrust/.idea
+iTrust/.settings
+iTrust/.metadata
+iTrust/target
+.DS_Store

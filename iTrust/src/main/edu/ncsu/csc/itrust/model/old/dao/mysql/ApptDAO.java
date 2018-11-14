@@ -355,8 +355,25 @@ public class ApptDAO {
 		}
 
 	}
-	
-	public ApptBean getNextPossibleAppt(final long mid) throws SQLException, DBException {
-		return null;
+
+	/**Select appointments in n days.
+	 *
+	 * @param n days
+	 * @return List of appointments
+	 * @throws SQLException
+	 * @throws DBException
+	 */
+	public  List<ApptBean> getApptForReminders(int n) throws SQLException, DBException{
+		try {
+			Connection conn = factory.getConnection();
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM appointment WHERE sched_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL ? DAY)");
+			stmt.setInt(1, n);
+			ResultSet rs = stmt.executeQuery();
+			List<ApptBean> list = this.abloader.loadList(rs);
+			rs.close();
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
 	}
 }

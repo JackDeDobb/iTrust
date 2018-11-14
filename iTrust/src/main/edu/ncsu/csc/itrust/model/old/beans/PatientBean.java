@@ -64,6 +64,8 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 	private String dateOfDeactivationStr = "";
 	private boolean RH = false;
 	private boolean RHImmunization = false;
+	private boolean obstetricEligibility = false;
+
 
 	public BloodType getBloodType() {
 		return bloodType;
@@ -501,6 +503,13 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 
 	public void setRHImmunization(boolean rHImmunization) {
 		RHImmunization = rHImmunization;
+	}
+	public boolean getObstetricEligibility() {
+		return obstetricEligibility;
+	}
+	
+	public void setObstetricEligibility(boolean obstetricEligibility) {
+		this.obstetricEligibility = obstetricEligibility;
 	}
 
 	@Override

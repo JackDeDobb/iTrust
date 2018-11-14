@@ -92,6 +92,7 @@ CREATE TABLE patients(
 	DateOfDeactivation DATE default NULL,
 	RH BOOLEAN default false,
 	RHImmunization BOOLEAN default false,
+	ObstetricEligibility BOOLEAN default false,
 	PRIMARY KEY (MID)
 ) ENGINE=MyISAM;
 
@@ -539,4 +540,20 @@ CREATE TABLE ultrasoundRecord
 	imagePath VARCHAR(100),
 	PRIMARY KEY (id),
 	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+) ENGINE=MyISAM;
+
+CREATE TABLE obstetricsInfo
+(
+	MID BIGINT unsigned NOT NULL,
+	recordId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	yearsOfConception		BIGINT(20),
+	numberOfHoursInLabor    BIGINT(20),
+	weightGainDuringPregnancy BIGINT(20),
+	deliveryType VARCHAR(20) ,
+	numBirths             BIGINT(20),
+	LMP                     DATE NOT NULL,
+	EDD                     DATE NOT NULL,
+	initDate                DATE NOT NULL,
+	PRIMARY KEY (recordId)
+
 ) ENGINE=MyISAM;
