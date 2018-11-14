@@ -155,7 +155,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 
 <div align=center>
 	<% if(isOBGYN){ %>
-	<input type="submit" name="action" style="font-size: 16pt; font-weight: bold;" value="Edit Obstetric Record">
+	<a href="viewIndividualObstetricsRecord.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( recordId )) %>" style="font-size: 16pt; font-weight: bold;">Edit Obstetric Record</a>
 	<% } %>
 	<br /><br />
 	
