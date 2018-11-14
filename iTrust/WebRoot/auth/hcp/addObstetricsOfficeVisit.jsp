@@ -2,6 +2,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
+<%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 
@@ -14,10 +17,10 @@ pageTitle = "iTrust - Add Obsetrics Office Visit";
 <%@include file="/header.jsp"%>
 
 <%
-	ObstetricsOfficeVisitDAO oovDAO = prodDAO.getObstetricsOfficeVisitDAO();
-	AuthDAO authDAO = prodDAO.getAuthDAO();
+	ObstetricOfficeVisitDAO oovDAO = prodDAO.getObstetricsOfficeVisitDAO();
+	authDAO = prodDAO.getAuthDAO();
 	ApptDAO apptDAO = prodDAO.getApptDAO();
-	AddObstetricsOfficeVisitAction addOOVisitAction = new AddObstetricsOfficeVisitAction(
+	AddObstetricOfficeVisitAction addOOVisitAction = new AddObstetricOfficeVisitAction(
 			oovDAO, authDAO, apptDAO, loggedInMID);
 %>
 <%
@@ -27,7 +30,7 @@ pageTitle = "iTrust - Add Obsetrics Office Visit";
 	if (formIsFilled) {
 		
 		//This page is not actually a "page", it just adds a visit and forwards.
-		ObstetricOfficeVisitBean v = new BeanBuilder<ObstetricsOfficeVisitBean>().build(request.getParameterMap(), new ObstetricsOfficeVisitBean());
+		ObstetricOfficeVisitBean v = new BeanBuilder<ObstetricOfficeVisitBean>().build(request.getParameterMap(), new ObstetricsOfficeVisitBean());
 		try{
 			addOOVisitAction.addObstetricOfficeVisit(p);
 %>
