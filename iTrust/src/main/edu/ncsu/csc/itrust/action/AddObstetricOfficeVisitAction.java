@@ -5,10 +5,12 @@ import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.model.old.beans.*;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
+import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
 
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -27,10 +29,10 @@ public class AddObstetricOfficeVisitAction {
     private PatientDAO patientDAO;
     private ApptTypeDAO apptTypeDAO;
     private UltrasoundRecordDAO ultrasoundRecordDAO;
+    private TransactionDAO transactionDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
     private ObstetricOfficeVisitValidator validator;
     private long loggedInMID;
-    private Optional<Long> visitID;
 
     public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
         this.obstetricOfficeVisitDAO = factory.getObstetricsOfficeVisitDAO();
@@ -39,8 +41,8 @@ public class AddObstetricOfficeVisitAction {
         this.patientDAO = factory.getPatientDAO();
         this.ultrasoundRecordDAO = factory.getUltrasoundRecordDAO();
         this.obstetricInfoDAO = factory.getObstetricInfoDAO();
+        this.transactionDAO = factory.getTransactionDAO();
         this.loggedInMID = loggedInMID;
-        this.visitID = Optional.empty();
         this.validator = new ObstetricOfficeVisitValidator();
     }
 
@@ -55,64 +57,58 @@ public class AddObstetricOfficeVisitAction {
      * Add obstetric office visit,
      * and schedules next office visit.
      *
-     * Returns true if the patient should be given an RH immunization shot, else false.
      */
-    public boolean addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
+    public long addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
             FormValidationException {
-
-        // Fetch the obstetric info bean.
-        ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
 
         // Validate office visit bean.
         this.validator.validate(obsOfficeVisit);
 
+        // Fetch the obstetric info bean.
+        ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
+
         // Add obstetric office visit to DB.
-        this.visitID = Optional.ofNullable(this.obstetricOfficeVisitDAO.addObstetricOfficeVisit(obsOfficeVisit));
+        long visitId = this.obstetricOfficeVisitDAO.addObstetricOfficeVisit(obsOfficeVisit);
+        obsOfficeVisit.setVisitId(visitId);
 
         // Schedule next visit.
         scheduleNextOfficeVisit(obsOfficeVisit, patientInfo);
 
+        transactionDAO.logTransaction(
+                TransactionType.CREATE_OBSTETRIC_OFFICE_VISIT,
+                loggedInMID, obsOfficeVisit.getPatientMID(),
+                obsOfficeVisit.getVisitId() + "");
+        return visitId;
+
+    }
+
+    public boolean needsRHImmunization(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
+            FormValidationException {
+
+        // Validate office visit bean.
+        this.validator.validate(obsOfficeVisit);
+
+        // Fetch the obstetric info bean.
+        ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
+
+        // Fetch the patient bean.
         PatientBean patient = patientDAO.getPatient(obsOfficeVisit.getPatientMID());
-        if (patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo) >= 28) {
-            return true;
-        }
 
-        return false;
+        return patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo.getLMP()) >= 28;
     }
 
-    public void addUltrasoundRecord(UltrasoundRecordBean ultrasoundRecord) throws DBException {
-        ultrasoundRecord.setVisitID(visitID.orElseThrow(() -> {
-            throw new IllegalArgumentException("No visit");
-        }));
+    public void addUltrasoundRecord(ObstetricOfficeVisitBean obsOfficeVisit, UltrasoundRecordBean ultrasoundRecord) throws DBException {
         ultrasoundRecordDAO.addUltrasoundRecord(ultrasoundRecord);
-        visitID = Optional.empty();
+        transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, obsOfficeVisit.getPatientMID(),
+                obsOfficeVisit.getVisitId() + "");
     }
 
-    /**
-     * Get number of weeks between two dates.
-     */
-    private int getNumberOfWeeksBetween(Date before, Date after) {
-        if (before.after(after)) {
-            return getNumberOfWeeksBetween(after, before);
-        }
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(before);
-
-        int weeks = 0;
-        while (cal.getTime().before(after)) {
-            // add another week
-            cal.add(Calendar.WEEK_OF_YEAR, 1);
-            weeks++;
-        }
-        return weeks;
+    private int getNumberOfWeeksPregnant(Date LMP) {
+        return getNumberOfWeeksPregnant(LMP, Date.from(Instant.now()));
     }
 
-    private int getNumberOfWeeksPregnant(ObstetricInfoBean patientInfo) {
-        return getNumberOfWeeksPregnant(patientInfo, Date.from(Instant.now()));
-    }
-
-    private int getNumberOfWeeksPregnant(ObstetricInfoBean patientInfo, Date now) {
-        return getNumberOfWeeksBetween(patientInfo.getLMP(), now);
+    private int getNumberOfWeeksPregnant(Date LMP, Date now) {
+        return TimeUtilityFunctions.getNumberOfWeeksBetween(LMP, now);
     }
 
     /**
@@ -126,7 +122,7 @@ public class AddObstetricOfficeVisitAction {
         LocalDateTime today = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
 
         // Get number of weeks pregnant.
-        int numberOfWeeksPregnant = getNumberOfWeeksPregnant(patientInfo, Date.from(now));
+        int numberOfWeeksPregnant = getNumberOfWeeksPregnant(patientInfo.getLMP(), Date.from(now));
 
         // Find next appointment date.
         // TODO(avjykmr2): Determine if appt type is correct.
