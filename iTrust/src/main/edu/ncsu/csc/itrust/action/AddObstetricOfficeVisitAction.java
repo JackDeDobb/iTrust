@@ -24,7 +24,7 @@ import java.util.Calendar;
 public class AddObstetricOfficeVisitAction {
     private ObstetricOfficeVisitDAO obstetricOfficeVisitDAO;
     private ApptDAO apptDAO;
-    private AuthDAO authDAO;
+    private PatientDAO patientDAO;
     private ApptTypeDAO apptTypeDAO;
     private UltrasoundRecordDAO ultrasoundRecordDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
@@ -36,7 +36,7 @@ public class AddObstetricOfficeVisitAction {
         this.obstetricOfficeVisitDAO = factory.getObstetricsOfficeVisitDAO();
         this.apptDAO = factory.getApptDAO();
         this.apptTypeDAO = factory.getApptTypeDAO();
-        this.authDAO = factory.getAuthDAO();
+        this.patientDAO = factory.getPatientDAO();
         this.ultrasoundRecordDAO = factory.getUltrasoundRecordDAO();
         this.obstetricInfoDAO = factory.getObstetricInfoDAO();
         this.loggedInMID = loggedInMID;
@@ -54,8 +54,10 @@ public class AddObstetricOfficeVisitAction {
     /**
      * Add obstetric office visit,
      * and schedules next office visit.
+     *
+     * Returns true if the patient should be given an RH immunization shot, else false.
      */
-    public void addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
+    public boolean addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
             FormValidationException {
 
         // Fetch the obstetric info bean.
@@ -69,6 +71,13 @@ public class AddObstetricOfficeVisitAction {
 
         // Schedule next visit.
         scheduleNextOfficeVisit(obsOfficeVisit, patientInfo);
+
+        PatientBean patient = patientDAO.getPatient(obsOfficeVisit.getPatientMID());
+        if (patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo) >= 28) {
+            return true;
+        }
+
+        return false;
     }
 
     public void addUltrasoundRecord(UltrasoundRecordBean ultrasoundRecord) throws DBException {
@@ -76,6 +85,7 @@ public class AddObstetricOfficeVisitAction {
             throw new IllegalArgumentException("No visit");
         }));
         ultrasoundRecordDAO.addUltrasoundRecord(ultrasoundRecord);
+        visitID = Optional.empty();
     }
 
     /**
@@ -97,6 +107,14 @@ public class AddObstetricOfficeVisitAction {
         return weeks;
     }
 
+    private int getNumberOfWeeksPregnant(ObstetricInfoBean patientInfo) {
+        return getNumberOfWeeksPregnant(patientInfo, Date.from(Instant.now()));
+    }
+
+    private int getNumberOfWeeksPregnant(ObstetricInfoBean patientInfo, Date now) {
+        return getNumberOfWeeksBetween(patientInfo.getLMP(), now);
+    }
+
     /**
      * Schedule next office visit.
      */
@@ -108,7 +126,7 @@ public class AddObstetricOfficeVisitAction {
         LocalDateTime today = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
 
         // Get number of weeks pregnant.
-        int numberOfWeeksPregnant = getNumberOfWeeksBetween(patientInfo.getLMP(), Date.from(now));
+        int numberOfWeeksPregnant = getNumberOfWeeksPregnant(patientInfo, Date.from(now));
 
         // Find next appointment date.
         // TODO(avjykmr2): Determine if appt type is correct.
@@ -134,6 +152,7 @@ public class AddObstetricOfficeVisitAction {
                     .withHour(9).withMinute(0).withSecond(0);
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 42) {
+            // TODO(avjykmr2): Dependent on UC-96, add childbirth visit.
             int amountOfDaysToAdd = DAY_OFFSET.getOrDefault(today.getDayOfWeek(), 2);
             LocalDateTime apptTime = today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
                     .withHour(9).withMinute(0).withSecond(0);

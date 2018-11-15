@@ -11,61 +11,41 @@ import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
 import java.util.Optional;
 
 /**
- * Edits a patient Used by editPatient.jsp
- * 
- * 
+ * Edits an obstetric office visit.
  */
 public class EditObstetricOfficeVisitAction  {
     private ObstetricOfficeVisitDAO obstetricOfficeVisitDAO;
     private ObstetricOfficeVisitValidator validator;
-    private ApptRequestDAO apptRequestDAO;
     private AuthDAO authDAO;
     private long loggedInMID;
     private Optional<Long> visitID;
 
 	/**
-	 * The super class validates the patient id
 	 * 
 	 * @param factory The DAOFactory used to create the DAOs for this action.
 	 * @param loggedInMID The MID of the user who is authorizing this action.
-	 * @param pidString The MID of the patient being edited.
-	 * @throws ITrustException
 	 */
-	public EditObstetricOfficeVisitAction(ObstetricOfficeVisitDAO obstetricOfficeVisitDAO, AuthDAO authDAO,
-            ApptRequestDAO apptRequestDAO, long loggedInMID) {
-        this.obstetricOfficeVisitDAO = obstetricOfficeVisitDAO;
-        this.apptRequestDAO = apptRequestDAO;
-        this.authDAO = authDAO;
+	public EditObstetricOfficeVisitAction(DAOFactory daoFactory, long loggedInMID) {
+        this.obstetricOfficeVisitDAO = daoFactory.getObstetricsOfficeVisitDAO();
+        this.authDAO = daoFactory.getAuthDAO();
         this.loggedInMID = loggedInMID;
-        this.visitID = Optional.empty();
         this.validator = new ObstetricOfficeVisitValidator();
 	}
 
 	/**
-	 * Takes the information out of the ObsetricOfficeVisitBean param and updates the visit's information
+	 * Takes the information out of the ObstetricOfficeVisitBean param and updates the visit's information
 	 * 
-	 * @param v
-	 *            the new office visit information
-
+	 * @param obsOfficeVisit
+	 *            Updated office visit information.
 	 */
-	public void updateInformation(ObstetricOfficeVisitBean v) {
-		v.setVisitId(this.visitID.get());
-		try {
-			validator.validate(v);
-		} catch (FormValidationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try{
-			obstetricOfficeVisitDAO.editObstetricOfficeVisit(v);
-		}
-		catch(DBException ex){
-			System.out.println(ex.getMessage());
-		}
+	public void updateInformation(ObstetricOfficeVisitBean obsOfficeVisit) throws FormValidationException, DBException {
+		this.visitID = Optional.ofNullable(obsOfficeVisit.getVisitId());
+		validator.validate(obsOfficeVisit);
+		obstetricOfficeVisitDAO.editObstetricOfficeVisit(obsOfficeVisit);
 	}
 
 	/**
-	 * Returns an ObsetricOfficeVisitBean for the visit
+	 * Returns an ObstetricOfficeVisitBean for the visit
 	 * 
 	 * @return the ObstetricOfficeVisitBean
 	 * @throws DBException
