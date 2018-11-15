@@ -4,6 +4,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
@@ -13,7 +14,7 @@
 <%@include file="/global.jsp"%>
 
 <%
-pageTitle = "iTrust - Add Obsetrics Office Visit";
+pageTitle = "iTrust - Add Obsetric Office Visit";
 %>
 
 <%@include file="/header.jsp"%>
@@ -46,6 +47,9 @@ pageTitle = "iTrust - Add Obsetrics Office Visit";
 <%
 		}
 	}
+	
+	PersonnelDAO pd = prodDAO.getPersonnelDAO();
+	if(pd.isOBGYN(loggedInMID)) {
 %>
 
 
@@ -105,9 +109,22 @@ pageTitle = "iTrust - Add Obsetrics Office Visit";
 
 </table>
 <br />
-<input type="submit" style="font-size: 16pt; font-weight: bold;" value="Add Obstetric Office Visit">
+<input type="submit" style="font-size: 16pt; font-weight: bold;" value="Save">
 <br />
 </form>
+
+<button onclick="window.location='/iTrust/auth/patient/viewObstetricOfficeVisit.jsp'">Finish</button>
 </div>
+
+
+<%
+	} else {
+%>
+<div align=center>
+	<p style="width: 50%; text-align:left;">Please use the <a href="/iTrust/auth/hcp-uap/viewOfficeVisit.xhtml">Document Office Visit</a> page.</p>
+</div>
+<%
+	}
+%>
 
 <%@include file="/footer.jsp" %>
