@@ -1,6 +1,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
@@ -13,27 +16,49 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 
 <%@include file="/header.jsp"%>
 
-<h1>Obstetric Office Visits</h1>
-<form method="post" action="viewObstetricOfficeVisit.jsp">
-	<input type="hidden" name="midIsFilled" value="true"><br />
-	<label for="patient-mid">Patient MID: </label>
-	<input type="text" name="patient-mid" id="patient-mid">
-	&nbsp;&nbsp;
-	<input type="submit" value="Submit" />
-</form>
-
 <%
-	boolean midIsFilled = request.getParameter("midIsFilled") != null && request.getParameter("midIsFilled").equals("true");
-	if(midIsFilled) {
-		long patientMID = Long.parseLong(request.getParameter("patient-mid"));
-		ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
-		List<ObstetricOfficeVisitBean> visits = action.getObstetricOfficeVisitRecords();
+	/* Require a Patient ID first */
+	String pidString = (String) session.getAttribute("pid");
+	if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
+		out.println("pidstring is null");
+		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/viewObstetricOfficeVisit.jsp");
+		return;
+	}
+
+	long patientMID = Long.parseLong(pidString);
+	ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
+	List<ObstetricOfficeVisitBean> visits = action.getObstetricOfficeVisitRecords();
+	
+	ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
+	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
+	boolean isOBGYN = hcp.getSpecialty().equals("OB/GYN");
+	
+	EditPatientAction paction = new EditPatientAction(prodDAO,
+			loggedInMID.longValue(), pidString);
+	PatientBean pb = paction.getPatient();
+	boolean isEligible = pb.getObstetricEligibility();
+	
+	if(!isOBGYN) {
 %>
-
-<button onclick="window.location.href='/auth/hcp/addObstetricOfficeVisit.jsp'"></button>
-<br/>
+<div align=center>
+<h1>Please use the <a href="/iTrust/auth/hcp-uap/viewOfficeVisit.xhtml">Document Office Visit</a> page.</h1>
+</div>
 
 <%
+	} else if(!isEligible) {
+%>
+<div align=center>
+<h1>Patient is not eligible!</h1>
+</div>
+<%
+	} else {
+	
+		for(int i = 0; i < visits.size(); i++) {
+%>
+<table>
+</table>
+<%
+		}
 	}
 %>
 
