@@ -112,8 +112,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <input type="submit" style="font-size: 16pt; font-weight: bold;" value="Save">
 <br />
 </form>
-
-<button onclick="window.location='/iTrust/auth/patient/viewObstetricOfficeVisit.jsp'">Finish</button>
 </div>
 
 
