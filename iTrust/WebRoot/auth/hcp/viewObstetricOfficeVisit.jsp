@@ -53,6 +53,9 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	} else {
 		int index = 0;
 %>
+<a href="addNewObstetricOfficeVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
+<br/>
+
 <table class="fancyTable">
 	<tr>
 		<th>Visit Date</th>
@@ -63,10 +66,10 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 		for(ObstetricOfficeVisitBean visit : visits) {
 %>
 	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
-	            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate())) %></td>
-	            <td><a href="viewDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate().toString())) %></td>
+	            <td><a href="editDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
 	        </tr>
-	        <%			index ++; %>
+	        <% index ++; %>
 <%
 		}
 %>
