@@ -53,14 +53,20 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 <%
 	} else {
 	
-		for(int i = 0; i < visits.size(); i++) {
+		for(ObstetricOfficeVisitBean visit : visits) {
 %>
-<table>
-</table>
+<table class="fancyTable">
+	<tr>
+		<th>Visit Date</th>
+	    <th></th>
+	    <th></th>
+	</tr>
 <%
 		}
+%>
+</table>
+<%
 	}
 %>
-
 
 <%@include file="/footer.jsp"%>
