@@ -33,8 +33,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
 	boolean isOBGYN = hcp.getSpecialty().equals("OB/GYN");
 	
-	EditPatientAction paction = new EditPatientAction(prodDAO,
-			loggedInMID.longValue(), pidString);
+	EditPatientAction paction = new EditPatientAction(prodDAO,loggedInMID.longValue(), pidString);
 	PatientBean pb = paction.getPatient();
 	boolean isEligible = pb.getObstetricEligibility();
 	
@@ -52,8 +51,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 </div>
 <%
 	} else {
-	
-		for(ObstetricOfficeVisitBean visit : visits) {
+		int index = 0;
 %>
 <table class="fancyTable">
 	<tr>
@@ -61,6 +59,14 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	    <th></th>
 	    <th></th>
 	</tr>
+<%
+		for(ObstetricOfficeVisitBean visit : visits) {
+%>
+	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate())) %></td>
+	            <td><a href="viewDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
+	        </tr>
+	        <%			index ++; %>
 <%
 		}
 %>
