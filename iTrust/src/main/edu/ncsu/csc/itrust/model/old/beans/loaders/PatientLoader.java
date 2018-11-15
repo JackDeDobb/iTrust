@@ -177,9 +177,9 @@ public class PatientLoader implements BeanLoader<PatientBean> {
 			}
 		}
 		ps.setDate(i++, date);
+		ps.setBoolean(i++, p.getObstetricEligibility());
 		ps.setBoolean(i++, p.isRH());
 		ps.setBoolean(i++, p.isRHImmunization());
-		ps.setBoolean(i++, p.getObstetricEligibility());
 		return ps;
 	}
 }

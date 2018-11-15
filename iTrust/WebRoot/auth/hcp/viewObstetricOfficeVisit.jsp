@@ -5,6 +5,8 @@
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
+<%@page import="edu.ncsu.csc.itrust.exception.DBException"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 
@@ -24,18 +26,25 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/viewObstetricOfficeVisit.jsp");
 		return;
 	}
+	List<ObstetricOfficeVisitBean> visits = new ArrayList<ObstetricOfficeVisitBean>();
+	boolean isEligible = false;
+	boolean isOBGYN = false;
+	try {
+		long patientMID = Long.parseLong(pidString);
+		ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
+		visits = action.getObstetricOfficeVisitRecords();
 
-	long patientMID = Long.parseLong(pidString);
-	ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
-	List<ObstetricOfficeVisitBean> visits = action.getObstetricOfficeVisitRecords();
-	
-	ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
-	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
-	boolean isOBGYN = hcp.getSpecialty().equals("OB/GYN");
-	
-	EditPatientAction paction = new EditPatientAction(prodDAO,loggedInMID.longValue(), pidString);
-	PatientBean pb = paction.getPatient();
-	boolean isEligible = pb.getObstetricEligibility();
+		ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
+		PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
+		isOBGYN = hcp.getSpecialty().equals("OB/GYN");
+
+		EditPatientAction paction = new EditPatientAction(prodDAO, loggedInMID.longValue(), pidString);
+		PatientBean pb = paction.getPatient();
+		isEligible = pb.getObstetricEligibility();
+	} catch (DBException ex) {
+	    System.err.println("Uncaught DBException i viewObstetricOfficeVisit.jsp");
+	    ex.printStackTrace();
+	}
 	
 	if(!isOBGYN) {
 %>
