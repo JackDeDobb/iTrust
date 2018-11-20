@@ -72,18 +72,27 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	    <th></th>
 	</tr>
 <%
-		for(ObstetricOfficeVisitBean visit : visits) {
+		if(visits != null && visits.size() > 0) {
+			for(ObstetricOfficeVisitBean visit : visits) {
 %>
-	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
-	            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate().toString())) %></td>
-	            <td><a href="editDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
-	        </tr>
-	        <% index ++; %>
+		        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+		            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate().toString())) %></td>
+		            <td><a href="editDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
+		        </tr>
 <%
-		}
+				index ++;
+			}
 %>
 </table>
 <%
+		} else {
+%>
+			<div align=center>
+				<i>This patient has no obstetric office visits!</i>
+			</div>
+<%
+			
+		}
 	}
 %>
 
