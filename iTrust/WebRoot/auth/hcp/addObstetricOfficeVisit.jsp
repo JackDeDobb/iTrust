@@ -4,7 +4,6 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.PersonnelDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
@@ -14,7 +13,6 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
-<%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 
@@ -31,13 +29,11 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	String pidString = (String) session.getAttribute("pid");
 	if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 		out.println("pidstring is null");
-		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/viewObstetricOfficeVisit.jsp");
+		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/addObstetricOfficeVisit.jsp");
 		return;
 	}
 	
 	long patientMID = Long.parseLong(pidString);
-	ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
-	List<ObstetricOfficeVisitBean> visits = action.getObstetricOfficeVisitRecords();
 	
 	ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
 	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
@@ -47,11 +43,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	PatientBean pb = paction.getPatient();
 	boolean isEligible = pb.getObstetricEligibility();
 	
-	AddObstetricOfficeVisitAction addOOVisitAction = new AddObstetricOfficeVisitAction(
-			prodDAO, loggedInMID);
-
-	boolean formIsFilled = request.getParameter("formIsFilled") != null
-	&& request.getParameter("formIsFilled").equals("true");
+	AddObstetricOfficeVisitAction addOOVisitAction = new AddObstetricOfficeVisitAction(prodDAO, loggedInMID);
+	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 
 	if (formIsFilled) {
 		ObstetricOfficeVisitBean v = new BeanBuilder<ObstetricOfficeVisitBean>().build(request.getParameterMap(), new ObstetricOfficeVisitBean());
@@ -72,15 +65,14 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		}
 	}
 	
-	PersonnelDAO pd = prodDAO.getPersonnelDAO();
-	if(pd.isOBGYN(loggedInMID)) {
+	if(isOBGYN) {
 %>
 
 
 <div align=center>
-<p style="width: 50%; text-align:left;">Please enter in the following fields to enter a new obstetrics office visit.</p>
+<p style="width: 50%; text-align:left;">Enter the following information to add a new obstetric office visit.</p>
 
-<form action="addObstetricsOfficeVisit.jsp" method="post">
+<form action="addObstetricOfficeVisit.jsp" method="post">
 <input type="hidden" name="formIsFilled" value="true"><br />
 <table class="fTable">
 	<tr>
@@ -102,25 +94,26 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td class="subHeaderVertical">Obstetric Record ID:</td>
 		<td><input type="text" name="obstetricRecordID"></td>
 	</tr>
-		<tr>
+	<tr>
 		<td class="subHeaderVertical">Weight:</td>
 		<td><input type="text" name="weight"></td>
 	</tr>
-	</tr>
-		<tr>
+	<tr>
 		<td class="subHeaderVertical">Blood Pressure:</td>
 		<td><input type="text" name="bloodPressure"></td>
-	</tr>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>
 		<td><input type="text" name="fetalHeartRate"></td>
 	</tr>
-	</tr>
+	<tr>
 		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
-		<td><select name="lowLyingPlacentaObserved">
-		<option value="true">Yes</option>
-		<option value="false">No</option>
+		<td>
+			<select name="lowLyingPlacentaObserved">
+				<option value="true">Yes</option>
+				<option value="false">No</option>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Number of Babies:</td>
@@ -133,17 +126,21 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 
 </table>
 <br />
-<input type="submit" style="font-size: 16pt; font-weight: bold;" value="Save">
+<input type="submit" style="font-size: 16pt; font-weight: bold;" value="Add Visit">
 <br />
 </form>
 </div>
-
-
 <%
-	} else {
+	} else if (!isOBGYN) {
 %>
 <div align=center>
 	<p style="width: 50%; text-align:left;">Please use the <a href="/iTrust/auth/hcp-uap/viewOfficeVisit.xhtml">Document Office Visit</a> page.</p>
+</div>
+<%
+	} else if (!isEligible) {
+%>
+<div align=center>
+<h1>Patient is not eligible!</h1>
 </div>
 <%
 	}

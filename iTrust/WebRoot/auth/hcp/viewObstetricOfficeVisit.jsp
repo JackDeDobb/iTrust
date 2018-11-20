@@ -62,7 +62,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	} else {
 		int index = 0;
 %>
-<a href="addNewObstetricOfficeVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
+<a href="addObstetricOfficeVisit.jsp" style="font-size: 16pt; font-weight: bold;">Document New Obstetric Office Visit</a>
 <br/>
 
 <table class="fancyTable">
@@ -91,7 +91,6 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 				<i>This patient has no obstetric office visits!</i>
 			</div>
 <%
-			
 		}
 	}
 %>
