@@ -70,16 +70,9 @@ public class ViewObstetricOfficeVisitAction {
 //				obsOfficeVisit.getVisitId() + "");
 		return obstetricOfficeVisitDAO.getObstetricOfficeVisitsByPatientMID(patientMID);
 	}
-
-
-	public ObstetricOfficeVisitBean getObstetricOfficeVisitRecord(String index) throws DBException {
-		int idx = Integer.parseInt(index);
-		List<ObstetricOfficeVisitBean> visitList = getObstetricOfficeVisitRecords();
-		if(visitList.size() > idx) {
-			ObstetricOfficeVisitBean visit = visitList.get(idx);
-			currentVisitId = visit.getVisitId();
-		}
-		throw new IllegalArgumentException("Provided index not in bounds.");
+	
+	public ObstetricOfficeVisitBean getObstetricOfficeVisitByVisitId(long visitID) throws DBException {
+		return obstetricOfficeVisitDAO.getObstetricOfficeVisitByID(visitID);
 	}
 
 	/**

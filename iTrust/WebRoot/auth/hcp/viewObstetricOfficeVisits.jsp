@@ -77,10 +77,10 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 %>
 		        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
 		            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate().toString())) %></td>
-		            <td><a href="editDetailedObstetricOfficeVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + index) %>">View</a></td>
+		            <td><a href="editDetailedObstetricOfficeVisit.jsp?id=<%= StringEscapeUtils.escapeHtml("" + visit.getVisitId()) %>">View</a></td>
 		        </tr>
 <%
-				index ++;
+				index++;
 			}
 %>
 </table>
