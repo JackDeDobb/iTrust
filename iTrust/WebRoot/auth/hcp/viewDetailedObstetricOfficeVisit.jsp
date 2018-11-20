@@ -2,6 +2,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
@@ -52,8 +53,11 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
             response.sendRedirect("viewObstetricOfficeVisits.jsp");
         }
 	}
-
+	
+	ViewObstetricOfficeVisitAction viewVisitAction = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
 	EditObstetricOfficeVisitAction editVisitAction = new EditObstetricOfficeVisitAction(prodDAO, loggedInMID);
+	ObstetricOfficeVisitBean visit = viewVisitAction.getObstetricOfficeVisitByVisitId(visitId);
+	
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 	
 	if (formIsFilled) {
@@ -89,71 +93,47 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<th colspan=2>Visit Information</th>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">Visit ID:</td>
-		<td><input type="text" name="visitId"></td>
-	</tr>
-	<tr>
 		<td class="subHeaderVertical">Patient MID:</td>
-		<td><input type="text" name="patientMID">
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">HCP MID:</td>
-		<td><input type="text" name="hcpMID"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Obstetric Record ID:</td>
-		<td><input type="text" name="obstetricRecordID"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Weight:</td>
-		<td><input type="text" name="weight"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="text" name="bloodPressure"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Fetal Heart Rate:</td>
-		<td><input type="text" name="fetalHeartRate"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
-		<td>
-			<select name="lowLyingPlacentaObserved">
-				<option value="true">Yes</option>
-				<option value="false">No</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Number of Babies:</td>
-		<td><input type="text" name="numberOfBabies"></td>
+		<td><%= StringEscapeUtils.escapeHtml("" + (visit.getPatientMID())) %></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Visit Date:</td>
-		<td><input type="text" name="visitDate"></td>   
+		<td><%= StringEscapeUtils.escapeHtml("" + (visit.getVisitDate().toString())) %></td>   
 	</tr>
-
+	<tr>
+		<td class="subHeaderVertical">Obstetric Record ID:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getObstetricRecordID())) %>" name="weight"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Weight:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getWeight())) %>" name="weight"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Blood Pressure:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getBloodPressure())) %>" name="bloodPressure"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Fetal Heart Rate:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getFetalHeartRate())) %>" name="fetalHeartRate"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getLowLyingPlacentaObserved())) %>" name="lowLyingPlacentaObserved"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Number of Babies:</td>
+		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getNumberOfBabies())) %>" name="numberOfBabies"></td>
+	</tr>
 </table>
 <br />
-<input type="submit" style="font-size: 16pt; font-weight: bold;" value="Add Visit">
 <br />
 </form>
+<div align="center">
+	<input type="submit" name="editOfficeVisitAction" style="font-size: 16pt; font-weight: bold;" value="Save Obstetric Visit">
+</div>
 </div>
 <%
-	} else if (!isOBGYN) {
-%>
-<div align=center>
-	<p style="width: 50%; text-align:left;">Please use the <a href="/iTrust/auth/hcp-uap/viewOfficeVisit.xhtml">Document Office Visit</a> page.</p>
-</div>
-<%
-	} else if (!isEligible) {
-%>
-<div align=center>
-<h1>Patient is not eligible!</h1>
-</div>
-<%
-	}
+	} 
 %>
 
 <%@include file="/footer.jsp" %>

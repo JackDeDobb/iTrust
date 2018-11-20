@@ -509,7 +509,7 @@ CREATE TABLE medicalProcedure
 
 CREATE TABLE obstetricOfficeVisit
 (
-	visitId BIGINT(20) UNSIGNED NOT NULL,
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	patientMID BIGINT(20) UNSIGNED NOT NULL,
 	hcpMID BIGINT(20) UNSIGNED NOT NULL,
 	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
@@ -519,7 +519,6 @@ CREATE TABLE obstetricOfficeVisit
 	lowLyingPlacentaObserved INT,
 	numberOfBabies INT,
 	visitDate DATE,
-	FOREIGN KEY (visitID) REFERENCES officeVisit(visitID),
 	FOREIGN KEY (patientMID) REFERENCES patients(MID),
 	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID),
 	FOREIGN KEY (obstetricRecordID) REFERENCES ultrasoundRecord(id)

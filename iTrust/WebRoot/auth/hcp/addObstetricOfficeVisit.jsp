@@ -79,16 +79,12 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<th colspan=2>Visit Information</th>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">Visit ID:</td>
-		<td><input type="text" name="visitId"></td>
-	</tr>
-	<tr>
 		<td class="subHeaderVertical">Patient MID:</td>
-		<td><input type="text" name="patientMID">
+		<td><%= StringEscapeUtils.escapeHtml("" + patientMID) %></td>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">HCP MID:</td>
-		<td><input type="text" name="hcpMID"></td>
+		<td class="subHeaderVertical">Visit Date:</td>
+		<td><input type="text" name="visitDate"></td>   
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Obstetric Record ID:</td>
@@ -108,20 +104,11 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
-		<td>
-			<select name="lowLyingPlacentaObserved">
-				<option value="true">Yes</option>
-				<option value="false">No</option>
-			</select>
-		</td>
+		<td><input type="text" name="lowLyingPlacentaObserved"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Number of Babies:</td>
 		<td><input type="text" name="numberOfBabies"></td>
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Visit Date:</td>
-		<td><input type="text" name="visitDate"></td>   
 	</tr>
 
 </table>
