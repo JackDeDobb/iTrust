@@ -15,6 +15,9 @@
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="java.util.List"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="java.util.Date"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 
 <%@include file="/global.jsp"%>
@@ -58,6 +61,11 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	EditObstetricOfficeVisitAction editVisitAction = new EditObstetricOfficeVisitAction(prodDAO, loggedInMID);
 	ObstetricOfficeVisitBean visit = viewVisitAction.getObstetricOfficeVisitByVisitId(visitId);
 	
+	// get visit date
+	Date visitDate = new Date(visit.getVisitDate().getTime());
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+	String dateString = format.format(visitDate);
+	
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 	
 	if (formIsFilled) {
@@ -70,7 +78,10 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
-		newVisit.setVisitDate(visit.getVisitDate());
+		
+		Date date = (Date) format.parse(request.getParameter("visitDate"));
+		Timestamp visitTimestamp = new Timestamp(date.getTime());
+		newVisit.setVisitDate(visitTimestamp);
 		
 		try{
 			editVisitAction.updateVisitInformation(newVisit);
@@ -108,7 +119,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Visit Date:</td>
-		<td><%= StringEscapeUtils.escapeHtml("" + (visit.getVisitDate().toString())) %></td>   
+		<td><input type="datetime-local" value="<%= StringEscapeUtils.escapeHtml("" + dateString) %>" name="visitDate"></td>   
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Obstetric Record ID:</td>

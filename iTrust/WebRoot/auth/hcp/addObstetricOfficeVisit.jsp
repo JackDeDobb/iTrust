@@ -55,7 +55,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
 		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
@@ -96,7 +96,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Visit Date:</td>
-		<td><input type="date" name="visitDate"></td>   
+		<td><input type="datetime-local" name="visitDate"></td>   
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Obstetric Record ID:</td>
