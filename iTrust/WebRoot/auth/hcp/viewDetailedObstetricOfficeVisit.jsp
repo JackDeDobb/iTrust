@@ -61,9 +61,19 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 	
 	if (formIsFilled) {
-		ObstetricOfficeVisitBean v = new BeanBuilder<ObstetricOfficeVisitBean>().build(request.getParameterMap(), new ObstetricOfficeVisitBean());
+		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
+		newVisit.setPatientMID(visit.getPatientMID());
+		newVisit.setHcpMID(visit.getHcpMID());
+		newVisit.setObstetricRecordID(Long.valueOf("obstetricRecordID"));
+		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
+		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
+		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
+		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
+		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
+		newVisit.setVisitDate(visit.getVisitDate());
+		
 		try{
-			editVisitAction.updateVisitInformation(v);
+			editVisitAction.updateVisitInformation(newVisit);
 %>
 
 	<div align=center>

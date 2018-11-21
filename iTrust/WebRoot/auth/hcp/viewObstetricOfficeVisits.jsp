@@ -77,7 +77,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 %>
 		        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
 		            <td><%= StringEscapeUtils.escapeHtml("" + ( visit.getVisitDate().toString())) %></td>
-		            <td><a href="editDetailedObstetricOfficeVisit.jsp?id=<%= StringEscapeUtils.escapeHtml("" + visit.getVisitId()) %>">View</a></td>
+		            <td><a href="viewDetailedObstetricOfficeVisit.jsp?id=<%= StringEscapeUtils.escapeHtml("" + visit.getVisitId()) %>">View</a></td>
 		        </tr>
 <%
 				index++;
