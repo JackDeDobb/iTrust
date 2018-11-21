@@ -520,8 +520,7 @@ CREATE TABLE obstetricOfficeVisit
 	numberOfBabies INT,
 	visitDate DATE,
 	FOREIGN KEY (patientMID) REFERENCES patients(MID),
-	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID),
-	FOREIGN KEY (obstetricRecordID) REFERENCES ultrasoundRecord(id)
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
 ) ENGINE=MyISAM;
 
 CREATE TABLE ultrasoundRecord

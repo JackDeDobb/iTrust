@@ -72,7 +72,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
 		newVisit.setPatientMID(visit.getPatientMID());
 		newVisit.setHcpMID(visit.getHcpMID());
-		newVisit.setObstetricRecordID(Long.valueOf("obstetricRecordID"));
+		newVisit.setObstetricRecordID(0);
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
 		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
@@ -120,10 +120,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	<tr>
 		<td class="subHeaderVertical">Visit Date:</td>
 		<td><input type="datetime-local" value="<%= StringEscapeUtils.escapeHtml("" + dateString) %>" name="visitDate"></td>   
-	</tr>
-	<tr>
-		<td class="subHeaderVertical">Obstetric Record ID:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getObstetricRecordID())) %>" name="weight"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Weight:</td>
