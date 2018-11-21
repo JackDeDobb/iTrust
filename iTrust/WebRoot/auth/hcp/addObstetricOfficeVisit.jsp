@@ -1,16 +1,11 @@
-<%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="java.util.List"%>
