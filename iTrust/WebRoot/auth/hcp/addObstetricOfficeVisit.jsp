@@ -14,6 +14,9 @@
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="java.util.List"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="java.util.Date"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 
 <%@include file="/global.jsp"%>
@@ -47,9 +50,23 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 
 	if (formIsFilled) {
-		ObstetricOfficeVisitBean v = new BeanBuilder<ObstetricOfficeVisitBean>().build(request.getParameterMap(), new ObstetricOfficeVisitBean());
+		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
+		newVisit.setPatientMID(patientMID);
+		newVisit.setHcpMID(hcp.getMID());
+		newVisit.setObstetricRecordID(Long.valueOf("obstetricRecordID"));
+		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
+		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
+		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
+		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
+		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = (Date) format.parse(request.getParameter("visitDate"));
+		Timestamp visitTimestamp = new Timestamp(date.getTime());
+		newVisit.setVisitDate(visitTimestamp);
+		
 		try{
-			addOOVisitAction.addObstetricOfficeVisit(v);
+			addOOVisitAction.addObstetricOfficeVisit(newVisit);
 %>
 
 	<div align=center>
@@ -84,7 +101,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Visit Date:</td>
-		<td><input type="text" name="visitDate"></td>   
+		<td><input type="date" name="visitDate"></td>   
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Obstetric Record ID:</td>
@@ -92,23 +109,23 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Weight:</td>
-		<td><input type="text" name="weight"></td>
+		<td><input type="number" name="weight"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="text" name="bloodPressure"></td>
+		<td><input type="number" name="bloodPressure"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>
-		<td><input type="text" name="fetalHeartRate"></td>
+		<td><input type="number" name="fetalHeartRate"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
-		<td><input type="text" name="lowLyingPlacentaObserved"></td>
+		<td><input type="number" step="1" name="lowLyingPlacentaObserved"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Number of Babies:</td>
-		<td><input type="text" name="numberOfBabies"></td>
+		<td><input type="number" step="1" name="numberOfBabies"></td>
 	</tr>
 
 </table>

@@ -106,23 +106,23 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Weight:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getWeight())) %>" name="weight"></td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getWeight())) %>" name="weight"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getBloodPressure())) %>" name="bloodPressure"></td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getBloodPressure())) %>" name="bloodPressure"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getFetalHeartRate())) %>" name="fetalHeartRate"></td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getFetalHeartRate())) %>" name="fetalHeartRate"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Low Lying Placenta Observed:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getLowLyingPlacentaObserved())) %>" name="lowLyingPlacentaObserved"></td>
+		<td><input type="number" step="1" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getLowLyingPlacentaObserved())) %>" name="lowLyingPlacentaObserved"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Number of Babies:</td>
-		<td><input type="text" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getNumberOfBabies())) %>" name="numberOfBabies"></td>
+		<td><input type="number" step="1" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getNumberOfBabies())) %>" name="numberOfBabies"></td>
 	</tr>
 </table>
 <br />
