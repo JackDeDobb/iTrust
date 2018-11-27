@@ -18,7 +18,7 @@ public class ChildBirthVisitDAO {
 	
 	public ChildBirthVisitDAO(DAOFactory factory) {
 		this.factory = factory;
-		this.loader = new ObstetricInfoLoader();
+		this.loader = new ChildBirthVisitLoader();
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class ChildBirthVisitDAO {
 
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
-			ChildBrithVisitBean record = loader.loadSingle(rs);
+			ChildBirthVisitBean record = loader.loadSingle(rs);
 			rs.close();
 			return record;
 		} catch (SQLException e) {
@@ -58,7 +58,7 @@ public class ChildBirthVisitDAO {
 								"INSERT INTO childBirthVisit "
 									+"(id,visitID,obstetricInitId,previouslyScheduled,preferredDeliveryType,hasDelivered, "
 									+"pitocinDosage,nitrousOxideDosage,epiduralAnaesthesiaDosage,magnesiumSulfateDosage,rhImmuneGlobulinDosage) "
-									+"VALUES(?,?,?,?,?,?,?,?)"), cbVisitBean))
+									+"VALUES(?,?,?,?,?,?,?,?,?,?,?)"), cbVisitBean))
 		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
@@ -78,7 +78,7 @@ public class ChildBirthVisitDAO {
 	public void editChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(
+				PreparedStatement ps = cbVisitLoader.loadParameters(
 						conn.prepareStatement("UPDATE childBirthVisit SET "
 							+"id=?, visitID=?, obstetricInitId=?, previouslyScheduled=?, preferredDeliveryType=?, hasDelivered=?, "
 							+"pitocinDosage=?, nitrousOxideDosage=?, epiduralAnaesthesiaDosage=?, magnesiumSulfateDosage=?, rhImmuneGlobulinDosage=? "
