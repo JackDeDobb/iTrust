@@ -78,7 +78,7 @@ public class ChildBirthVisitDAO {
 	public void editChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(
+				PreparedStatement ps = cbVisitLoader.loadParameters(
 						conn.prepareStatement("UPDATE childBirthVisit SET "
 							+"id=?, visitID=?, obstetricInitId=?, previouslyScheduled=?, preferredDeliveryType=?, hasDelivered=?, "
 							+"pitocinDosage=?, nitrousOxideDosage=?, epiduralAnaesthesiaDosage=?, magnesiumSulfateDosage=?, rhImmuneGlobulinDosage=? "
