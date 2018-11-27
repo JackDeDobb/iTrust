@@ -90,6 +90,8 @@ CREATE TABLE patients(
 	SpiritualPractices varchar(512) default '',
 	AlternateName varchar(32) default '',
 	DateOfDeactivation DATE default NULL,
+	RH BOOLEAN default false,
+	RHImmunization BOOLEAN default false,
 	ObstetricEligibility BOOLEAN default false,
 	PRIMARY KEY (MID)
 ) ENGINE=MyISAM;
@@ -505,6 +507,39 @@ CREATE TABLE medicalProcedure
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
 ) ENGINE=MyISAM;
 
+CREATE TABLE obstetricOfficeVisit
+(
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	patientMID BIGINT(20) UNSIGNED NOT NULL,
+	hcpMID BIGINT(20) UNSIGNED NOT NULL,
+	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
+	weight FLOAT,
+	bloodPressure FLOAT,
+	fetalHeartRate FLOAT,
+	lowLyingPlacentaObserved INT,
+	numberOfBabies INT,
+	visitDate DATE,
+	FOREIGN KEY (patientMID) REFERENCES patients(MID),
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
+) ENGINE=MyISAM;
+
+CREATE TABLE ultrasoundRecord
+(
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId BIGINT(20) UNSIGNED NOT NULL,
+	crownRumpLength FLOAT,
+	biparietalDiameter FLOAT,
+	headCircumference FLOAT,
+	femurLength FLOAT,
+	occipitofrontalDiameter FLOAT,
+	abdominalCircumference FLOAT,
+	humerusLength FLOAT,
+	estimatedFetalWeight FLOAT,
+	imagePath VARCHAR(100),
+	PRIMARY KEY (id),
+	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+) ENGINE=MyISAM;
+
 CREATE TABLE obstetricsInfo
 (
 	MID BIGINT unsigned NOT NULL,
@@ -549,3 +584,4 @@ CREATE TABLE babyDeliveryInfo
 	PRIMARY KEY(id),
 	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
 ) ENGINE=MyISAM;
+>>>>>>> dbe79702c91f20286553835f2a6e51ac289d5be3

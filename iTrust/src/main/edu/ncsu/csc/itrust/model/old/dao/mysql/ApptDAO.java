@@ -1,15 +1,18 @@
 package edu.ncsu.csc.itrust.model.old.dao.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.ApptBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.ApptBeanLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
+import edu.ncsu.csc.itrust.model.personnel.Speciality;
 
 public class ApptDAO {
 
@@ -83,6 +86,116 @@ public class ApptDAO {
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
+	}
+
+	/**
+	 * Schedules next available appointment for a given starting time and HCP.
+	 * TODO: Hardcoded 1hr duration right now.
+	 */
+	public void scheduleNextAvailableAppt(final ApptBean appt) throws SQLException,
+			DBException {
+
+		Connection conn = null;
+		PreparedStatement stmt1 = null;
+		ResultSet rs = null;
+		try {
+			conn = factory.getConnection();
+
+			// Get ascending list of next taken appointments.
+			stmt1 = conn.prepareStatement(
+				"SELECT appointment.sched_date as start_time, appointment.sched_date + INTERVAL appointmenttype.duration MINUTE as end_time, appointmenttype.duration from `appointment`, `appointmenttype`\n" +
+						"WHERE appointment.sched_date >= ?\n" +
+						"AND appointment.doctor_id = ?" +
+						"AND appointment.appt_type = appointmenttype.appt_type\n" +
+						"ORDER BY end_time ASC"
+			);
+			stmt1.setTimestamp(1, appt.getDate());
+			stmt1.setLong(2, appt.getHcp());
+			rs = stmt1.executeQuery();
+
+			// Iterate through, and check if current appointment overlap
+			// with desired date
+			// Otherwise accept and schedule.
+
+			Timestamp startAppt = appt.getDate();
+			int apptDurationInMinutes = apptTypeDAO.getApptType(appt.getApptType()).getDuration();
+			Timestamp endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
+			while (rs.next()) {
+				Timestamp curStartTime = rs.getTimestamp("start_time");
+				Timestamp curEndTime = rs.getTimestamp("end_time");
+				if (endAppt.before(curStartTime)) {
+					break;
+				} else {
+					startAppt = curEndTime;
+					int curApptDurationInMinutes = apptTypeDAO.
+							getApptType(rs.getString("appt_type")).getDuration();
+					endAppt = addTime(startAppt, curApptDurationInMinutes,  ChronoUnit.MINUTES);
+				}
+				LocalDateTime ldt = endAppt.toLocalDateTime();
+				if (ldt.getHour() > 16 ||
+						(ldt.getMinute() > 0 && ldt.getHour() == 16)) {
+					// Current time state is after 4pm.
+					// Move forward to next day 9am.
+					LocalDateTime nextDay = ldt.plusDays(1);
+					LocalDateTime firstTimeNextDay = nextDay.minusHours(nextDay.getHour() - 9);
+					startAppt = Timestamp.valueOf(firstTimeNextDay);
+					endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
+				} else if (ldt.getHour() < 9) {
+					// Current time state is before 9am.
+					// Move forward to 9am.
+					startAppt = Timestamp.valueOf(ldt.plusMinutes(9 - ldt.getHour()));
+					endAppt = addTime(startAppt, apptDurationInMinutes, ChronoUnit.MINUTES);
+				}
+			}
+
+			// Schedule new appointment.
+			ApptBean newAppt = new ApptBean();
+			newAppt.setDate(startAppt);
+			newAppt.setApptType(appt.getApptType());
+			newAppt.setPatient(appt.getPatient());
+			newAppt.setComment(appt.getComment());
+			newAppt.setHcp(appt.getHcp());
+			newAppt.setPrice(appt.getPrice());
+
+			scheduleAppt(newAppt);
+
+		} catch (SQLException sqlEx) {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException ex) {}
+			try {
+				if (stmt1 != null)
+					stmt1.close();
+			} catch (SQLException ex) { }
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex) { }
+
+			throw new DBException(sqlEx);
+		} catch (DBException dbEx) {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException ex) {}
+			try {
+				if (stmt1 != null)
+					stmt1.close();
+			} catch (SQLException ex) { }
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex) { }
+			throw dbEx;
+		}
+
+
+	}
+
+
+	private Timestamp addTime(Timestamp startTs, int amount, TemporalUnit unit) {
+		return Timestamp.from(startTs.toInstant().plus(amount, unit));
 	}
 
 	public void editAppt(final ApptBean appt) throws SQLException, DBException {

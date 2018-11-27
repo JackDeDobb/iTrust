@@ -15,6 +15,7 @@ import edu.ncsu.csc.itrust.model.old.beans.loaders.HospitalBeanLoader;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.PersonnelLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.enums.Role;
+import edu.ncsu.csc.itrust.model.personnel.Speciality;
 
 /**
  * Used for managing information related to personnel: HCPs, UAPs, Admins
@@ -146,6 +147,21 @@ public class PersonnelDAO {
 			throw new DBException(e);
 		}
 		return bean;
+	}
+
+	/**
+	 * Determines if a given person is an OBGYN.
+	 * @param mid
+	 *            The MID of the personnel in question.
+	 * @return True, if given personnel is an OBGYN or False otherwise.
+	 */
+	public boolean isOBGYN(final long mid) throws DBException {
+		try {
+			Speciality speciality = Speciality.fromString(getPersonnel(mid).getSpecialty());
+			return speciality == Speciality.OBGYN;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
 	}
 
 	/**
