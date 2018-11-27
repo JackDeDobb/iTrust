@@ -53,7 +53,7 @@ public class ChildBirthVisitDAO {
 	public long addChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ChildBirthVisitLoader.loadParameters(
+				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement(
 								"INSERT INTO childBirthVisit "
 									+"(id,visitID,obstetricInitId,previouslyScheduled,preferredDeliveryType,hasDelivered, "
@@ -78,7 +78,7 @@ public class ChildBirthVisitDAO {
 	public void editChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = cbVisitLoader.loadParameters(
+				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement("UPDATE childBirthVisit SET "
 							+"id=?, visitID=?, obstetricInitId=?, previouslyScheduled=?, preferredDeliveryType=?, hasDelivered=?, "
 							+"pitocinDosage=?, nitrousOxideDosage=?, epiduralAnaesthesiaDosage=?, magnesiumSulfateDosage=?, rhImmuneGlobulinDosage=? "
