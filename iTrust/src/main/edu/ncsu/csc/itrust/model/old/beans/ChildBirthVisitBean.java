@@ -7,7 +7,7 @@ public class ChildBirthVisitBean {
 	private long visitId;
 	private long obstetricInitId;
 	private boolean previouslyScheduled;
-	private DeliveryType dType = DeliveryType.NS;
+	private DeliveryType preferredDeliveryType = DeliveryType.NS;
 	private boolean hasDelivered;
 	private float pitocinDosage;
 	private float nitrousOxideDosage;
@@ -47,12 +47,12 @@ public class ChildBirthVisitBean {
 		this.previouslyScheduled = previouslyScheduled;
 	}
 	
-	public DeliveryType getdType() {
-		return dType;
+	public DeliveryType getPreferredDeliveryType() {
+		return preferredDeliveryType;
 	}
 	
-	public void setdType(DeliveryType dType) {
-		this.dType = dType;
+	public void setdType(DeliveryType preferredDeliveryType) {
+		this.preferredDeliveryType = preferredDeliveryType;
 	}
 	
 	public boolean isHasDelivered() {
