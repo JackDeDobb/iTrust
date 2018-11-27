@@ -35,7 +35,7 @@ public class ChildBirthVisitDAO {
 
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
-			ChildBrithVisitBean record = loader.loadSingle(rs);
+			ChildBirthVisitBean record = loader.loadSingle(rs);
 			rs.close();
 			return record;
 		} catch (SQLException e) {
