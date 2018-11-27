@@ -577,7 +577,7 @@ CREATE TABLE babyDeliveryInfo
 (
 	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
-	gender enum('Male', 'Female', 'Not Specified') NOT NULL DEFAULT 'Not Specified',
+	gender VARCHAR(20),
 	birthTime TIMESTAMP,
 	deliveryType VARCHAR(20),
 	isEstimated BOOLEAN DEFAULT FALSE,

@@ -35,9 +35,9 @@ public class ChildBirthVisitLoader implements BeanLoader<ChildBirthVisitBean> {
 	
 	@Override
 	public ChildBirthVisitBean loadSingle(ResultSet rs) throws SQLException {
-		ChildBirthVisitBean p = new ChildBirthVisitBean();
-		loadCommon(rs, p);
-		return p;
+		ChildBirthVisitBean c = new ChildBirthVisitBean();
+		loadCommon(rs, c);
+		return c;
 	}
 	
 	@Override

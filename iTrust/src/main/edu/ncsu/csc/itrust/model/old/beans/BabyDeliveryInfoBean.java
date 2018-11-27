@@ -37,6 +37,10 @@ public class BabyDeliveryInfoBean {
 		this.gender = gender;
 	}
 	
+	public void setGender(String genderStr) {
+		this.gender = Gender.parse(genderStr);
+	}
+	
 	public Timestamp getBirthTime() {
 		return birthTime;
 	}
@@ -51,6 +55,10 @@ public class BabyDeliveryInfoBean {
 	
 	public void setDeliveryType(DeliveryType deliveryType) {
 		this.deliveryType = deliveryType;
+	}
+	
+	public void setDeliveryType(String deliveryTypeStr) {
+		this.deliveryType = DeliveryType.parse(deliveryTypeStr);
 	}
 	
 	public boolean isEstimated() {
