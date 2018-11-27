@@ -520,3 +520,31 @@ CREATE TABLE obstetricsInfo
 	PRIMARY KEY (recordId)
 
 ) ENGINE=MyISAM;
+
+CREATE TABLE childBirthVisit
+(
+	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId	BIGINT(20) UNSIGNED NOT NULL,
+	previouslyScheduled BOOLEAN,
+	preferredDeliveryMethod enum('vaginal delivery','vaginal delivery vacuum assist','vaginal delivery forceps assist','caesarean section','miscarriage'),
+	hasDelivered BOOLEAN,
+	pitocinDosage FLOAT,
+	nitrousOxideDosage FLOAT,
+	epiduralAnaesthesiaDosage FLOAT,
+	magnesiumSulfateDosage FLOAT,
+	rhImmuneGlobulinDosage FLOAT,
+	PRIMARY KEY(id),
+	FOREIGN KEY (visitId) REFERENCES officeVisit(visitID)
+) ENGINE=MyISAM;
+
+CREATE TABLE babyDeliveryInfo
+(
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
+	gender enum('male', 'female'),
+	birthTime TIMESTAMP,
+	deliveryMethod enum('vaginal delivery','vaginal delivery vacuum assist','vaginal delivery forceps assist','caesarean section','miscarriage'),
+	isEstimated BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY(id),
+	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
+) ENGINE=MyISAM;
