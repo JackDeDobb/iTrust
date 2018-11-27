@@ -18,7 +18,7 @@ public class ChildBirthVisitDAO {
 	
 	public ChildBirthVisitDAO(DAOFactory factory) {
 		this.factory = factory;
-		this.loader = new ObstetricInfoLoader();
+		this.loader = new ChildBirthVisitLoader();
 	}
 
 	/**
