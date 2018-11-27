@@ -14,7 +14,7 @@ import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 
 public class BabyDeliveryInfoDAO {
 	private DAOFactory factory;
-	private ChildBirthVisitLoader loader;
+	private BabyDeliveryInfoLoader loader;
 	
 	public BabyDeliveryInfoDAO(DAOFactory factory) {
 		this.factory = factory;
@@ -35,7 +35,7 @@ public class BabyDeliveryInfoDAO {
 
 			ps.setLong(1, id);
 			ResultSet rs = ps.executeQuery();
-			BabyDeliveryInfo record = loader.loadSingle(rs);
+			BabyDeliveryInfoBean record = loader.loadSingle(rs);
 			rs.close();
 			return record;
 		} catch (SQLException e) {
@@ -98,7 +98,7 @@ public class BabyDeliveryInfoDAO {
 	public List<BabyDeliveryInfoBean> getBabyDeliveryInfoList(long childBirthVisitId) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE childBirthVisitId = ?")) {
-			ps.setLong(1, mid);
+			ps.setLong(1, childBirthVisitId);
 			ResultSet rs = ps.executeQuery();
 			List<BabyDeliveryInfoBean> records = rs.next() ? loader.loadList(rs) : null;
 			rs.close();
