@@ -58,7 +58,7 @@ public class ChildBirthVisitDAO {
 								"INSERT INTO childBirthVisit "
 									+"(id,visitID,obstetricInitId,previouslyScheduled,preferredDeliveryType,hasDelivered, "
 									+"pitocinDosage,nitrousOxideDosage,epiduralAnaesthesiaDosage,magnesiumSulfateDosage,rhImmuneGlobulinDosage) "
-									+"VALUES(?,?,?,?,?,?,?,?)"), cbVisitBean))
+									+"VALUES(?,?,?,?,?,?,?,?,?,?,?)"), cbVisitBean))
 		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
