@@ -562,8 +562,8 @@ CREATE TABLE childBirthVisit
 	visitId	BIGINT(20) UNSIGNED NOT NULL,
 	obstetricInitId BIGINT(20),
 	previouslyScheduled BOOLEAN,
-	preferredDeliveryType enum('Vaginal Delivery','Vaginal Delivery Vacuum Assist','Vaginal Delivery Forceps Assist','Caesarean Section','Miscarriage','N/S') NOT NULL DEFAULT 'N/S',
-	hasDelivered BOOLEAN,
+	preferredDeliveryType VARCHAR(20),
+	delivered BOOLEAN,
 	pitocinDosage FLOAT,
 	nitrousOxideDosage FLOAT,
 	epiduralAnaesthesiaDosage FLOAT,
@@ -577,11 +577,10 @@ CREATE TABLE babyDeliveryInfo
 (
 	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
-	gender enum('Male', 'Female', 'Not Specified') NOT NULL DEFAULT 'Not Specified',
+	gender VARCHAR(20),
 	birthTime TIMESTAMP,
-	deliveryType enum('Vaginal Delivery','Vaginal Delivery Vacuum Assist','Vaginal Delivery Forceps Assist','Caesarean Section','Miscarriage','N/S') NOT NULL DEFAULT 'N/S',
+	deliveryType VARCHAR(20),
 	isEstimated BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY(id),
 	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
 ) ENGINE=MyISAM;
->>>>>>> dbe79702c91f20286553835f2a6e51ac289d5be3
