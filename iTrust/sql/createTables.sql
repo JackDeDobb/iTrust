@@ -584,4 +584,3 @@ CREATE TABLE babyDeliveryInfo
 	PRIMARY KEY(id),
 	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
 ) ENGINE=MyISAM;
->>>>>>> dbe79702c91f20286553835f2a6e51ac289d5be3
