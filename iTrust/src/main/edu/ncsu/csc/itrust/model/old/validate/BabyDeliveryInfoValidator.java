@@ -3,6 +3,8 @@ package edu.ncsu.csc.itrust.model.old.validate;
 import edu.ncsu.csc.itrust.exception.ErrorList;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean;
+import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
+import edu.ncsu.csc.itrust.model.old.enums.Gender;
 
 public class BabyDeliveryInfoValidator extends BeanValidator<BabyDeliveryInfoBean> {
 	/**
@@ -15,16 +17,22 @@ public class BabyDeliveryInfoValidator extends BeanValidator<BabyDeliveryInfoBea
 	public void validate(BabyDeliveryInfoBean b) throws FormValidationException {
 		ErrorList errorList = new ErrorList();
 		
-		errorList.addIfNotNull(checkFormat("obstetricRecordID", oov.getObstetricRecordID(), ValidationFormat.POSITIVE_NONZERO_INT, false));
-		errorList.addIfNotNull(checkFormat("visit id", oov.getVisitId(), ValidationFormat.POSITIVE_NONZERO_INT, false));
-		
-		if(oov.getNumberOfBabies() <= 0) {
-			errorList.addIfNotNull("Number of babies must be greater than 0!");
+		if(b.getChildBirthVisitId() <= 0) {
+			errorList.addIfNotNull("Child birth visit ID must be set!");
 		}
-		if(oov.getWeight() <= 0) {
-			errorList.addIfNotNull("Weight must be greater than 0!");
+		
+		if(b.getGender() == Gender.NotSpecified) {
+			errorList.addIfNotNull("Gender must be specified!");
+		}
+		
+		if(b.getDeliveryType() == DeliveryType.NS) {
+			errorList.addIfNotNull("Delivery Type must be specified!");
 		}
 
+		if(b.getBirthTime() == null) {
+			errorList.addIfNotNull("Birth time must be set!");
+		}
+		
 		if (errorList.hasErrors())
 			throw new FormValidationException(errorList);
 	}
