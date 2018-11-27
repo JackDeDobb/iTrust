@@ -525,6 +525,7 @@ CREATE TABLE childBirthVisit
 (
 	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	visitId	BIGINT(20) UNSIGNED NOT NULL,
+	obstetricInitId BIGINT(20),
 	previouslyScheduled BOOLEAN,
 	preferredDeliveryMethod enum('vaginal delivery','vaginal delivery vacuum assist','vaginal delivery forceps assist','caesarean section','miscarriage'),
 	hasDelivered BOOLEAN,
