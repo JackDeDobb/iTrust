@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Calendar;
+import java.util.function.Function;
 
 /**
  * Class that defines the new obstetric office visit `document` action.
@@ -136,27 +137,40 @@ public class AddObstetricOfficeVisitAction {
         ApptTypeBean apptType = apptTypeDAO.getApptType("Consultation");
         nextAppt.setPrice(apptType.getPrice());
         nextAppt.setHcp(obsOfficeVisit.getHcpMID());
-        nextAppt.setApptType("Consultation");
+        nextAppt.setApptType("Consultation"); // TODO: Add new appointment type.
+        nextAppt.setPatient(patientInfo.getMID());
+        nextAppt.setComment("Regularly auto-scheduled obstetric office visit appointment.");
 
         //  -> Given number of weeks pregnant:
 
+        Function<LocalDateTime, LocalDateTime> truncate = (date) -> {
+            return date.withMinute(0).withSecond(0).withNano(0);
+        };
+
         if (numberOfWeeksPregnant <= 13 && numberOfWeeksPregnant >= 0) {
-            LocalDateTime apptTime = today.plus(4, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(4, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 28) {
-            LocalDateTime apptTime = today.plus(2, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(2, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 40) {
-            LocalDateTime apptTime = today.plus(1, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(1, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 42) {
             // TODO(avjykmr2): Dependent on UC-96, add childbirth visit.
             int amountOfDaysToAdd = DAY_OFFSET.getOrDefault(today.getDayOfWeek(), 2);
-            LocalDateTime apptTime = today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
+                    .withHour(9));
+            nextAppt.setDate(Timestamp.valueOf(apptTime));
+        } else {
+            System.out.println(String.format("Warning: Number of weeks pregnant (%d) is more than maximum understood " +
+                    "value", numberOfWeeksPregnant));
+            int amountOfDaysToAdd = DAY_OFFSET.getOrDefault(today.getDayOfWeek(), 2);
+            LocalDateTime apptTime = truncate.apply(today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         }
 

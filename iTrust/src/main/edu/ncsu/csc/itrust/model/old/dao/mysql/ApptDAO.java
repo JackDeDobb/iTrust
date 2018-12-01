@@ -76,7 +76,7 @@ public class ApptDAO {
 
 	}
 
-	public void scheduleAppt(final ApptBean appt) throws SQLException, DBException {
+	public void scheduleAppt(final ApptBean appt) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement stmt = this.abloader.loadParameters(conn.prepareStatement(
 						"INSERT INTO appointment (appt_type, patient_id, doctor_id, sched_date, comment) "
@@ -103,12 +103,16 @@ public class ApptDAO {
 
 			// Get ascending list of next taken appointments.
 			stmt1 = conn.prepareStatement(
-				"SELECT appointment.sched_date as start_time, appointment.sched_date + INTERVAL appointmenttype.duration MINUTE as end_time, appointmenttype.duration from `appointment`, `appointmenttype`\n" +
-						"WHERE appointment.sched_date >= ?\n" +
-						"AND appointment.doctor_id = ?" +
-						"AND appointment.appt_type = appointmenttype.appt_type\n" +
-						"ORDER BY end_time ASC"
+				"SELECT appointment.sched_date as start_time, appointment.sched_date + INTERVAL appointmenttype.duration " +
+						"MINUTE as end_time, appointmenttype.duration, appointment.appt_type as appt_type " +
+						"FROM `appointment`, `appointmenttype` " +
+						"WHERE appointment.sched_date >= ? " +
+						"AND appointment.doctor_id = ? " +
+						"AND appointment.appt_type = appointmenttype.appt_type " +
+						"ORDER BY end_time ASC "
 			);
+			System.out.println("Appt Date: " + appt.getDate());
+			System.out.println("Appt HCP: " + appt.getHcp());
 			stmt1.setTimestamp(1, appt.getDate());
 			stmt1.setLong(2, appt.getHcp());
 			rs = stmt1.executeQuery();
@@ -173,6 +177,7 @@ public class ApptDAO {
 					conn.close();
 			} catch (SQLException ex) { }
 
+			sqlEx.printStackTrace();
 			throw new DBException(sqlEx);
 		} catch (DBException dbEx) {
 			try {

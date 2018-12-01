@@ -58,7 +58,7 @@ public class ObstetricOfficeVisitDAO {
 								"INSERT INTO obstetricOfficeVisit "
 									+"(obstetricRecordID, patientMID,hcpMID,weight,bloodPressure, "
 									+"fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies,visitDate) "
-									+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean))
+									+"VALUES(?,?,?,?,?,?,?,?,?)"), ObsVisitBean))
 		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
