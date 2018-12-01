@@ -551,7 +551,7 @@ CREATE TABLE obstetricOfficeVisit
 	fetalHeartRate FLOAT,
 	lowLyingPlacentaObserved INT,
 	numberOfBabies INT,
-	visitDate DATE,
+	visitDate DATETIME,
 	PRIMARY KEY (visitId),
 	FOREIGN KEY (obstetricRecordID) REFERENCES obstetricsInfo(recordId),
 	FOREIGN KEY (patientMID) REFERENCES patients(MID),

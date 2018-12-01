@@ -31,7 +31,7 @@ public class AddApptAction extends ApptAction {
 				return "Warning! This appointment conflicts with other appointments";
 			}
 		}
-		
+
 		apptDAO.scheduleAppt(appt);
 		TransactionLogger.getInstance().logTransaction(TransactionType.APPOINTMENT_ADD, loggedInMID, appt.getPatient(), "");
 		if(ignoreConflicts){
