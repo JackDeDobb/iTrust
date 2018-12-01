@@ -48,7 +48,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
 		newVisit.setPatientMID(patientMID);
 		newVisit.setHcpMID(hcp.getMID());
-		newVisit.setObstetricRecordID(0);
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
 		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));

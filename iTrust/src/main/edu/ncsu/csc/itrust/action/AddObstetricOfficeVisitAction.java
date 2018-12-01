@@ -64,8 +64,13 @@ public class AddObstetricOfficeVisitAction {
         // Validate office visit bean.
         this.validator.validate(obsOfficeVisit);
 
+        System.out.println(obsOfficeVisit.toString());
+
         // Fetch the obstetric info bean.
         ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
+
+        // Link obstetric record id to office visit.
+        obsOfficeVisit.setObstetricRecordID(patientInfo.getRecordId());
 
         // Add obstetric office visit to DB.
         long visitId = this.obstetricOfficeVisitDAO.addObstetricOfficeVisit(obsOfficeVisit);

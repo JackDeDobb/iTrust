@@ -57,6 +57,43 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 	}
 
 	/**
+	 * Load parameters for an insert query into the obstetric office visit table.
+	 * @throws SQLException
+	 */
+	public PreparedStatement loadInsertParameters(PreparedStatement ps, ObstetricOfficeVisitBean oov) throws SQLException {
+		int i = 1;
+		ps.setLong(i++, oov.getObstetricRecordID());
+		ps.setLong(i++, oov.getPatientMID());
+		ps.setLong(i++, oov.getHcpMID());
+		ps.setFloat(i++, oov.getWeight());
+		ps.setFloat(i++, oov.getBloodPressure());
+		ps.setFloat(i++, oov.getFetalHeartRate());
+		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
+		ps.setInt(i++, oov.getNumberOfBabies());
+		ps.setTimestamp(i++, oov.getVisitDate());
+		return ps;
+	}
+
+	/**
+	 * Load parameters for an update query into the obstetric office visit table.
+	 * @throws SQLException
+	 */
+	public PreparedStatement loadUpdateParameters(PreparedStatement ps, ObstetricOfficeVisitBean oov) throws SQLException {
+		int i = 1;
+		ps.setLong(i++, oov.getObstetricRecordID());
+		ps.setLong(i++, oov.getPatientMID());
+		ps.setLong(i++, oov.getHcpMID());
+		ps.setFloat(i++, oov.getWeight());
+		ps.setFloat(i++, oov.getBloodPressure());
+		ps.setFloat(i++, oov.getFetalHeartRate());
+		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
+		ps.setInt(i++, oov.getNumberOfBabies());
+		ps.setTimestamp(i++, oov.getVisitDate());
+		ps.setLong(i++, oov.getVisitId());
+		return ps;
+	}
+
+	/**
 	 * loadParameters
 	 * @throws SQLException
 	 */

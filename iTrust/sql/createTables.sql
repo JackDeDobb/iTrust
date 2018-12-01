@@ -507,22 +507,6 @@ CREATE TABLE medicalProcedure
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
 ) ENGINE=MyISAM;
 
-CREATE TABLE obstetricOfficeVisit
-(
-	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
-	patientMID BIGINT(20) UNSIGNED NOT NULL,
-	hcpMID BIGINT(20) UNSIGNED NOT NULL,
-	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
-	weight FLOAT,
-	bloodPressure FLOAT,
-	fetalHeartRate FLOAT,
-	lowLyingPlacentaObserved INT,
-	numberOfBabies INT,
-	visitDate DATE,
-	FOREIGN KEY (patientMID) REFERENCES patients(MID),
-	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
-) ENGINE=MyISAM;
-
 CREATE TABLE ultrasoundRecord
 (
 	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
@@ -554,4 +538,22 @@ CREATE TABLE obstetricsInfo
 	initDate                DATE NOT NULL,
 	PRIMARY KEY (recordId)
 
+) ENGINE=MyISAM;
+
+CREATE TABLE obstetricOfficeVisit
+(
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	patientMID BIGINT(20) UNSIGNED NOT NULL,
+	hcpMID BIGINT(20) UNSIGNED NOT NULL,
+	obstetricRecordID BIGINT(20) NOT NULL,
+	weight FLOAT,
+	bloodPressure FLOAT,
+	fetalHeartRate FLOAT,
+	lowLyingPlacentaObserved INT,
+	numberOfBabies INT,
+	visitDate DATE,
+	PRIMARY KEY (visitId),
+	FOREIGN KEY (obstetricRecordID) REFERENCES obstetricsInfo(recordId),
+	FOREIGN KEY (patientMID) REFERENCES patients(MID),
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
 ) ENGINE=MyISAM;

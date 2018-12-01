@@ -97,4 +97,20 @@ public class ObstetricOfficeVisitBean {
 	public void setVisitDate(Timestamp visitDate) {
 		this.visitDate = visitDate;
 	}
+
+	@Override
+	public String toString() {
+		return "ObstetricOfficeVisitBean{" +
+				"visitId=" + visitId +
+				", patientMID=" + patientMID +
+				", hcpMID=" + hcpMID +
+				", obstetricRecordID=" + obstetricRecordID +
+				", weight=" + weight +
+				", bloodPressure=" + bloodPressure +
+				", fetalHeartRate=" + fetalHeartRate +
+				", lowLyingPlacentaObserved=" + lowLyingPlacentaObserved +
+				", numberOfBabies=" + numberOfBabies +
+				", visitDate=" + visitDate +
+				'}';
+	}
 }
