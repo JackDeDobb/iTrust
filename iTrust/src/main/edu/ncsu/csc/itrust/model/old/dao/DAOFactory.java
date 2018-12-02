@@ -252,5 +252,13 @@ public class DAOFactory {
 		return new UltrasoundRecordDAO(this);
 	}
 	
+	/**
+	 * Creates a DAO for child birth visit records.
+	 * @return this DAOFactory's ChildBirthVisitDAO
+	 */
+	public ChildBirthVisitDAO getChildBirthVisitDAO() {
+		return new ChildBirthVisitDAO(this);
+	}
+	
 
 }
