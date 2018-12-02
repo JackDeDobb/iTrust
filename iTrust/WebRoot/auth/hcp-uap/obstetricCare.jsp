@@ -119,6 +119,7 @@
 	    
 	    <%	if (isOBGYN) { %>
 	    	<a href="addNewObstetricRecord.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
+	    	<a href="addNewChildBirthVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add New Child Birth Record</a>
 	    <%	} %>
 	    
 	    

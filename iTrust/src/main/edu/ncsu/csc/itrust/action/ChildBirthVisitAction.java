@@ -25,7 +25,9 @@ public class ChildBirthVisitAction extends PatientBaseAction {
 	/**obstetricInitID is the pregnancy in question */
 	private long obstetricInitId;
 	/**Viewer is the patient bean for the person that is logged in*/ 
-	private List<ChildBirthVisitBean> viewer;
+	private ChildBirthVisitBean viewer;
+	
+	private String pidString;
 
 	/**
 	 * ViewPateintAction is the constructor for this action class. It simply initializes the
@@ -35,13 +37,13 @@ public class ChildBirthVisitAction extends PatientBaseAction {
 	 * @param obstetricInitId The pregnancy we are viewing.
 	 * @throws ITrustException When there is a bad user.
 	 */
-	public ViewChildBirthVisitAction(DAOFactory factory, long loggedInMID, long obstetricInitId)
+	public ChildBirthVisitAction(DAOFactory factory, long loggedInMID, String pidString)
 			throws ITrustException {
 		super(factory, pidString);
 		this.childBirthVisitDAO = factory.getChildBirthVisitDAO();
 		this.loggedInMID = loggedInMID;
-		this.obstetricInitId = obstetricInitId;
 		this.viewer = childBirthVisitDAO.getChildBirthVisitByID(loggedInMID);
+		this.pidString = pidString;
 		TransactionLogger.getInstance().logTransaction(TransactionType.ACTIVITY_FEED_VIEW, loggedInMID, 0L , "");
 	}
 	
@@ -54,7 +56,7 @@ public class ChildBirthVisitAction extends PatientBaseAction {
 	public List<ChildBirthVisitBean> getAllRecords() throws ITrustException{
 		List<ChildBirthVisitBean> result;
 		try {
-			result = childBirthVisitDAO.getChildBirthVisitList(this.obstetricInitId);
+			result = childBirthVisitDAO.getChildBirthVisitListByObstetricInitId(this.obstetricInitId);
 		} catch (DBException e) {
 			throw new ITrustException("Invalid Record");
 		}
