@@ -5,6 +5,7 @@ import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.model.old.beans.*;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
+import edu.ncsu.csc.itrust.model.old.enums.AppointmentType;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
 
@@ -134,10 +135,10 @@ public class AddObstetricOfficeVisitAction {
         // TODO(avjykmr2): Determine if appt type is correct.
 
         ApptBean nextAppt = new ApptBean();
-        ApptTypeBean apptType = apptTypeDAO.getApptType("Consultation");
+        ApptTypeBean apptType = apptTypeDAO.getApptType(AppointmentType.OBSTETRIC_OV.getName());
         nextAppt.setPrice(apptType.getPrice());
         nextAppt.setHcp(obsOfficeVisit.getHcpMID());
-        nextAppt.setApptType("Consultation"); // TODO: Add new appointment type.
+        nextAppt.setApptType(apptType.getName()); // TODO: Add new appointment type.
         nextAppt.setPatient(patientInfo.getMID());
         nextAppt.setComment("Regularly auto-scheduled obstetric office visit appointment.");
 

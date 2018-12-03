@@ -531,7 +531,7 @@ CREATE TABLE obstetricsInfo
 	yearsOfConception		BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType VARCHAR(20) ,
+	deliveryType VARCHAR(40) ,
 	numBirths             BIGINT(20),
 	LMP                     DATE NOT NULL,
 	EDD                     DATE NOT NULL,

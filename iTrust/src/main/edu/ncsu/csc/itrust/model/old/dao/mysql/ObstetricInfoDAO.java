@@ -60,6 +60,7 @@ public class ObstetricInfoDAO {
 						"LMP, EDD, initDate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())"), info)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
