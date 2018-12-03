@@ -6,9 +6,9 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 <%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
 
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
@@ -71,10 +71,8 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 
 	        try {
 	        	String lmpdate = request.getParameter("lmp");
-		        DateFormat formatter;
-		        java.util.Date date;
-		        formatter = new SimpleDateFormat("YYYY-MM-DD");
-		        date = formatter.parse(lmpdate);
+		        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				Date date = formatter.parse(lmpdate);
 		        info.setLMP(date);
 		        info.setEDD();
 	        } catch(Exception e) {
