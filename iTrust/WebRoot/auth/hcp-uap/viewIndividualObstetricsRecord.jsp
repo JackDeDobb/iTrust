@@ -122,8 +122,8 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				r = obstetricInfoAction.getRecordById(recordId);
 	        }
 			
-			
-			
+
+
 			
 
 			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");

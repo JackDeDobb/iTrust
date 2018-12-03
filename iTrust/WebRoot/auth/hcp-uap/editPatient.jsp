@@ -39,6 +39,9 @@
 	if (formIsFilled) {
 		p = new BeanBuilder<PatientBean>().build(request
 				.getParameterMap(), new PatientBean());
+		// Added support for the RH field.
+		boolean isRH = Boolean.parseBoolean(request.getParameter("RHStr"));
+		p.setRH(isRH);
 		try {
 			action.updateInformation(p);
 			loggingAction.logEvent(TransactionType.DEMOGRAPHICS_EDIT, loggedInMID.longValue(), p.getMID(), "");
@@ -260,7 +263,15 @@
 					<%
 						}
 					%>
-				</select>
+				</select></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">RH Negative:</td>
+				<td><select name="RHStr">
+					<option value="true" <%= StringEscapeUtils.escapeHtml(p.isRH() ? "selected=selected" : "")%>>Yes</option>
+					<option value="false" <%= StringEscapeUtils.escapeHtml(!p.isRH() ? "selected=selected" : "")%>>No
+					</option>
+				</select></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Gender:</td>
