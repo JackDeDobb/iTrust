@@ -58,28 +58,34 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
-		
-		String addUltra = request.getParameter("ultrasound");
-		UltrasoundRecordBean ultrasound = null;
-		if(addUltra.equals("true")){
-			ultrasound = new UltrasoundRecordBean();
-			ultrasound.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
-			ultrasound.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
-			ultrasound.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
-			ultrasound.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
-			ultrasound.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
-			ultrasound.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
-			ultrasound.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
-			ultrasound.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
-			// TODO: have to add image data
-		}
+
+
+//		String addUltra = request.getParameter("ultrasound");
+//		UltrasoundRecordBean ultrasound = null;
+//		if(addUltra.equals("true")){
+//			ultrasound = new UltrasoundRecordBean();
+//			ultrasound.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
+//			ultrasound.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
+//			ultrasound.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
+//			ultrasound.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
+//			ultrasound.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
+//			ultrasound.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
+//			ultrasound.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
+//			ultrasound.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
+//
+//
+//			// TODO: have to add image data
+//		}
 		
 		try{
 			long visitId = addOOVisitAction.addObstetricOfficeVisit(newVisit);
-			// Obs Office visit added. Add Ultrasound record
-			if(addUltra.equals("true")){
-				ultrasound.setVisitID(visitId);
-			}
+			String ultrasoundUrl = "addUltrasound.jsp?visitId=" + visitId;
+			session.setAttribute("visitId", "" + visitId);
+			response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
+//			// Obs Office visit added. Add Ultrasound record
+//			if(addUltra.equals("true")){
+//				ultrasound.setVisitID(visitId);
+//			}
 			
 %>
 

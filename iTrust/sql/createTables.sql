@@ -519,9 +519,9 @@ CREATE TABLE ultrasoundRecord
 	abdominalCircumference FLOAT,
 	humerusLength FLOAT,
 	estimatedFetalWeight FLOAT,
-	imagePath VARCHAR(100),
+	imagePath VARCHAR(1000),
 	PRIMARY KEY (id),
-	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+	FOREIGN KEY (visitID) REFERENCES obstetricOfficeVisit(visitId)
 ) ENGINE=MyISAM;
 
 CREATE TABLE obstetricsInfo

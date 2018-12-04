@@ -8,10 +8,12 @@ import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
 import edu.ncsu.csc.itrust.model.old.enums.AppointmentType;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
+import edu.ncsu.csc.itrust.model.old.validate.UltrasoundRecordValidator;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -19,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.Calendar;
 import java.util.function.Function;
 
 /**
@@ -31,9 +32,10 @@ public class AddObstetricOfficeVisitAction {
     private PatientDAO patientDAO;
     private ApptTypeDAO apptTypeDAO;
     private UltrasoundRecordDAO ultrasoundRecordDAO;
+    private UltrasoundRecordValidator ultrasoundRecordValidator;
     private TransactionDAO transactionDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
-    private ObstetricOfficeVisitValidator validator;
+    private ObstetricOfficeVisitValidator obsOfficeVisitValidator;
     private long loggedInMID;
 
     public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
@@ -45,7 +47,9 @@ public class AddObstetricOfficeVisitAction {
         this.obstetricInfoDAO = factory.getObstetricInfoDAO();
         this.transactionDAO = factory.getTransactionDAO();
         this.loggedInMID = loggedInMID;
-        this.validator = new ObstetricOfficeVisitValidator();
+        this.obsOfficeVisitValidator = new ObstetricOfficeVisitValidator();
+        this.ultrasoundRecordValidator = new UltrasoundRecordValidator();
+
     }
 
     private final static Map<DayOfWeek, Integer> DAY_OFFSET = new HashMap<>();
@@ -64,7 +68,7 @@ public class AddObstetricOfficeVisitAction {
             FormValidationException {
 
         // Validate office visit bean.
-        this.validator.validate(obsOfficeVisit);
+        this.obsOfficeVisitValidator.validate(obsOfficeVisit);
 
         System.out.println(obsOfficeVisit.toString());
 
@@ -93,7 +97,7 @@ public class AddObstetricOfficeVisitAction {
             FormValidationException {
 
         // Validate office visit bean.
-        this.validator.validate(obsOfficeVisit);
+        this.obsOfficeVisitValidator.validate(obsOfficeVisit);
 
         // Fetch the obstetric info bean.
         ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
@@ -104,10 +108,16 @@ public class AddObstetricOfficeVisitAction {
         return patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo.getLMP()) >= 28;
     }
 
-    public void addUltrasoundRecord(ObstetricOfficeVisitBean obsOfficeVisit, UltrasoundRecordBean ultrasoundRecord) throws DBException {
+    public void addUltrasoundRecord(long visitId, long patientMID, UltrasoundRecordBean ultrasoundRecord) throws DBException, FormValidationException {
+        // Validate ultrasound record fields.
+        ultrasoundRecordValidator.validate(ultrasoundRecord);
+
+        // Add the ultrasound record to the DB.
         ultrasoundRecordDAO.addUltrasoundRecord(ultrasoundRecord);
-        transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, obsOfficeVisit.getPatientMID(),
-                obsOfficeVisit.getVisitId() + "");
+
+        // Log the transaction.
+        transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, patientMID,
+                visitId + "");
     }
 
     private int getNumberOfWeeksPregnant(Date LMP) {
@@ -120,6 +130,7 @@ public class AddObstetricOfficeVisitAction {
 
     /**
      * Schedule next office visit.
+     * TODO(avjykmr2): Add handling logic if office visit is on a Weekend.
      */
     private void scheduleNextOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit, ObstetricInfoBean patientInfo) throws DBException {
 
@@ -183,4 +194,5 @@ public class AddObstetricOfficeVisitAction {
 
 
     }
+
 }
