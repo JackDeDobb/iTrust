@@ -89,7 +89,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			*/
 			
 	        try {
-	        	String deliveryDate= request.getParameter("deliveryDate");
+	        	String deliveryDate= request.getParameter("birthTime");
 		        DateFormat formatter;
 		        java.util.Timestamp birthTime;
 		        formatter = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.");
@@ -103,15 +103,77 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        
 	        
 	        try {
-	        	info.setGender(request.getParameter("gender"));
+	        	info.setGender(request.getParameter("g1"));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("gender").equals("")) {
+	        	if (!request.getParameter("g1").equals("")) {
 	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
 	        		invalid = true;
 	        	}
 	        }
-	        
-	   		
+	        try {
+	        	info.setGender(request.getParameter("g2"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g2").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g3"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g3").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g3"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g3").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g4"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g4").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g5"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g5").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g6"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g6").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g7"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g7").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
+	        try {
+	        	info.setGender(request.getParameter("g8"));
+	        } catch(Exception e) {
+	        	if (!request.getParameter("g8").equals("")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid gender <br>");
+	        		invalid = true;
+	        	}
+	        }
 	        
 	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
 	        if(!invalid) {
@@ -134,42 +196,55 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 		<table class="fTable" align=center style="width: 350px;">
 			<tr>
 				<th colspan=2>Patient Information</th>
-			</tr>		
+			</tr>	
+			<tr>
+				<td class="subHeaderVertical">Birth Time:</td>
+				<td><input name="birthTime" type="text"></td>
+			</tr>	
 			<tr>		
-				<td class="subHeaderVertical">Previously Scheduled:</td>
-				<td><input name="firstName" type="text"></td>
+				<td class="subHeaderVertical">Estimated?</td>
+				<td><input name="estimated" type="text"></td>
+			</tr>
+			
+			<tr>
+				<td class="subHeaderVertical">Gender Baby 1:</td>
+				<td><input name="g1" type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Delivered:</td>
-				<td><input name="lastName" type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 2:</td>
+				<td><input name="g2"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Pitocin Dosage:</td>
-				<td><input name="Pitocin" type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 3:</td>
+				<td><input name="g3"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Nitrous Oxide Dosage:</td>
-				<td><input name="NitrousOxide"  type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 4:</td>
+				<td><input name="g4"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Epidural Anesthesia Dosage:</td>
-				<td><input name="EpiduralAnaesthesia"  type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 5:</td>
+				<td><input name="g5"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Magnesium Sulfate Dosage:</td>
-				<td><input name="MagnesiumSulfate"  type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 6:</td>
+				<td><input name="g6"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">RHImmune Globulin Dosage:</td>
-				<td><input name="RhImmuneGlobulin"  type="text"></td>
+				<td class="subHeaderVertical">Gender Baby 7:</td>
+				<td><input name="g7"  type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Preferred Delivery Type:</td>
+				<td class="subHeaderVertical">Gender Baby 8:</td>
+				<td><input name="g8"  type="text"></td>
+			</tr>
+			<tr>
+				<td class="subHeaderVertical">Delivery Type:</td>
 				<td><select name="deliveryTypeStr">
 					<%
 						String selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
-							selected = (dt.equals(DeliveryType.NS)) ? "selected=selected"
+							selected = (dt.equals(DeliveryType.Vaginal)) ? "selected=selected"
 									: "";
 					%>
 					<option value="<%=dt.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (dt.getName())) %></option>
