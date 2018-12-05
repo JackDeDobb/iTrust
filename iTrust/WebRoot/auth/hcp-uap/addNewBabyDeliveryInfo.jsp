@@ -15,10 +15,10 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.AddPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
-<%@page import="edu.ncsu.csc.itrust.action.BabyDeliveryInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
@@ -29,6 +29,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.BabyDeliveryInfoDAO"%>
+<%@page import="edu.ncsu.csc.itrust.action.AddBabyDeliveryInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
 <%@include file="/global.jsp" %>
 
@@ -59,7 +60,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	PatientBean p = action.getPatient();
 	boolean obstEligibility = p.getObstetricEligibility();
 	
-	BabyDeliveryInfoAction babyDeliveryInfoAction = new BabyDeliveryInfoAction(prodDAO, loggedInMID.longValue(), pidString);
+	AddBabyDeliveryInfoAction babyDeliveryInfoAction = new AddBabyDeliveryInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 	//ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
 	
 	if(request.getParameter("editRecordAction") != null) {
@@ -178,6 +179,15 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        info.setDeliveryType(request.getParameter("deliveryTypeStr"));
 	        if(!invalid) {
 	        	babyDeliveryInfoAction.addBabyDeliveryInfo(info);
+	        	AddPatientAction addPatientAction = new AddPatientAction(prodDAO, loggedInMID.longValue());
+	        	EditPatientAction editPatientAction = new EditPatientAction(prodDAO, loggedInMID.longValue());
+	        	if (info.getGender(request.getParameter("g1")) != null) {
+	        		PatientBean baby1 = new PatientBean();
+	        		long newMID = addPatientAction.addPatient(baby1, loggedInMID.longValue());
+	        		baby1.setMotherMID(pidString);
+	        		baby1.setGender(request.getParameter("g1"));
+	        		editPatientAction.updateInformation(baby1);	
+	        	}
 				response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
 	        }
 		} catch(Exception  e) {
