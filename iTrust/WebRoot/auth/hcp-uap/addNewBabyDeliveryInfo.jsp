@@ -22,6 +22,7 @@
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.enums.BooleanType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.DeliveryType"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
@@ -220,48 +221,143 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				<td class="subHeaderVertical">Birth Time:</td>
 				<td><input name="birthTime" type="text"></td>
 			</tr>	
-			<tr>		
-				<td class="subHeaderVertical">Estimated?</td>
-				<td><input name="estimated" type="text"></td>
+			
+			
+			<tr>
+				<td class="subHeaderVertical">Estimated?:</td>
+				<td><select name="genderStr">
+					<%
+						String selected = "";
+						for (BooleanType g : BooleanType.values()) {
+							selected = (g.equals(BooleanType.No)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
+			
+			
+			
+			
 			
 			<tr>
 				<td class="subHeaderVertical">Gender Baby 1:</td>
-				<td><input name="g1" type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
 				<td class="subHeaderVertical">Gender Baby 2:</td>
-				<td><input name="g2"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 3:</td>
-				<td><input name="g3"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 4:</td>
-				<td><input name="g4"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 5:</td>
-				<td><input name="g5"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 6:</td>
-				<td><input name="g6"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 7:</td>
-				<td><input name="g7"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
-			<tr>
+			</tr>
 				<td class="subHeaderVertical">Gender Baby 8:</td>
-				<td><input name="g8"  type="text"></td>
+				<td><select name="genderStr">
+					<%
+						selected = "";
+						for (Gender g : Gender.values()) {
+							selected = (g.equals(Gender.NotSpecified)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Delivery Type:</td>
 				<td><select name="deliveryTypeStr">
 					<%
-						String selected = "";
+						selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
 							selected = (dt.equals(DeliveryType.Vaginal)) ? "selected=selected"
 									: "";
