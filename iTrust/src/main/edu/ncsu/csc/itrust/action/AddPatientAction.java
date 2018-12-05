@@ -63,6 +63,16 @@ public class AddPatientAction {
 		return newMID;
 	}
 	
+	public long addBaby(PatientBean p, long loggedInMID) throws FormValidationException, ITrustException {
+		long newMID = patientDAO.addEmptyPatient();
+		p.setMID(newMID);
+		String pwd = authDAO.addUser(newMID, Role.PATIENT, RandomPassword.getRandomPassword());
+		p.setPassword(pwd);
+		patientDAO.editPatient(p, loggedInMID);
+		TransactionLogger.getInstance().logTransaction(TransactionType.PATIENT_CREATE, loggedInMID, p.getMID(), "");
+		return newMID;
+	}
+	
 	public long addPatient(PatientBean p, long loggedInMID) throws FormValidationException, ITrustException {
 		new AddPatientValidator().validate(p);
 		long newMID = patientDAO.addEmptyPatient();

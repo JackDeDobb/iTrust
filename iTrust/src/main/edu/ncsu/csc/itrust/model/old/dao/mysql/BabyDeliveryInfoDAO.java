@@ -59,9 +59,11 @@ public class BabyDeliveryInfoDAO {
 				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement(
 								"INSERT INTO babyDeliveryInfo "
-									+"(MID,id,childBirthVisitId,gender,birthTime,deliveryType,isEstimated) "
-									+"VALUES(?,?,?,?,?,?,?)"), bdInfoBean))
+									+"(MID,childBirthVisitId,gender,birthTime,deliveryType,isEstimated) "
+									+"VALUES(?,?,?,?,?,?)"), bdInfoBean))
 		{
+			
+			System.out.println(ps.toString());
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
 		} catch (SQLException e) {

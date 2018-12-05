@@ -145,8 +145,9 @@
 	    
 	    <%	if (isOBGYN) { %>
 	    	<a href="addNewObstetricRecord.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
-	    	<br></br>
+	    	<br/>
 	    	<a href="addNewChildBirthVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add New Child Birth Record</a>
+	    	<br/>
 	    	<a href="addNewBabyDeliveryInfo.jsp" style="font-size: 16pt; font-weight: bold;">Add New Baby</a>
 	    <%	} %>
 	    

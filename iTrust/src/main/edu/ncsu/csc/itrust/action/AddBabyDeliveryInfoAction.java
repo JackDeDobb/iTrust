@@ -85,6 +85,7 @@ public class AddBabyDeliveryInfoAction extends PatientBaseAction {
 		try {
 			babyDeliveryInfoDAO.addBabyDeliveryInfo(info);
 		} catch (DBException e) {
+			e.printStackTrace();
 			throw new ITrustException("Invalid Record");
 		}
 	}

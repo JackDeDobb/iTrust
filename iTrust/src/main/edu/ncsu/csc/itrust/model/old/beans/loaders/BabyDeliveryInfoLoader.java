@@ -40,12 +40,12 @@ public class BabyDeliveryInfoLoader implements BeanLoader<BabyDeliveryInfoBean> 
 	public PreparedStatement loadParameters(PreparedStatement ps, BabyDeliveryInfoBean b) throws SQLException {
 		int i = 1;
 		ps.setLong(i++, b.getMID());
-		ps.setLong(i++, b.getId());
 		ps.setLong(i++, b.getChildBirthVisitId());
 		ps.setString(i++, b.getGender().getName());
+		ps.setTimestamp(i++, b.getBirthTime());
 		ps.setString(i++, b.getDeliveryType().getName());
 		ps.setBoolean(i++, b.isEstimated());
-		ps.setTimestamp(i++, b.getBirthTime());
+		
 		return ps;
 	}
 	

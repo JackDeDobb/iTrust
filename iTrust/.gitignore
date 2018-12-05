@@ -4,3 +4,4 @@
 /WebRoot/WEB-INF/lib/*
 !/WebRoot/WEB-INF/lib/cewolf-1.1.jar
 /bin/
+.classpath
