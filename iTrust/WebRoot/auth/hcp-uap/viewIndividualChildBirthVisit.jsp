@@ -6,8 +6,7 @@
 <%@taglib prefix="itrust" uri="/WEB-INF/tags.tld"%>
 <%@page errorPage="/auth/exceptionHandler.jsp"%>
 <%@page import="java.util.Calendar"%>
-<%@page import="java.text.DateFormat"%>
-<%@page import="java.text.SimpleDateFormat"%>
+
 <%@page import="java.sql.Date"%>
 <%@page import="java.util.List"%>
 
@@ -16,19 +15,15 @@
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
-<%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
-<%@page import="edu.ncsu.csc.itrust.action.ChildBirthVisitAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewChildBirthVisit"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.DeliveryType"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Gender"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ChildBirthVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ChildBirthVisitDAO"%>
-<%@page import="edu.ncsu.csc.itrust.exception.ITrustException"%>
 <%@include file="/global.jsp" %>
 
 <%
@@ -58,40 +53,32 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	PatientBean p = action.getPatient();
 	boolean obstEligibility = p.getObstetricEligibility();
 	
-	ChildBirthVisitAction childBirthVisitAction = new ChildBirthVisitAction(prodDAO, loggedInMID.longValue(), pidString);
-	//ObstetricInfoBean r = obstetricInfoAction.getRecordById(recordId);
+
+	long recordId = 0;
+	if (request.getParameter("msg") != null) {
+        String msgParameter = request.getParameter("msg");
+        try {
+            recordId = Long.parseLong(msgParameter);
+        } catch (NumberFormatException nfe) {
+            response.sendRedirect("obstetricCare.jsp");
+        }
+	
+	
+	ViewChildBirthVisit viewChildBirthVisitAction = new ViewChildBirthVisit(prodDAO, loggedInMID.longValue(), pidString);
+	ChildBirthVisitBean r = viewChildBirthVisitAction.getRecordById(recordId);
 	
 	if(request.getParameter("editRecordAction") != null) {
 		try {
 			ChildBirthVisitBean info = new ChildBirthVisitBean();
-	        info.setMID(p.getMID());
-	        
-	        
-	        
-	        //Add visitId, obstetricInitId, delivered, previouslyScheduled to info
-	        
+	        info.setMID(r.getMID());
+	        info.setId(r.getId());
 	        boolean invalid = false;
-			/*
-	        try {
-	        	String lmpdate = request.getParameter("lmp");
-		        DateFormat formatter;
-		        java.util.Date date;
-		        formatter = new SimpleDateFormat("YYYY-MM-DD");
-		        date = formatter.parse(lmpdate);
-		        
-		        info.setLMP(date);
-		        info.setEDD();
-	        } catch(Exception e) {
-	        	out.println("<span class=\"font_failure\">" + "Invalid LMP Date <br>");
-	        	invalid = true;
-	        }
-			*/
+				
 			
-	        try {
-	        	//setPitocinDosage(float pitocinDosage)
+			try {
 	        	info.setPitocinDosage(Float.valueOf(request.getParameter("Pitocin")));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("Pitocin").equals("")) {
+	        	if (!request.getParameter("Pitocin").equals("0.0")) {
 	        		out.println("<span class=\"font_failure\">" + "Invalid Pitocin <br>");
 	        		invalid = true;
 	        	}
@@ -100,50 +87,50 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        try {
 	        	info.setNitrousOxideDosage(Float.valueOf(request.getParameter("NitrousOxide")));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("NitrousOxide").equals("")) {
+	        	if (!request.getParameter("NitrousOxide").equals("0.0")) {
 	        		out.println("<span class=\"font_failure\">" + "Invalid Nitrous Oxide <br>");
 	        		invalid = true;
 	        	}
 	        }
 	        
 	        try {
-	        	info.setEpiduralAnaesthesiaDosage(Float.valueOf(request.getParameter("EpiduralAnaesthesia")));
+	        	info.setEpiduralAnaesthesiaDosage(Long.valueOf(request.getParameter("EpiduralAnaesthesia")));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("EpiduralAnaesthesia").equals("")) {
+	        	if (!request.getParameter("EpiduralAnaesthesia").equals("0.0")) {
 	        		out.println("<span class=\"font_failure\">" + "Invalid Epidural Anaesthesia <br>");
 	        		invalid = true;
 	        	}
 	        }
 	        
 	        try {
-	        	info.setMagnesiumSulfateDosage(Float.valueOf(request.getParameter("MagnesiumSulfate")));
+	        	info.setMagnesiumSulfateDosage(Long.valueOf(request.getParameter("MagnesiumSulfate")));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("MagnesiumSulfate").equals("")) {
+	        	if (!request.getParameter("MagnesiumSulfate").equals("0.0")) {
 	        		out.println("<span class=\"font_failure\">" + "Invalid Magnesium Sulfate <br>");
 	        		invalid = true;
 	        	}
 	        }
 	        
 	        try {
-	        	info.setRhImmuneGlobulinDosage(Float.valueOf(request.getParameter("RhImmuneGlobulin")));
+	        	info.setRhImmuneGlobulinDosage(Long.valueOf(request.getParameter("RhImmuneGlobulin")));
 	        } catch(Exception e) {
-	        	if (!request.getParameter("RhImmuneGlobulin").equals("")) {
-	        		out.println("<span class=\"font_failure\">" + "Invalid RhImmune Globulin <br>");
+	        	if (!request.getParameter("RhImmuneGlobulin").equals("0.0")) {
+	        		out.println("<span class=\"font_failure\">" + "Invalid RHImmune Globulin <br>");
 	        		invalid = true;
 	        	}
 	        }
 	        
-	   		
-	        
 	        info.setPreferredDeliveryType(request.getParameter("deliveryTypeStr"));
 	        if(!invalid) {
-	        	childBirthVisitAction.addChildBirthVisitRecord(info);
-				response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        	viewChildBirthVisitAction.updateRecord(info);
+				r = viewChildBirthVisitAction.getRecordById(recordId);
 	        }
+			
+			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
 		} catch(Exception  e) {
 			e.printStackTrace();
 		}
-	} 
+	}
 
 
 %>
@@ -157,33 +144,34 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			<tr>
 				<th colspan=2>Patient Information</th>
 			</tr>		
-			<tr>		
+			<tr>
+			
 				<td class="subHeaderVertical">Previously Scheduled:</td>
-				<td><input name="firstName" type="text"></td>
+				<td><input name="firstName" value="<%= StringEscapeUtils.escapeHtml("" + (r.isPreviouslyScheduled())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Delivered:</td>
-				<td><input name="lastName" type="text"></td>
+				<td><input name="lastName" value="<%= StringEscapeUtils.escapeHtml("" + (r.isDelivered())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Pitocin Dosage:</td>
-				<td><input name="Pitocin" type="text"></td>
+				<td><input name="Pitocin" value="<%= StringEscapeUtils.escapeHtml("" + (r.getPitocinDosage())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Nitrous Oxide Dosage:</td>
-				<td><input name="NitrousOxide"  type="text"></td>
+				<td><input name="NitrousOxide" value="<%= StringEscapeUtils.escapeHtml("" + (r.getNitrousOxideDosage())) %>" type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">Epidural Anesthesia Dosage:</td>
-				<td><input name="EpiduralAnaesthesia"  type="text"></td>
+				<td class="subHeaderVertical">Epidural Anaesthesia Dosage:</td>
+				<td><input name="EpiduralAnaesthesia" value="<%= StringEscapeUtils.escapeHtml("" + (r.getEpiduralAnaesthesiaDosage())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Magnesium Sulfate Dosage:</td>
-				<td><input name="MagnesiumSulfate"  type="text"></td>
+				<td><input name="MagnesiumSulfate" value="<%= StringEscapeUtils.escapeHtml("" + (r.getMagnesiumSulfateDosage())) %>" type="text"></td>
 			</tr>
 			<tr>
-				<td class="subHeaderVertical">RHImmune Globulin Dosage:</td>
-				<td><input name="RhImmuneGlobulin"  type="text"></td>
+				<td class="subHeaderVertical">RhImmune Globulin Dosage:</td>
+				<td><input name="RhImmuneGlobulin" value="<%= StringEscapeUtils.escapeHtml("" + (r.getRhImmuneGlobulinDosage())) %>" type="text"></td>
 			</tr>
 			<tr>
 				<td class="subHeaderVertical">Preferred Delivery Type:</td>
@@ -191,7 +179,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 					<%
 						String selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
-							selected = (dt.equals(DeliveryType.NS)) ? "selected=selected"
+							selected = (dt.equals(r.getPreferredDeliveryType())) ? "selected=selected"
 									: "";
 					%>
 					<option value="<%=dt.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (dt.getName())) %></option>
@@ -200,6 +188,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 					%>
 				</select>
 			</tr>
+			
 		</table>
 		<br />
 		</td>
@@ -213,7 +202,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	<%
 		if(isOBGYN){
 	%>
-		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Add Child Visit Record">
+		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Edit Child Birth Visit Record">
 	<%
 	}
 	%>
@@ -225,8 +214,8 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 <br />
 <itrust:patientNav thisTitle="Demographics" />
 
-<%
-	
-	%>
+
+<% }  %>
+
 
 <%@include file="/footer.jsp"%>

@@ -20,113 +20,71 @@ public class ChildBirthVisitDAO {
 		this.factory = factory;
 		this.loader = new ChildBirthVisitLoader();
 	}
-	
-	/**
-	 * Adds a visit into the childBirthVisit table
-	 * 
-	 * @param cbVisitBean
-	 *            The ChildBirthVisit bean representing the new information to be added
-	 * @throws DBException
-	 */
-	public long addChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
-		
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = loader.loadParameters(
-						conn.prepareStatement(
-								"INSERT INTO childBirthVisit "
-									+"(id,visitID,obstetricInitId,previouslyScheduled,preferredDeliveryType,hasDelivered, "
-									+"pitocinDosage,nitrousOxideDosage,epiduralAnaesthesiaDosage,magnesiumSulfateDosage,rhImmuneGlobulinDosage) "
-									+"VALUES(?,?,?,?,?,?,?,?,?,?,?)"), cbVisitBean))
-		{
-			ps.executeUpdate();
-			return DBUtil.getLastInsert(conn);
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	/**
-	 * Updates a visit's information for the given bean
-	 * 
-	 * @param cbVisitBean
-	 *            The ChildBirthVisit bean representing the new information for the
-	 *            visit.
-	 * @throws DBException
-	 */
-	public void editChildBirthVisit(ChildBirthVisitBean cbVisitBean) throws DBException {
-		
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = loader.loadParameters(
-						conn.prepareStatement("UPDATE childBirthVisit SET "
-							+"id=?, visitID=?, obstetricInitId=?, previouslyScheduled=?, preferredDeliveryType=?, hasDelivered=?, "
-							+"pitocinDosage=?, nitrousOxideDosage=?, epiduralAnaesthesiaDosage=?, magnesiumSulfateDosage=?, rhImmuneGlobulinDosage=? "
-							+"WHERE id=?"), cbVisitBean))
-		{
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	/**
-	 * Returns a list of ChildBirthVisit given by the obstetricInitId
-	 * 
-	 * @param obstetricInitId
-	 *            The obstetricInitID of the visits in question.
-	 * @return A java.util.List of ChildBirthVisit Beans.
-	 * @throws DBException
-	 */
-	public List<ChildBirthVisitBean> getChildBirthVisitListByObstetricInitId(long obstetricInitId) throws DBException {
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE obstetricInitId = ?")) {
-			ps.setLong(1, obstetricInitId);
-			ResultSet rs = ps.executeQuery();
-			List<ChildBirthVisitBean> records = rs.next() ? loader.loadList(rs) : null;
-			rs.close();
-			return records;
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	/**
-	 * Returns the visit's information for a given id
-	 * 
-	 * @param id
-	 *            The id of the ChildBirthVisit to retrieve
-	 * @return A ChildBirthVisitBean representing the child birth visit.
-	 * @throws DBException
-	 */
-	public ChildBirthVisitBean getChildBirthVisitByID(long id) throws DBException {
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE id = ? ")) {
 
-			ps.setLong(1, id);
+	public ChildBirthVisitBean getMostRecentChildBirthVisitForMID(long mid) throws DBException {
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE MID = ? ORDER BY" +
+						"id DESC LIMIT 1")) {
+
+			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			ChildBirthVisitBean record = loader.loadSingle(rs);
 			rs.close();
+
 			return record;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 	}
-	
-	/**
-	 * Returns a list of ChildBirthVisit given by visitId
-	 * 
-	 * @param obstetricInitId
-	 *            The obstetricInitID of the visits in question.
-	 * @return A java.util.List of ChildBirthVisit Beans.
-	 * @throws DBException
-	 */
-	public List<ChildBirthVisitBean> getChildBirthVisitListByVisitId(long visitId) throws DBException {
+
+	public List<ChildBirthVisitBean> getChildBirthVisitsForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE visitId = ?")) {
-			ps.setLong(1, visitId);
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE MID = ? ORDER BY " +
+						"id DESC")) {
+			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			List<ChildBirthVisitBean> records = rs.next() ? loader.loadList(rs) : null;
 			rs.close();
 			return records;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
+	
+	public void addChildBirthVisit(ChildBirthVisitBean info) throws DBException{
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("INSERT INTO childBirthVisit "
+						+"(MID, id,visitId,obstetricInitId,previouslyScheduled,preferredDeliveryType,delivered, "
+						+"pitocinDosage,nitrousOxideDosage,epiduralAnaesthesiaDosage,magnesiumSulfateDosage,rhImmuneGlobulinDosage) "
+						+"VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"), info)) {
+			System.out.println(ps.toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
+	 
+	public void updateChildBirthVisit(ChildBirthVisitBean info) throws DBException {
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = loader.loadParameters(conn.prepareStatement("UPDATE childBirthVisit SET "
+						+"MID=?, id=?, visitId=?, obstetricInitId=?, previouslyScheduled=?, preferredDeliveryType=?, delivered=?, "
+						+"pitocinDosage=?, nitrousOxideDosage=?, epiduralAnaesthesiaDosage=?, magnesiumSulfateDosage=?, rhImmuneGlobulinDosage=? "
+						+"WHERE id=?"), info)) {
+			ps.setLong(13, info.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
+	
+	public ChildBirthVisitBean getRecordById(long recordId) throws DBException {
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE id = ?")) {
+			ps.setLong(1, recordId);
+			ResultSet rs = ps.executeQuery();
+			ChildBirthVisitBean record = rs.next() ? loader.loadSingle(rs) : null;
+			rs.close();
+			return record;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}

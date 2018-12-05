@@ -52,3 +52,7 @@ DROP TABLE IF EXISTS WardRoomCheckout;
 DROP TABLE IF EXISTS WardRooms;
 DROP TABLE IF EXISTS Wards;
 DROP TABLE IF EXISTS obstetricsInfo;
+DROP TABLE IF EXISTS obstetricOfficeVisit;
+DROP TABLE IF EXISTS childBirthVisit;
+DROP TABLE IF EXISTS ultraSoundRecord;
+DROP TABLE IF EXISTS babyDeliveryInfo;

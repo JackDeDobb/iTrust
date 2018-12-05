@@ -16,7 +16,7 @@ import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
  * ViewPatientAction is just a class to help the edit demographics page get all the users that should
  * be displayed on the page.
  */
-public class ChildBirthVisitAction extends PatientBaseAction {
+public class ViewChildBirthVisit extends PatientBaseAction {
 
 	/**patientDAO is the patientDAO that retrieves the users from the database*/
 	private ChildBirthVisitDAO childBirthVisitDAO;
@@ -33,7 +33,7 @@ public class ChildBirthVisitAction extends PatientBaseAction {
 	 * @param pidString The user ID patient we are viewing.
 	 * @throws ITrustException When there is a bad user.
 	 */
-	public ChildBirthVisitAction(DAOFactory factory, long loggedInMID, String pidString)
+	public ViewChildBirthVisit(DAOFactory factory, long loggedInMID, String pidString)
 			throws ITrustException {
 		super(factory, pidString);
 		this.childBirthVisitDAO = factory.getChildBirthVisitDAO();
@@ -81,7 +81,7 @@ public class ChildBirthVisitAction extends PatientBaseAction {
 	}
 	
 	
-	public void addChildBirthVisitRecord(ChildBirthVisitBean info) throws ITrustException{
+	public void addNewRecord(ChildBirthVisitBean info) throws ITrustException{
 		try {
 			childBirthVisitDAO.addChildBirthVisit(info);
 		} catch (DBException e) {

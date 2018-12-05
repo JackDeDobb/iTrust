@@ -3,6 +3,7 @@ package edu.ncsu.csc.itrust.model.old.beans;
 import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
 
 public class ChildBirthVisitBean {
+	private long MID;
 	private long id;
 	private long visitId;
 	private long obstetricInitId;
@@ -15,6 +16,13 @@ public class ChildBirthVisitBean {
 	private float magnesiumSulfateDosage;
 	private float rhImmuneGlobulinDosage;
 	
+	
+	public long getMID() {
+		return MID;
+	}
+	public void setMID(long mid) {
+		MID = mid;
+	}
 	public long getId() {
 		return id;
 	}

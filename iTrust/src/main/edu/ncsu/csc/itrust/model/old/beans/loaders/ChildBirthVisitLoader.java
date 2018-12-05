@@ -20,6 +20,7 @@ public class ChildBirthVisitLoader implements BeanLoader<ChildBirthVisitBean> {
 	}
 
 	private void loadCommon(ResultSet rs, ChildBirthVisitBean c) throws SQLException{
+		c.setMID(rs.getLong("MID"));
 		c.setId(rs.getLong("id"));
 		c.setVisitId(rs.getLong("visitId"));
 		c.setObstetricInitId(rs.getLong("obstetricInitId"));
@@ -43,6 +44,7 @@ public class ChildBirthVisitLoader implements BeanLoader<ChildBirthVisitBean> {
 	@Override
 	public PreparedStatement loadParameters(PreparedStatement ps, ChildBirthVisitBean c) throws SQLException {
 		int i = 1;
+		ps.setLong(i++, c.getMID());
 		ps.setLong(i++, c.getId());
 		ps.setLong(i++, c.getVisitId());
 		ps.setLong(i++, c.getObstetricInitId());

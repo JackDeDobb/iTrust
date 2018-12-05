@@ -509,7 +509,7 @@ CREATE TABLE medicalProcedure
 
 CREATE TABLE obstetricOfficeVisit
 (
-	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	patientMID BIGINT(20) UNSIGNED NOT NULL,
 	hcpMID BIGINT(20) UNSIGNED NOT NULL,
 	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
@@ -547,7 +547,7 @@ CREATE TABLE obstetricsInfo
 	yearsOfConception		BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType VARCHAR(20) ,
+	deliveryType VARCHAR(50) ,
 	numBirths             BIGINT(20),
 	LMP                     DATE NOT NULL,
 	EDD                     DATE NOT NULL,
@@ -558,11 +558,12 @@ CREATE TABLE obstetricsInfo
 
 CREATE TABLE childBirthVisit
 (
+	MID BIGINT unsigned NOT NULL,
 	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	visitId	BIGINT(20) UNSIGNED NOT NULL,
 	obstetricInitId BIGINT(20),
 	previouslyScheduled BOOLEAN,
-	preferredDeliveryType VARCHAR(20),
+	preferredDeliveryType VARCHAR(50),
 	delivered BOOLEAN,
 	pitocinDosage FLOAT,
 	nitrousOxideDosage FLOAT,
