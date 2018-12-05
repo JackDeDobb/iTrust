@@ -6,6 +6,7 @@ import edu.ncsu.csc.itrust.model.old.enums.Gender;
 import java.sql.Timestamp;
 
 public class BabyDeliveryInfoBean {
+	private long MID;
 	private long id;
 	private long childBirthVisitId;
 	private Gender gender = Gender.NotSpecified;
@@ -67,6 +68,14 @@ public class BabyDeliveryInfoBean {
 	
 	public void setEstimated(boolean isEstimated) {
 		this.isEstimated = isEstimated;
+	}
+
+	public long getMID() {
+		return MID;
+	}
+
+	public void setMID(long MID) {
+		this.MID = MID;
 	}
 
 }

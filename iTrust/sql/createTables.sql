@@ -576,11 +576,12 @@ CREATE TABLE childBirthVisit
 
 CREATE TABLE babyDeliveryInfo
 (
+	MID BIGINT unsigned NOT NULL,
 	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
 	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
 	gender VARCHAR(20),
 	birthTime TIMESTAMP,
-	deliveryType VARCHAR(20),
+	deliveryType VARCHAR(500),
 	isEstimated BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY(id),
 	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)

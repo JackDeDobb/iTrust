@@ -20,6 +20,7 @@ public class BabyDeliveryInfoLoader implements BeanLoader<BabyDeliveryInfoBean> 
 	}
 
 	private void loadCommon(ResultSet rs, BabyDeliveryInfoBean b) throws SQLException{
+		b.setMID(rs.getLong("MID"));
 		b.setId(rs.getLong("id"));
 		b.setChildBirthVisitId(rs.getLong("childBirthVisitId"));
 		b.setGender(rs.getString("gender"));
@@ -38,6 +39,7 @@ public class BabyDeliveryInfoLoader implements BeanLoader<BabyDeliveryInfoBean> 
 	@Override
 	public PreparedStatement loadParameters(PreparedStatement ps, BabyDeliveryInfoBean b) throws SQLException {
 		int i = 1;
+		ps.setLong(i++, b.getMID());
 		ps.setLong(i++, b.getId());
 		ps.setLong(i++, b.getChildBirthVisitId());
 		ps.setString(i++, b.getGender().getName());

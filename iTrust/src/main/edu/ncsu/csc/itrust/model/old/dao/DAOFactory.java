@@ -260,5 +260,12 @@ public class DAOFactory {
 		return new ChildBirthVisitDAO(this);
 	}
 	
+	/**
+	 * Creates a DAO for baby delivery records.
+	 * @return this DAOFactory's BabyDeliveryInfoDAO
+	 */
+	public BabyDeliveryInfoDAO getBabyDeliveryInfoDAO() {
+		return new BabyDeliveryInfoDAO(this);
+	}
 
 }

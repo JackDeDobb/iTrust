@@ -9,6 +9,7 @@ import java.util.List;
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean;
+import edu.ncsu.csc.itrust.model.old.beans.ChildBirthVisitBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.BabyDeliveryInfoLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 
@@ -29,14 +30,16 @@ public class BabyDeliveryInfoDAO {
 	 * @return A BabyDeliveryInfo representing the given id.
 	 * @throws DBException
 	 */
-	public BabyDeliveryInfoBean getBabyDeliveryInfoByID(long id) throws DBException {
+	public BabyDeliveryInfoBean getMostRecentChildBirthVisitForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE id = ? ")) {
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE MID = ? ORDER BY" +
+						"id DESC LIMIT 1")) {
 
-			ps.setLong(1, id);
+			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			BabyDeliveryInfoBean record = loader.loadSingle(rs);
 			rs.close();
+
 			return record;
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -56,8 +59,8 @@ public class BabyDeliveryInfoDAO {
 				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement(
 								"INSERT INTO babyDeliveryInfo "
-									+"(id,childBirthVisitId,gender,birthTime,deliveryType,isEstimated) "
-									+"VALUES(?,?,?,?,?,?)"), bdInfoBean))
+									+"(MID,id,childBirthVisitId,gender,birthTime,deliveryType,isEstimated) "
+									+"VALUES(?,?,?,?,?,?,?)"), bdInfoBean))
 		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
@@ -74,14 +77,15 @@ public class BabyDeliveryInfoDAO {
 	 *            delivery.
 	 * @throws DBException
 	 */
-	public void editBabyDeliveryInfo(BabyDeliveryInfoBean bdInfoBean) throws DBException {
+	public void updateBabyDeliveryInfo(BabyDeliveryInfoBean bdInfoBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement("UPDATE babyDeliveryInfo SET "
-							+"id=?, childBirthVisitId=?, gender=?, birthTime=?, deliveryType=?, isEstimated=?, "
+							+"MID=?, id=?, childBirthVisitId=?, gender=?, birthTime=?, deliveryType=?, isEstimated=?, "
 							+"WHERE id=?"), bdInfoBean))
 		{
+			ps.setLong(8, bdInfoBean.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -95,14 +99,27 @@ public class BabyDeliveryInfoDAO {
 	 * @return A java.util.List of BabyDeliveryInfo Beans.
 	 * @throws DBException
 	 */
-	public List<BabyDeliveryInfoBean> getBabyDeliveryInfoList(long childBirthVisitId) throws DBException {
+	public List<BabyDeliveryInfoBean> getBabyDeliveryInfosForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE childBirthVisitId = ?")) {
-			ps.setLong(1, childBirthVisitId);
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE MID = ?")) {
+			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			List<BabyDeliveryInfoBean> records = rs.next() ? loader.loadList(rs) : null;
 			rs.close();
 			return records;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
+	
+	public BabyDeliveryInfoBean getRecordById(long id) throws DBException {
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE id = ?")) {
+			ps.setLong(1, id);
+			ResultSet rs = ps.executeQuery();
+			BabyDeliveryInfoBean record = rs.next() ? loader.loadSingle(rs) : null;
+			rs.close();
+			return record;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
