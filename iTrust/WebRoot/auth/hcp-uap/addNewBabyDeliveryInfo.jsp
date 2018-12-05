@@ -8,9 +8,10 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.sql.Date"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.List"%>
+
 
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
@@ -90,12 +91,19 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			*/
 			
 	        try {
+	        	
 	        	String deliveryDate= request.getParameter("birthTime");
-		        DateFormat formatter;
-		        java.util.Timestamp birthTime;
-		        formatter = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.");
+		        /*
+	        	DateFormat formatter;
+		        Timestamp birthTime;
+		        formatter = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss.").format(Date())));
 		        birthTime = formatter.parse(deliveryDate);
 		        info.setBirthTime(birthTime);
+		        */
+	        	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+	            Date parsedDate = dateFormat.parse(deliveryDate);
+	            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+	            info.setBirthTime(timestamp);
 	        } catch(Exception e) {
 	        	
 	        	out.println("<span class=\"font_failure\">" + "Invalid Birth Time <br>");
@@ -180,12 +188,13 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        if(!invalid) {
 	        	babyDeliveryInfoAction.addBabyDeliveryInfo(info);
 	        	AddPatientAction addPatientAction = new AddPatientAction(prodDAO, loggedInMID.longValue());
-	        	EditPatientAction editPatientAction = new EditPatientAction(prodDAO, loggedInMID.longValue());
-	        	if (info.getGender(request.getParameter("g1")) != null) {
+	        	
+	        	if (request.getParameter("g1") != null) {
 	        		PatientBean baby1 = new PatientBean();
 	        		long newMID = addPatientAction.addPatient(baby1, loggedInMID.longValue());
+	        		EditPatientAction editPatientAction = new EditPatientAction(prodDAO, loggedInMID.longValue(), Long.toString(newMID));
 	        		baby1.setMotherMID(pidString);
-	        		baby1.setGender(request.getParameter("g1"));
+	        		baby1.setGenderStr(request.getParameter("g1"));
 	        		editPatientAction.updateInformation(baby1);	
 	        	}
 				response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
