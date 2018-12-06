@@ -17,8 +17,7 @@ public class UltrasoundRecordValidator extends BeanValidator<UltrasoundRecordBea
 	@Override
 	public void validate(UltrasoundRecordBean ur) throws FormValidationException {
 		ErrorList errorList = new ErrorList();
-		
-		errorList.addIfNotNull(checkFormat("Id", ur.getId(), ValidationFormat.POSITIVE_NONZERO_INT, false));
+
 		errorList.addIfNotNull(checkFormat("visit id", ur.getVisitID(), ValidationFormat.POSITIVE_NONZERO_INT, false));
 		
 		if(ur.getCrownRumpLength() <= 0) {

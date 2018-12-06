@@ -5,12 +5,15 @@ import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.model.old.beans.*;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
+import edu.ncsu.csc.itrust.model.old.enums.AppointmentType;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
+import edu.ncsu.csc.itrust.model.old.validate.UltrasoundRecordValidator;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.Instant;
@@ -18,7 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.Calendar;
+import java.util.function.Function;
 
 /**
  * Class that defines the new obstetric office visit `document` action.
@@ -29,9 +32,10 @@ public class AddObstetricOfficeVisitAction {
     private PatientDAO patientDAO;
     private ApptTypeDAO apptTypeDAO;
     private UltrasoundRecordDAO ultrasoundRecordDAO;
+    private UltrasoundRecordValidator ultrasoundRecordValidator;
     private TransactionDAO transactionDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
-    private ObstetricOfficeVisitValidator validator;
+    private ObstetricOfficeVisitValidator obsOfficeVisitValidator;
     private long loggedInMID;
 
     public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
@@ -43,7 +47,9 @@ public class AddObstetricOfficeVisitAction {
         this.obstetricInfoDAO = factory.getObstetricInfoDAO();
         this.transactionDAO = factory.getTransactionDAO();
         this.loggedInMID = loggedInMID;
-        this.validator = new ObstetricOfficeVisitValidator();
+        this.obsOfficeVisitValidator = new ObstetricOfficeVisitValidator();
+        this.ultrasoundRecordValidator = new UltrasoundRecordValidator();
+
     }
 
     private final static Map<DayOfWeek, Integer> DAY_OFFSET = new HashMap<>();
@@ -62,10 +68,15 @@ public class AddObstetricOfficeVisitAction {
             FormValidationException {
 
         // Validate office visit bean.
-        this.validator.validate(obsOfficeVisit);
+        this.obsOfficeVisitValidator.validate(obsOfficeVisit);
+
+        System.out.println(obsOfficeVisit.toString());
 
         // Fetch the obstetric info bean.
         ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
+
+        // Link obstetric record id to office visit.
+        obsOfficeVisit.setObstetricRecordID(patientInfo.getRecordId());
 
         // Add obstetric office visit to DB.
         long visitId = this.obstetricOfficeVisitDAO.addObstetricOfficeVisit(obsOfficeVisit);
@@ -86,7 +97,7 @@ public class AddObstetricOfficeVisitAction {
             FormValidationException {
 
         // Validate office visit bean.
-        this.validator.validate(obsOfficeVisit);
+        this.obsOfficeVisitValidator.validate(obsOfficeVisit);
 
         // Fetch the obstetric info bean.
         ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
@@ -97,10 +108,16 @@ public class AddObstetricOfficeVisitAction {
         return patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo.getLMP()) >= 28;
     }
 
-    public void addUltrasoundRecord(ObstetricOfficeVisitBean obsOfficeVisit, UltrasoundRecordBean ultrasoundRecord) throws DBException {
+    public void addUltrasoundRecord(long visitId, long patientMID, UltrasoundRecordBean ultrasoundRecord) throws DBException, FormValidationException {
+        // Validate ultrasound record fields.
+        ultrasoundRecordValidator.validate(ultrasoundRecord);
+
+        // Add the ultrasound record to the DB.
         ultrasoundRecordDAO.addUltrasoundRecord(ultrasoundRecord);
-        transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, obsOfficeVisit.getPatientMID(),
-                obsOfficeVisit.getVisitId() + "");
+
+        // Log the transaction.
+        transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, patientMID,
+                visitId + "");
     }
 
     private int getNumberOfWeeksPregnant(Date LMP) {
@@ -113,6 +130,7 @@ public class AddObstetricOfficeVisitAction {
 
     /**
      * Schedule next office visit.
+     * TODO(avjykmr2): Add handling logic if office visit is on a Weekend.
      */
     private void scheduleNextOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit, ObstetricInfoBean patientInfo) throws DBException {
 
@@ -128,30 +146,43 @@ public class AddObstetricOfficeVisitAction {
         // TODO(avjykmr2): Determine if appt type is correct.
 
         ApptBean nextAppt = new ApptBean();
-        ApptTypeBean apptType = apptTypeDAO.getApptType("Consultation");
+        ApptTypeBean apptType = apptTypeDAO.getApptType(AppointmentType.OBSTETRIC_OV.getName());
         nextAppt.setPrice(apptType.getPrice());
         nextAppt.setHcp(obsOfficeVisit.getHcpMID());
-        nextAppt.setApptType("Consultation");
+        nextAppt.setApptType(apptType.getName()); // TODO: Add new appointment type.
+        nextAppt.setPatient(patientInfo.getMID());
+        nextAppt.setComment("Regularly auto-scheduled obstetric office visit appointment.");
 
         //  -> Given number of weeks pregnant:
 
+        Function<LocalDateTime, LocalDateTime> truncate = (date) -> {
+            return date.withMinute(0).withSecond(0).withNano(0);
+        };
+
         if (numberOfWeeksPregnant <= 13 && numberOfWeeksPregnant >= 0) {
-            LocalDateTime apptTime = today.plus(4, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(4, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 28) {
-            LocalDateTime apptTime = today.plus(2, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(2, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 40) {
-            LocalDateTime apptTime = today.plus(1, ChronoUnit.WEEKS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(1, ChronoUnit.WEEKS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         } else if (numberOfWeeksPregnant <= 42) {
             // TODO(avjykmr2): Dependent on UC-96, add childbirth visit.
             int amountOfDaysToAdd = DAY_OFFSET.getOrDefault(today.getDayOfWeek(), 2);
-            LocalDateTime apptTime = today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
-                    .withHour(9).withMinute(0).withSecond(0);
+            LocalDateTime apptTime = truncate.apply(today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
+                    .withHour(9));
+            nextAppt.setDate(Timestamp.valueOf(apptTime));
+        } else {
+            System.out.println(String.format("Warning: Number of weeks pregnant (%d) is more than maximum understood " +
+                    "value", numberOfWeeksPregnant));
+            int amountOfDaysToAdd = DAY_OFFSET.getOrDefault(today.getDayOfWeek(), 2);
+            LocalDateTime apptTime = truncate.apply(today.plus(amountOfDaysToAdd, ChronoUnit.DAYS)
+                    .withHour(9));
             nextAppt.setDate(Timestamp.valueOf(apptTime));
         }
 
@@ -163,4 +194,5 @@ public class AddObstetricOfficeVisitAction {
 
 
     }
+
 }

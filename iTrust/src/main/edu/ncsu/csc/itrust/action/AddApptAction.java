@@ -31,19 +31,13 @@ public class AddApptAction extends ApptAction {
 				return "Warning! This appointment conflicts with other appointments";
 			}
 		}
-		
-		try {
-			apptDAO.scheduleAppt(appt);
-			TransactionLogger.getInstance().logTransaction(TransactionType.APPOINTMENT_ADD, loggedInMID, appt.getPatient(), "");
-			if(ignoreConflicts){
-				TransactionLogger.getInstance().logTransaction(TransactionType.APPOINTMENT_CONFLICT_OVERRIDE, loggedInMID, appt.getPatient(), "");
-			}
-			return "Success: " + appt.getApptType() + " for " + appt.getDate() + " added";
+
+		apptDAO.scheduleAppt(appt);
+		TransactionLogger.getInstance().logTransaction(TransactionType.APPOINTMENT_ADD, loggedInMID, appt.getPatient(), "");
+		if(ignoreConflicts){
+			TransactionLogger.getInstance().logTransaction(TransactionType.APPOINTMENT_CONFLICT_OVERRIDE, loggedInMID, appt.getPatient(), "");
 		}
-		catch (SQLException e) {
-			
-			return e.getMessage();
-		} 
+		return "Success: " + appt.getApptType() + " for " + appt.getDate() + " added";
 	}	
 	
 	

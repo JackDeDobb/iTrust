@@ -48,7 +48,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
 		newVisit.setPatientMID(patientMID);
 		newVisit.setHcpMID(hcp.getMID());
-		newVisit.setObstetricRecordID(0);
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
 		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
@@ -59,9 +58,35 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
+
+
+//		String addUltra = request.getParameter("ultrasound");
+//		UltrasoundRecordBean ultrasound = null;
+//		if(addUltra.equals("true")){
+//			ultrasound = new UltrasoundRecordBean();
+//			ultrasound.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
+//			ultrasound.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
+//			ultrasound.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
+//			ultrasound.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
+//			ultrasound.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
+//			ultrasound.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
+//			ultrasound.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
+//			ultrasound.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
+//
+//
+//			// TODO: have to add image data
+//		}
 		
 		try{
-			addOOVisitAction.addObstetricOfficeVisit(newVisit);
+			long visitId = addOOVisitAction.addObstetricOfficeVisit(newVisit);
+			String ultrasoundUrl = "addUltrasound.jsp?visitId=" + visitId;
+			session.setAttribute("visitId", "" + visitId);
+			response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
+//			// Obs Office visit added. Add Ultrasound record
+//			if(addUltra.equals("true")){
+//				ultrasound.setVisitID(visitId);
+//			}
+			
 %>
 
 	<div align=center>
@@ -80,6 +105,22 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	if(isOBGYN) {
 %>
 
+<script>
+	function toggleUltrasoundVisibilty(){
+		var tableRows = document.getElementsByClassName("ultra");
+		var ultrasound = document.getElementById("ultrasound")
+		for(i=0; i < tableRows.length; i++){
+			if(tableRows[i].style.display == 'none'){
+				tableRows[i].style.display = 'table-row';
+				ultrasound.value = "true";
+			}
+			else{
+				tableRows[i].style.display = 'none'
+				ultrasound.value = "false";
+			}
+		}
+	}
+</script>
 
 <div align=center>
 <p style="width: 50%; text-align:left;">Enter the following information to add a new obstetric office visit.</p>
@@ -118,9 +159,58 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td class="subHeaderVertical">Number of Babies:</td>
 		<td><input type="number" step="1" name="numberOfBabies"></td>
 	</tr>
+	<tr>
+		<td class="subHeaderVertical">Add/Remove Ultrasound Record?</td>
+		<td>
+			<input type="button" name="addUltraSound" value="Ultrasound"
+				onclick="toggleUltrasoundVisibilty()">
+		</td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Crown Rump Length:</td>
+		<td><input type="number" name="crownRumpLength"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Head circumference:</td>
+		<td><input type="number" name="headCircumference"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Crown Rump Length:</td>
+		<td><input type="number" name="crownRumpLength"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Biparietal Diameter:</td>
+		<td><input type="number" name="biparietalDiameter"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Femur Length:</td>
+		<td><input type="number" name="femurLength"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Occipitofrontal Diameter:</td>
+		<td><input type="number" name="occipitofrontalDiameter"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Abdominal Circumference:</td>
+		<td><input type="number" name="abdominalCircumference"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Humerus Length:</td>
+		<td><input type="number" name="humerusLength"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
+		<td><input type="number" name="estimatedFetalWeight"></td>
+	</tr>
+	<tr class="ultra" style="display:none;">
+		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
+		<td><input type="number" name="estimatedFetalWeight"></td>
+	</tr>
+	
 
 </table>
 <br />
+<input type="hidden" id="ultrasound" name="ultrasound" value="false">
 <input type="submit" style="font-size: 16pt; font-weight: bold;" value="Add Visit">
 <br />
 </form>
