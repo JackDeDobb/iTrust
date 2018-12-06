@@ -28,8 +28,8 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 	
 	List<ObstetricOfficeVisitBean> visits = new ArrayList<ObstetricOfficeVisitBean>();
 	boolean isEligible = false;
+	long patientMID = Long.parseLong(pidString);
 	try {
-		long patientMID = Long.parseLong(pidString);
 		ViewObstetricOfficeVisitAction action = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
 		visits = action.getObstetricOfficeVisitRecords();
 
@@ -55,7 +55,7 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 	</div>
 <%
 	} else {
-		LaborDeliveryReportAction reportAction = new LaborDeliveryReportAction(prodDAO, loggedInMID, patientMID);
+		LaborDeliveryReportAction reportAction = new LaborDeliveryReportAction(prodDAO, loggedInMID, pidString);
 		List<String> allergies = reportAction.getAllergies();
 		boolean rhFlag = reportAction.hasRHFlag();
 %>
