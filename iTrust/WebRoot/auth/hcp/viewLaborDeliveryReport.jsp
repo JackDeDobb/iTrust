@@ -3,6 +3,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.LaborDeliveryReportAction"%>
 <%@page import="edu.ncsu.csc.itrust.exception.DBException"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -43,18 +44,33 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 	if(visits.isEmpty()) {
 %>
 	<div align=center>
-	<h1>The selected patient does not have any obstetrics record.</h1>
+		<h1>The selected patient does not have any obstetrics record.</h1>
 	</div>
 <%		
 	
 	} else if(!isEligible) {
 %>
 	<div align=center>
-	<h1>The selected patient is not eligible for obstetric care.</h1>
+		<h1>The selected patient is not eligible for obstetric care.</h1>
 	</div>
 <%
 	} else {
-		
+		LaborDeliveryReportAction reportAction = new LaborDeliveryReportAction(prodDAO, loggedInMID, patientMID);
+		List<String> allergies = reportAction.getAllergies();
+%>
+	<div align=center>
+		<table class="fTable">
+			<tr>
+				<th>Type</th>
+				<th>Information</th>
+			</tr>
+			<tr>
+				<td>Allergies</td>
+				<td><%= StringEscapeUtils.escapeHtml("" + String.join(", ", allergies)) %></td>
+			</tr>
+		</table>
+	</div>
+<%		
 	}
 %>
 
