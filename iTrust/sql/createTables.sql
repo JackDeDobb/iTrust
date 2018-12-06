@@ -90,6 +90,8 @@ CREATE TABLE patients(
 	SpiritualPractices varchar(512) default '',
 	AlternateName varchar(32) default '',
 	DateOfDeactivation DATE default NULL,
+	RH BOOLEAN default false,
+	RHImmunization BOOLEAN default false,
 	ObstetricEligibility BOOLEAN default false,
 	PRIMARY KEY (MID)
 ) ENGINE=MyISAM;
@@ -505,6 +507,39 @@ CREATE TABLE medicalProcedure
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
 ) ENGINE=MyISAM;
 
+CREATE TABLE obstetricOfficeVisit
+(
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	patientMID BIGINT(20) UNSIGNED NOT NULL,
+	hcpMID BIGINT(20) UNSIGNED NOT NULL,
+	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
+	weight FLOAT,
+	bloodPressure FLOAT,
+	fetalHeartRate FLOAT,
+	lowLyingPlacentaObserved INT,
+	numberOfBabies INT,
+	visitDate DATE,
+	FOREIGN KEY (patientMID) REFERENCES patients(MID),
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
+) ENGINE=MyISAM;
+
+CREATE TABLE ultrasoundRecord
+(
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId BIGINT(20) UNSIGNED NOT NULL,
+	crownRumpLength FLOAT,
+	biparietalDiameter FLOAT,
+	headCircumference FLOAT,
+	femurLength FLOAT,
+	occipitofrontalDiameter FLOAT,
+	abdominalCircumference FLOAT,
+	humerusLength FLOAT,
+	estimatedFetalWeight FLOAT,
+	imagePath VARCHAR(100),
+	PRIMARY KEY (id),
+	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+) ENGINE=MyISAM;
+
 CREATE TABLE obstetricsInfo
 (
 	MID BIGINT unsigned NOT NULL,
@@ -512,11 +547,42 @@ CREATE TABLE obstetricsInfo
 	yearsOfConception		BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType VARCHAR(20) ,
+	deliveryType VARCHAR(50) ,
 	numBirths             BIGINT(20),
 	LMP                     DATE NOT NULL,
 	EDD                     DATE NOT NULL,
 	initDate                DATE NOT NULL,
 	PRIMARY KEY (recordId)
 
+) ENGINE=MyISAM;
+
+CREATE TABLE childBirthVisit
+(
+	MID BIGINT unsigned NOT NULL,
+	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId	BIGINT(20) UNSIGNED NOT NULL,
+	obstetricInitId BIGINT(20),
+	previouslyScheduled BOOLEAN,
+	preferredDeliveryType VARCHAR(50),
+	delivered BOOLEAN,
+	pitocinDosage FLOAT,
+	nitrousOxideDosage FLOAT,
+	epiduralAnaesthesiaDosage FLOAT,
+	magnesiumSulfateDosage FLOAT,
+	rhImmuneGlobulinDosage FLOAT,
+	PRIMARY KEY(id),
+	FOREIGN KEY (visitId) REFERENCES officeVisit(visitID)
+) ENGINE=MyISAM;
+
+CREATE TABLE babyDeliveryInfo
+(
+	MID BIGINT unsigned NOT NULL,
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
+	gender VARCHAR(20),
+	birthTime TIMESTAMP,
+	deliveryType VARCHAR(500),
+	isEstimated BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY(id),
+	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
 ) ENGINE=MyISAM;

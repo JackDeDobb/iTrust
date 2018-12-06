@@ -10,6 +10,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.ViewChildBirthVisit"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
@@ -17,7 +18,9 @@
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Gender"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.ChildBirthVisitBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ChildBirthVisitDAO"%>
 
 <%@include file="/global.jsp"%>
 
@@ -106,6 +109,29 @@
 	        </tr>
 	        <%			index ++; %>
 	        <%		} %>
+	        <%		} %>
+	    </table>
+	     <%
+	    ViewChildBirthVisit childBirthVisitAction = new ViewChildBirthVisit(prodDAO, loggedInMID.longValue(), pidString);
+		List<ChildBirthVisitBean> cb = childBirthVisitAction.getAllRecords(pidString);
+		
+		if (cb != null && cb.size() > 0) { 
+		%>
+		<div align=center>
+	    <br />
+	    <table class="fancyTable">
+	        <tr>
+	            <th>Record ID</th>
+	            <th></th>
+	        </tr>
+	        <%		int index = 0; %>
+	        <%		for(ChildBirthVisitBean record : cb) { %>
+	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getId())) %></td>
+	            <td><a href="viewIndividualChildBirthVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( record.getId() )) %>">View</a></td>
+	        </tr>
+	        <%			index ++; %>
+	        <%		} %>
 	    </table>
 	    <%	} else { %>
 	    <div align=center>
@@ -119,6 +145,10 @@
 	    
 	    <%	if (isOBGYN) { %>
 	    	<a href="addNewObstetricRecord.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
+	    	<br/>
+	    	<a href="addNewChildBirthVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add New Child Birth Record</a>
+	    	<br/>
+	    	<a href="addNewBabyDeliveryInfo.jsp" style="font-size: 16pt; font-weight: bold;">Add New Baby</a>
 	    <%	} %>
 	    
 	    

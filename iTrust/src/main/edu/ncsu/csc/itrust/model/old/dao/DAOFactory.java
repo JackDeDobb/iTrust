@@ -235,6 +235,37 @@ public class DAOFactory {
 	public ReviewsDAO getReviewsDAO() {
 		return new ReviewsDAO(this);
 	}
+
+	/**
+	 * Creates a DAO for obstetrics office visits.
+	 * @return this DAOFactory's ObstetricOfficeVisitDAO
+	 */
+	public ObstetricOfficeVisitDAO getObstetricsOfficeVisitDAO() {
+		return new ObstetricOfficeVisitDAO(this);
+	}
 	
+	/**
+	 * Creates a DAO for ultrasound records.
+	 * @return this DAOFactory's UltrasoundRecordDAO
+	 */
+	public UltrasoundRecordDAO getUltrasoundRecordDAO() {
+		return new UltrasoundRecordDAO(this);
+	}
+	
+	/**
+	 * Creates a DAO for child birth visit records.
+	 * @return this DAOFactory's ChildBirthVisitDAO
+	 */
+	public ChildBirthVisitDAO getChildBirthVisitDAO() {
+		return new ChildBirthVisitDAO(this);
+	}
+	
+	/**
+	 * Creates a DAO for baby delivery records.
+	 * @return this DAOFactory's BabyDeliveryInfoDAO
+	 */
+	public BabyDeliveryInfoDAO getBabyDeliveryInfoDAO() {
+		return new BabyDeliveryInfoDAO(this);
+	}
 
 }

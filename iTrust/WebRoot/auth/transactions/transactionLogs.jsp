@@ -76,6 +76,20 @@ for(TransactionType type: TransactionType.values()){
 	points.add(map);
 }
 String dataPoints3 = gsonObj.toJson(points);
+
+// Load date for graph 4.
+gsonObj = new Gson();
+map = null;
+points = new ArrayList<Map<Object,Object>>();
+Map<String, Integer> aggData =DAOFactory.getProductionInstance().getTransactionDAO().aggregateTransactionsByMonth();
+for (Map.Entry<String, Integer> entry: aggData.entrySet()) {
+    map = new HashMap<Object, Object>();
+    map.put("label", entry.getKey());
+    map.put("y", entry.getValue());
+    points.add(map);
+}
+String dataPoints4 = gsonObj.toJson(points);
+
 %>
 
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -116,23 +130,41 @@ String dataPoints3 = gsonObj.toJson(points);
 		chart.render();
 	}
 	
-	var renderGraph3 = function() { 
-		var chart = new CanvasJS.Chart("chartContainer3", {
-			animationEnabled: true,
-			exportEnabled: true,
-			title: {
-				text: "Transactions per Transaction Type"
-			},
-			data: [{
-				type: "column",
-				//indexLabel: "{y}", //Shows y value on all Data Points
-				indexLabelFontColor: "#5A5757",
-				indexLabelPlacement: "outside",
-				dataPoints: <%out.print(dataPoints3);%>
-			}]
-		});
-		chart.render();
-	}
+	var renderGraph3 = function() {
+        var chart = new CanvasJS.Chart("chartContainer3", {
+            animationEnabled: true,
+            exportEnabled: true,
+            title: {
+                text: "Transactions per Transaction Type"
+            },
+            data: [{
+                type: "column",
+                //indexLabel: "{y}", //Shows y value on all Data Points
+                indexLabelFontColor: "#5A5757",
+                indexLabelPlacement: "outside",
+                dataPoints: <%out.print(dataPoints3);%>
+            }]
+        });
+        chart.render();
+    }
+
+    var renderGraph4 = function() {
+        var chart = new CanvasJS.Chart("chartContainer4", {
+            animationEnabled: true,
+            exportEnabled: true,
+            title: {
+                text: "Transactions per Month and Year"
+            },
+            data: [{
+                type: "column",
+                //indexLabel: "{y}", //Shows y value on all Data Points
+                indexLabelFontColor: "#5A5757",
+                indexLabelPlacement: "outside",
+                dataPoints: <%out.print(dataPoints4);%>
+            }]
+        });
+        chart.render();
+    }
 </script>
 <form method="post" action="transactionLogs.jsp">
 	<label for="select-role">Role: </label>
@@ -273,6 +305,7 @@ String dataPoints3 = gsonObj.toJson(points);
     <br/><br/>
     <div id="chartContainer3" style="height:370px; width:100%"></div>
     <br/><br/>
+    <div id="chartContainer4" style="height:370px; width:100%"></div>
   </div>
 
 </div>
@@ -285,6 +318,7 @@ summarize.onclick = function() {
 	renderGraph1();
 	renderGraph2();
 	renderGraph3();
+	renderGraph4();
 	modal.style.display = "block";
 }
 
