@@ -93,7 +93,6 @@ public class BabyDeliveryInfoDAO {
 	}
 	/**
 	 * Returns a list of BabyDeliveryInfo given by the childBirthVisitId
-	 * 
 	 * @return A java.util.List of BabyDeliveryInfo Beans.
 	 * @throws DBException
 	 */
