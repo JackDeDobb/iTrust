@@ -24,9 +24,7 @@ public class BabyDeliveryInfoDAO {
 
 	/**
 	 * Returns the Baby delivery information for a given id
-	 * 
-	 * @param id
-	 *            The id of the BabyDeliveryInfo to retrieve
+	 *
 	 * @return A BabyDeliveryInfo representing the given id.
 	 * @throws DBException
 	 */
@@ -84,10 +82,10 @@ public class BabyDeliveryInfoDAO {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = loader.loadParameters(
 						conn.prepareStatement("UPDATE babyDeliveryInfo SET "
-							+"MID=?, id=?, childBirthVisitId=?, gender=?, birthTime=?, deliveryType=?, isEstimated=?, "
+							+"MID=?, childBirthVisitId=?, gender=?, birthTime=?, deliveryType=?, isEstimated=?  "
 							+"WHERE id=?"), bdInfoBean))
 		{
-			ps.setLong(8, bdInfoBean.getId());
+			ps.setLong(7, bdInfoBean.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -96,14 +94,12 @@ public class BabyDeliveryInfoDAO {
 	/**
 	 * Returns a list of BabyDeliveryInfo given by the childBirthVisitId
 	 * 
-	 * @param childBirthVisitId
-	 *            The childBirthVisitId of the visit in question
 	 * @return A java.util.List of BabyDeliveryInfo Beans.
 	 * @throws DBException
 	 */
 	public List<BabyDeliveryInfoBean> getBabyDeliveryInfosForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE MID = ?")) {
+				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE MID = ? ORDER BY id DESC")) {
 			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			List<BabyDeliveryInfoBean> records = rs.next() ? loader.loadList(rs) : null;
