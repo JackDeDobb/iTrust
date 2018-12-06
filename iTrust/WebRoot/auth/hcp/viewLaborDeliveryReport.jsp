@@ -57,12 +57,18 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 	} else {
 		LaborDeliveryReportAction reportAction = new LaborDeliveryReportAction(prodDAO, loggedInMID, patientMID);
 		List<String> allergies = reportAction.getAllergies();
+		boolean rhFlag = reportAction.hasRHFlag();
 %>
 	<div align=center>
+		<h2>Patient Information</h2>
 		<table class="fTable">
 			<tr>
 				<th>Type</th>
-				<th>Information</th>
+				<th>Details</th>
+			</tr>
+			<tr>
+				<td>RH Flag</td>
+				<td><% if(rhFlag) { StringEscapeUtils.escapeHtml("Yes"); } else { StringEscapeUtils.escapeHtml("No"); }%></td>
 			</tr>
 			<tr>
 				<td>Allergies</td>
