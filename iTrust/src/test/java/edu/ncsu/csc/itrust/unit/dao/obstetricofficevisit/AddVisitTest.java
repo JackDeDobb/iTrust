@@ -27,5 +27,7 @@ public class AddVisitTest extends TestCase {
         List<ObstetricOfficeVisitBean> list = obstetricOfficeVisitDAO.getObstetricOfficeVisitsByPatientMID(11111111);
         bean = list.get(list.size() - 1);
         assertEquals((float)100.0, bean.getWeight());
+        assertEquals(8, bean.getNumberOfBabies());
+        assertEquals(33, bean.getLowLyingPlacentaObserved());
     }
 }
