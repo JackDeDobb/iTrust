@@ -20,6 +20,7 @@
 <%@page import="edu.ncsu.csc.itrust.action.ChildBirthVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.Ethnicity"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.enums.BooleanType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.BloodType"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.enums.DeliveryType"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
@@ -134,18 +135,22 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        }
 	        
 	   		
-	        
+	        boolean delivered = request.getParameter("delivered").equals("Yes");
+	        info.setDelivered(delivered);
+	        info.setPreviouslyScheduled(request.getParameter("previouslyScheduled").equals("Yes"));
 	        info.setPreferredDeliveryType(request.getParameter("deliveryTypeStr"));
 	        if(!invalid) {
 	        	childBirthVisitAction.addChildBirthVisitRecord(info);
-				response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        	if (delivered) {
+	        		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/addNewBabyDeliveryInfo.jsp");
+	        	} else {
+					response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        	}
 	        }
 		} catch(Exception  e) {
 			e.printStackTrace();
 		}
 	} 
-
-
 %>
 
 
@@ -157,14 +162,41 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 			<tr>
 				<th colspan=2>Patient Information</th>
 			</tr>		
-			<tr>		
+			
+			
+			
+			<tr>
 				<td class="subHeaderVertical">Previously Scheduled:</td>
-				<td><input name="firstName" type="text"></td>
+				<td><select name="previouslyScheduled">
+					<%
+						String selected = "";
+						for (BooleanType g : BooleanType.values()) {
+							selected = (g.equals(BooleanType.No)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
+			
+			
 			<tr>
 				<td class="subHeaderVertical">Delivered:</td>
-				<td><input name="lastName" type="text"></td>
+				<td><select name="delivered">
+					<%
+						selected = "";
+						for (BooleanType g : BooleanType.values()) {
+							selected = (g.equals(BooleanType.No)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
+
+			
 			<tr>
 				<td class="subHeaderVertical">Pitocin Dosage:</td>
 				<td><input name="Pitocin" type="text"></td>
@@ -189,7 +221,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				<td class="subHeaderVertical">Preferred Delivery Type:</td>
 				<td><select name="deliveryTypeStr">
 					<%
-						String selected = "";
+						selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
 							selected = (dt.equals(DeliveryType.NS)) ? "selected=selected"
 									: "";
