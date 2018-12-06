@@ -254,7 +254,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	<%
 		if(isOBGYN){
 	%>
-		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Add Child Visit Record">
+		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Add New Baby Record">
 	<%
 	}
 	%>

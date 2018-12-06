@@ -14,6 +14,8 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.enums.BooleanType"%>
+<%@page import="edu.ncsu.csc.itrust.action.ChildBirthVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewChildBirthVisit"%>
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
@@ -64,7 +66,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
         }
 	
 	
-	ViewChildBirthVisit viewChildBirthVisitAction = new ViewChildBirthVisit(prodDAO, loggedInMID.longValue(), pidString);
+	ChildBirthVisitAction viewChildBirthVisitAction = new ChildBirthVisitAction(prodDAO, loggedInMID.longValue(), pidString);
 	ChildBirthVisitBean r = viewChildBirthVisitAction.getRecordById(recordId);
 	
 	if(request.getParameter("editRecordAction") != null) {
@@ -120,12 +122,18 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	        	}
 	        }
 	        
+	        boolean delivered = request.getParameter("delivered").equals("Yes");
+	        info.setDelivered(delivered);
+	        info.setPreviouslyScheduled(request.getParameter("previouslyScheduled").equals("Yes"));
 	        info.setPreferredDeliveryType(request.getParameter("deliveryTypeStr"));
 	        if(!invalid) {
 	        	viewChildBirthVisitAction.updateRecord(info);
-				r = viewChildBirthVisitAction.getRecordById(recordId);
+	        	if (delivered) {
+	        		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/addNewBabyDeliveryInfo.jsp");
+	        	} else {
+					response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
+	        	}
 	        }
-			
 			//response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp");
 		} catch(Exception  e) {
 			e.printStackTrace();
@@ -143,16 +151,38 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 		<table class="fTable" align=center style="width: 350px;">
 			<tr>
 				<th colspan=2>Patient Information</th>
-			</tr>		
+			</tr>	
 			<tr>
-			
 				<td class="subHeaderVertical">Previously Scheduled:</td>
-				<td><input name="firstName" value="<%= StringEscapeUtils.escapeHtml("" + (r.isPreviouslyScheduled())) %>" type="text"></td>
+				<td><select name="previouslyScheduled">
+					<%
+						String selected = "";
+						for (BooleanType g : BooleanType.values()) {
+							selected = (g.equals(BooleanType.No)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
+			
+			
 			<tr>
 				<td class="subHeaderVertical">Delivered:</td>
-				<td><input name="lastName" value="<%= StringEscapeUtils.escapeHtml("" + (r.isDelivered())) %>" type="text"></td>
+				<td><select name="delivered">
+					<%
+						selected = "";
+						for (BooleanType g : BooleanType.values()) {
+							selected = (g.equals(BooleanType.No)) ? "selected=selected" : "";
+					%>
+					<option value="<%=g.getName()%>" <%= StringEscapeUtils.escapeHtml("" + (selected)) %>><%= StringEscapeUtils.escapeHtml("" + (g.getName())) %></option>
+					<%
+						}
+					%>
+				</select></td>
 			</tr>
+				
 			<tr>
 				<td class="subHeaderVertical">Pitocin Dosage:</td>
 				<td><input name="Pitocin" value="<%= StringEscapeUtils.escapeHtml("" + (r.getPitocinDosage())) %>" type="text"></td>
@@ -177,7 +207,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 				<td class="subHeaderVertical">Preferred Delivery Type:</td>
 				<td><select name="deliveryTypeStr">
 					<%
-						String selected = "";
+						selected = "";
 						for (DeliveryType dt : DeliveryType.values()) {
 							selected = (dt.equals(r.getPreferredDeliveryType())) ? "selected=selected"
 									: "";
@@ -202,7 +232,7 @@ if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 	<%
 		if(isOBGYN){
 	%>
-		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Edit Child Birth Visit Record">
+		<input type="submit" name="editRecordAction" style="font-size: 16pt; font-weight: bold;" value="Edit Baby Delivery Record">
 	<%
 	}
 	%>
