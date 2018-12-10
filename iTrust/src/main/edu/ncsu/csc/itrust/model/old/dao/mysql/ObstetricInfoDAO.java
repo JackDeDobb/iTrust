@@ -30,7 +30,6 @@ public class ObstetricInfoDAO {
 			ResultSet rs = ps.executeQuery();
 			ObstetricInfoBean record = rs.next() ? loader.loadSingle(rs) : null;
 			rs.close();
-
 			return record;
 		} catch (SQLException e) {
 			e.printStackTrace();

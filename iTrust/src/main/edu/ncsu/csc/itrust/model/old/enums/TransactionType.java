@@ -510,7 +510,10 @@ public enum TransactionType {
 	/**SCHEDULE_NEXT_OFFICE_VISIT**/
 	SCHEDULE_NEXT_OFFICE_VISIT(9404, "Schedule Next Office Visit", "Schedule Next Office Visit", true),
 	/**SCHEDULE_CHILDBIRTH**/
-	SCHEDULE_CHILDBIRTH(9405, "Schedule Childbirth", "Schedule Childbirth", true)
+	SCHEDULE_CHILDBIRTH(9405, "Schedule Childbirth", "Schedule Childbirth", true),
+	
+	/**GENERATE_LABOR_DELIVERY_REPORT**/
+	GENERATE_LABOR_DELIVERY_REPORT(9500, "Generate Labor Delivery Report", "Generate Labor Delivery Report", true)
 	;
 	/**
 	 * This string is used in the SQL statement associated with pulling events for
