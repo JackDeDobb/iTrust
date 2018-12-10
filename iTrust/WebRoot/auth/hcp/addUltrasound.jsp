@@ -39,41 +39,39 @@
     EditPatientAction paction = new EditPatientAction(prodDAO,loggedInMID.longValue(), patientMIDString);
     PatientBean pb = paction.getPatient();
     boolean isEligible = pb.getObstetricEligibility();
-
-    AddObstetricOfficeVisitAction addObstetricOfficeVisitAction = new AddObstetricOfficeVisitAction(prodDAO,
-            loggedInMID.longValue());
-
-    boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
-
-    if (formIsFilled) {
-        UltrasoundRecordBean ultrasoundRecord = new UltrasoundRecordBean();
-        ultrasoundRecord.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
-        ultrasoundRecord.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
-        ultrasoundRecord.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
-        ultrasoundRecord.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
-        ultrasoundRecord.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
-        ultrasoundRecord.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
-        ultrasoundRecord.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
-        ultrasoundRecord.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
-        ultrasoundRecord.setImagePath(request.getParameter("filepath"));
-        ultrasoundRecord.setVisitID(visitId.longValue());
-        addObstetricOfficeVisitAction.addUltrasoundRecord(visitId, patientMID, ultrasoundRecord);
-    }
+//
+//    AddObstetricOfficeVisitAction addObstetricOfficeVisitAction = new AddObstetricOfficeVisitAction(prodDAO,
+//            loggedInMID.longValue());
+//
+//    boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
+//
+//    if (formIsFilled) {
+//        UltrasoundRecordBean ultrasoundRecord = new UltrasoundRecordBean();
+//        ultrasoundRecord.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
+//        ultrasoundRecord.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
+//        ultrasoundRecord.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
+//        ultrasoundRecord.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
+//        ultrasoundRecord.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
+//        ultrasoundRecord.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
+//        ultrasoundRecord.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
+//        ultrasoundRecord.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
+//        ultrasoundRecord.setImagePath(request.getParameter("filepath"));
+//        ultrasoundRecord.setVisitID(visitId.longValue());
+//
+//    }
 
     if (isOBGYN) {
 %>
-<form id="upload-file" action="UltrasoundServlet" method = "post" enctype = "multipart/form-data">
-    <table class="fTable">
-        <tr class="ultra" >
-            <td class="subHeaderVertical">Choose Ultrasound</td>
-            <td><input type = "file" name = "file" size = "50" /></td>
-        </tr>
-    </table>
-    <input type = "submit" value = "Upload ultrasound file" />
+<form action="viewObstetricOfficeVisits.jsp">
+    <input type="submit" value="Skip adding ultrasound record" />
 </form>
-<form id="add-ultrasound-record" action="addUltrasound.jsp" method = "post">
+<br/>
+<form id="upload-file" action="UltrasoundServlet" method = "post" enctype = "multipart/form-data">
     <input id = "filepath" type="hidden" name = "filepath"/>
     <input type="hidden" name="formIsFilled" value="true"><br/>
+    <input type="hidden" name="loggedInMID" value="<%=loggedInMID.longValue()%>"><br/>
+    <input type="hidden" name="patientMID" value="<%=patientMIDString%>"><br/>
+    <input type="hidden" name="visitId" value="<%=visitIdString%>"><br/>
     <table class="fTable">
         <tr class="ultra" >
             <td class="subHeaderVertical">Crown Rump Length:</td>
@@ -82,10 +80,6 @@
         <tr class="ultra" >
             <td class="subHeaderVertical">Head circumference:</td>
             <td><input type="number" name="headCircumference"></td>
-        </tr>
-        <tr class="ultra" >
-            <td class="subHeaderVertical">Crown Rump Length:</td>
-            <td><input type="number" name="crownRumpLength"></td>
         </tr>
         <tr class="ultra" >
             <td class="subHeaderVertical">Biparietal Diameter:</td>
@@ -112,10 +106,11 @@
             <td><input type="number" name="estimatedFetalWeight"></td>
         </tr>
         <tr class="ultra" >
-            <td class="subHeaderVertical">Estimated Fetal Weight:</td>
-            <td><input type="number" name="estimatedFetalWeight"></td>
+            <td class="subHeaderVertical">Choose Ultrasound</td>
+            <td><input type = "file" name = "file" /></td>
         </tr>
     </table>
+    <br/>
     <input type = "submit" value = "Add ultrasound record" />
 </form>
 
@@ -124,8 +119,10 @@
     $(function() {
         $('#upload-file').ajaxForm({
             success: function(msg) {
-                $('#filepath').val(msg);
-                alert("Filepath is: " + msg);
+                alert(msg);
+                if (!msg.includes("exception")) {
+                    window.location.replace("./viewObstetricOfficeVisits.jsp");
+                }
             },
             error: function(msg) {
                 $("#upload-error").text("Couldn't upload file");

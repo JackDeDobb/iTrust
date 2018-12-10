@@ -557,3 +557,34 @@ CREATE TABLE obstetricOfficeVisit
 	FOREIGN KEY (patientMID) REFERENCES patients(MID),
 	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
 ) ENGINE=MyISAM;
+
+CREATE TABLE babyDeliveryInfo
+(
+	MID BIGINT unsigned NOT NULL,
+	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
+	gender VARCHAR(20),
+	birthTime TIMESTAMP,
+	deliveryType VARCHAR(500),
+	isEstimated BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY(id),
+	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
+) ENGINE=MyISAM;
+
+CREATE TABLE childBirthVisit
+(
+	MID BIGINT unsigned NOT NULL,
+	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	visitId	BIGINT(20) UNSIGNED NOT NULL,
+	obstetricInitId BIGINT(20),
+	previouslyScheduled BOOLEAN,
+	preferredDeliveryType VARCHAR(50),
+	delivered BOOLEAN,
+	pitocinDosage FLOAT,
+	nitrousOxideDosage FLOAT,
+	epiduralAnaesthesiaDosage FLOAT,
+	magnesiumSulfateDosage FLOAT,
+	rhImmuneGlobulinDosage FLOAT,
+	PRIMARY KEY(id),
+	FOREIGN KEY (visitId) REFERENCES obstetricOfficeVisit(visitID)
+) ENGINE=MyISAM;

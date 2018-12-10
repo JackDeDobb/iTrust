@@ -52,6 +52,10 @@ public class AddObstetricOfficeVisitAction {
 
     }
 
+    public void setLoggedInMID(long loggedInMID) {
+        this.loggedInMID = loggedInMID;
+    }
+
     private final static Map<DayOfWeek, Integer> DAY_OFFSET = new HashMap<>();
     static {
         DAY_OFFSET.put(DayOfWeek.SUNDAY, 1);
@@ -108,7 +112,7 @@ public class AddObstetricOfficeVisitAction {
         return patient.isRH() && !patient.isRHImmunization() && getNumberOfWeeksPregnant(patientInfo.getLMP()) >= 28;
     }
 
-    public void addUltrasoundRecord(long visitId, long patientMID, UltrasoundRecordBean ultrasoundRecord) throws DBException, FormValidationException {
+    public void addUltrasoundRecord(long patientMID, UltrasoundRecordBean ultrasoundRecord) throws DBException, FormValidationException {
         // Validate ultrasound record fields.
         ultrasoundRecordValidator.validate(ultrasoundRecord);
 
@@ -117,7 +121,7 @@ public class AddObstetricOfficeVisitAction {
 
         // Log the transaction.
         transactionDAO.logTransaction(TransactionType.ULTRASOUND, loggedInMID, patientMID,
-                visitId + "");
+                ultrasoundRecord.getVisitID() + "");
     }
 
     private int getNumberOfWeeksPregnant(Date LMP) {
