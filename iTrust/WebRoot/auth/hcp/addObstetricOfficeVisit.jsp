@@ -159,54 +159,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td class="subHeaderVertical">Number of Babies:</td>
 		<td><input type="number" step="1" name="numberOfBabies"></td>
 	</tr>
-	<tr>
-		<td class="subHeaderVertical">Add/Remove Ultrasound Record?</td>
-		<td>
-			<input type="button" name="addUltraSound" value="Ultrasound"
-				onclick="toggleUltrasoundVisibilty()">
-		</td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Crown Rump Length:</td>
-		<td><input type="number" name="crownRumpLength"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Head circumference:</td>
-		<td><input type="number" name="headCircumference"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Crown Rump Length:</td>
-		<td><input type="number" name="crownRumpLength"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Biparietal Diameter:</td>
-		<td><input type="number" name="biparietalDiameter"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Femur Length:</td>
-		<td><input type="number" name="femurLength"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Occipitofrontal Diameter:</td>
-		<td><input type="number" name="occipitofrontalDiameter"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Abdominal Circumference:</td>
-		<td><input type="number" name="abdominalCircumference"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Humerus Length:</td>
-		<td><input type="number" name="humerusLength"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
-		<td><input type="number" name="estimatedFetalWeight"></td>
-	</tr>
-	<tr class="ultra" style="display:none;">
-		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
-		<td><input type="number" name="estimatedFetalWeight"></td>
-	</tr>
-	
 
 </table>
 <br />

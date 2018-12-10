@@ -1,10 +1,10 @@
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.UltrasoundRecordDAO"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
@@ -60,6 +60,13 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	ViewObstetricOfficeVisitAction viewVisitAction = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
 	EditObstetricOfficeVisitAction editVisitAction = new EditObstetricOfficeVisitAction(prodDAO, loggedInMID);
 	ObstetricOfficeVisitBean visit = viewVisitAction.getObstetricOfficeVisitByVisitId(visitId);
+	UltrasoundRecordDAO ultrasoundDAO = prodDAO.getUltrasoundRecordDAO();
+	List<UltrasoundRecordBean> ultrasoundRecords = ultrasoundDAO.getUltrasoundRecordsByVisitID(visitId);
+	UltrasoundRecordBean ultrasoundRec = null;
+	if (!ultrasoundRecords.isEmpty()) {
+		ultrasoundRec = ultrasoundRecords.get(0);
+	}
+
 	
 	// get visit date
 	Date visitDate = new Date(visit.getVisitDate().getTime());
@@ -141,8 +148,48 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td class="subHeaderVertical">Number of Babies:</td>
 		<td><input type="number" step="1" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getNumberOfBabies())) %>" name="numberOfBabies"></td>
 	</tr>
+	<% if (ultrasoundRec != null) { %>
+	<tr>
+		<th colspan=2>Ultrasound Information</th>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Crown Rump Length:</td>
+		<td><input type="number" name="crownRumpLength" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getCrownRumpLength())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Head circumference:</td>
+		<td><input type="number" name="headCircumference" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getHeadCircumference())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Biparietal Diameter:</td>
+		<td><input type="number" name="biparietalDiameter" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getBiparietalDiameter())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Femur Length:</td>
+		<td><input type="number" name="femurLength" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getFemurLength())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Occipitofrontal Diameter:</td>
+		<td><input type="number" name="occipitofrontalDiameter" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getOccipitofrontalDiameter())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Abdominal Circumference:</td>
+		<td><input type="number" name="abdominalCircumference" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getAbdominalCircumference())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Humerus Length:</td>
+		<td><input type="number" name="humerusLength" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getHumerusLength())%>"></td>
+	</tr>
+	<tr class="ultra" >
+		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
+		<td><input type="number" name="estimatedFetalWeight" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getEstimatedFetalWeight())%>"></td>
+	</tr>
+	<% } %>
 </table>
 <br />
+<% if (ultrasoundRec != null) { %>
+	<img src="/iTrust/image/ultrasounds/<%=ultrasoundRec.getImagePath()%>"
+<% } %>
 <br />
 </form>
 <div align="center">
