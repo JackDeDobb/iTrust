@@ -21,28 +21,6 @@ public class BabyDeliveryInfoDAO {
 		this.factory = factory;
 		this.loader = new BabyDeliveryInfoLoader();
 	}
-
-	/**
-	 * Returns the Baby delivery information for a given id
-	 *
-	 * @return A BabyDeliveryInfo representing the given id.
-	 * @throws DBException
-	 */
-	public BabyDeliveryInfoBean getMostRecentChildBirthVisitForMID(long mid) throws DBException {
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE MID = ? ORDER BY" +
-						"id DESC LIMIT 1")) {
-
-			ps.setLong(1, mid);
-			ResultSet rs = ps.executeQuery();
-			BabyDeliveryInfoBean record = loader.loadSingle(rs);
-			rs.close();
-
-			return record;
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
 	
 	/**
 	 * Adds a visit into the babyDeliveryInfo table

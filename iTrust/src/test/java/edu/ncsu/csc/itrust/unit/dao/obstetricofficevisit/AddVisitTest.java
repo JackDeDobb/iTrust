@@ -29,5 +29,8 @@ public class AddVisitTest extends TestCase {
         assertEquals((float)100.0, bean.getWeight());
         assertEquals(8, bean.getNumberOfBabies());
         assertEquals(33, bean.getLowLyingPlacentaObserved());
+
+        ObstetricOfficeVisitBean recent = obstetricOfficeVisitDAO.getMostRecentObstetricOfficeVisitsByPatientMID(11111111);
+        assertEquals(recent.getVisitId(), bean.getVisitId());
     }
 }

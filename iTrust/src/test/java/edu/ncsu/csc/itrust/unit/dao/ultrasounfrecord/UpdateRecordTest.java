@@ -16,6 +16,9 @@ public class UpdateRecordTest extends TestCase {
         bean = list.get(list.size() - 1);
         bean.setHumerusLength((float) 3.33);
         bean.setBiparietalDiameter((float)1.11);
+        ultrasoundRecordDAO.editUltrasoundRecord(bean);
+        list = ultrasoundRecordDAO.getUltrasoundRecordsByVisitID(273829);
+        bean = list.get(list.size() - 1);
         assertEquals((float)0.618, bean.getEstimatedFetalWeight());
         assertEquals((float)1.11, bean.getBiparietalDiameter());
         assertEquals((float)3.33, bean.getHumerusLength());
