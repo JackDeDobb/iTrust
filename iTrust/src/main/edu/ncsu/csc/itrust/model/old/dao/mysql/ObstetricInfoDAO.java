@@ -24,13 +24,15 @@ public class ObstetricInfoDAO {
 	public ObstetricInfoBean getMostRecentObstetricInfoForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE MID = ? ORDER BY " +
-						"initDate DESC LIMIT 1")) {
+						" initDate DESC LIMIT 1")) {
+
 			ps.setLong(1, mid);
 			ResultSet rs = ps.executeQuery();
 			ObstetricInfoBean record = rs.next() ? loader.loadSingle(rs) : null;
 			rs.close();
 			return record;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
@@ -45,6 +47,7 @@ public class ObstetricInfoDAO {
 			rs.close();
 			return records;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
@@ -56,6 +59,7 @@ public class ObstetricInfoDAO {
 						"LMP, EDD, initDate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())"), info)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}

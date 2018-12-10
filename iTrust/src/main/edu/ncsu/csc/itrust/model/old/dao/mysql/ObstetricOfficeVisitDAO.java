@@ -53,16 +53,17 @@ public class ObstetricOfficeVisitDAO {
 	public long addObstetricOfficeVisit(ObstetricOfficeVisitBean ObsVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(
+				PreparedStatement ps = ObsVisitLoader.loadInsertParameters(
 						conn.prepareStatement(
 								"INSERT INTO obstetricOfficeVisit "
-									+"(visitId,patientMID,hcpMID,obstetricRecordID,weight,bloodPressure, "
-									+"fetalHeartRate,fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies,visitDate) "
-									+"VALUES(?,?,?,?,?,?,?,?)"), ObsVisitBean))
+									+"(obstetricRecordID, patientMID,hcpMID,weight,bloodPressure, "
+									+"fetalHeartRate,lowLyingPlacentaObserved,numberOfBabies,visitDate) "
+									+"VALUES(?,?,?,?,?,?,?,?,?)"), ObsVisitBean))
 		{
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
@@ -79,10 +80,10 @@ public class ObstetricOfficeVisitDAO {
 	public void editObstetricOfficeVisit(ObstetricOfficeVisitBean ObsVisitBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ObsVisitLoader.loadParameters(
+				PreparedStatement ps = ObsVisitLoader.loadUpdateParameters(
 						conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-							+"visitId=?, patientMID=?, hcpMID=?, obstetricRecordID=?, weight=?, bloodPressure=?, "
-							+"fetalHeartRate=?, fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
+							+"obstetricRecordID=?, patientMID=?, hcpMID=?, weight=?, bloodPressure=?, "
+							+"fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
 							+"WHERE visitId=?"), ObsVisitBean))
 		{
 			ps.executeUpdate();

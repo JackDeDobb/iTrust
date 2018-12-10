@@ -507,22 +507,6 @@ CREATE TABLE medicalProcedure
 	FOREIGN KEY (cptCode) 	REFERENCES cptCode(code)
 ) ENGINE=MyISAM;
 
-CREATE TABLE obstetricOfficeVisit
-(
-	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	patientMID BIGINT(20) UNSIGNED NOT NULL,
-	hcpMID BIGINT(20) UNSIGNED NOT NULL,
-	obstetricRecordID BIGINT(20) UNSIGNED NOT NULL,
-	weight FLOAT,
-	bloodPressure FLOAT,
-	fetalHeartRate FLOAT,
-	lowLyingPlacentaObserved INT,
-	numberOfBabies INT,
-	visitDate DATE,
-	FOREIGN KEY (patientMID) REFERENCES patients(MID),
-	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
-) ENGINE=MyISAM;
-
 CREATE TABLE ultrasoundRecord
 (
 	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
@@ -535,9 +519,9 @@ CREATE TABLE ultrasoundRecord
 	abdominalCircumference FLOAT,
 	humerusLength FLOAT,
 	estimatedFetalWeight FLOAT,
-	imagePath VARCHAR(100),
+	imagePath VARCHAR(1000),
 	PRIMARY KEY (id),
-	FOREIGN KEY (visitID) REFERENCES officeVisit(visitId)
+	FOREIGN KEY (visitID) REFERENCES obstetricOfficeVisit(visitId)
 ) ENGINE=MyISAM;
 
 CREATE TABLE obstetricsInfo
@@ -547,7 +531,7 @@ CREATE TABLE obstetricsInfo
 	yearsOfConception		BIGINT(20),
 	numberOfHoursInLabor    BIGINT(20),
 	weightGainDuringPregnancy BIGINT(20),
-	deliveryType VARCHAR(50) ,
+	deliveryType VARCHAR(40) ,
 	numBirths             BIGINT(20),
 	LMP                     DATE NOT NULL,
 	EDD                     DATE NOT NULL,
@@ -556,33 +540,20 @@ CREATE TABLE obstetricsInfo
 
 ) ENGINE=MyISAM;
 
-CREATE TABLE childBirthVisit
+CREATE TABLE obstetricOfficeVisit
 (
-	MID BIGINT unsigned NOT NULL,
-	id	BIGINT(20) UNSIGNED AUTO_INCREMENT,
-	visitId	BIGINT(20) UNSIGNED NOT NULL,
-	obstetricInitId BIGINT(20),
-	previouslyScheduled BOOLEAN,
-	preferredDeliveryType VARCHAR(50),
-	delivered BOOLEAN,
-	pitocinDosage FLOAT,
-	nitrousOxideDosage FLOAT,
-	epiduralAnaesthesiaDosage FLOAT,
-	magnesiumSulfateDosage FLOAT,
-	rhImmuneGlobulinDosage FLOAT,
-	PRIMARY KEY(id),
-	FOREIGN KEY (visitId) REFERENCES officeVisit(visitID)
-) ENGINE=MyISAM;
-
-CREATE TABLE babyDeliveryInfo
-(
-	MID BIGINT unsigned NOT NULL,
-	id BIGINT(20) UNSIGNED AUTO_INCREMENT,
-	childBirthVisitId BIGINT(20) UNSIGNED NOT NULL,
-	gender VARCHAR(20),
-	birthTime TIMESTAMP,
-	deliveryType VARCHAR(500),
-	isEstimated BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY(id),
-	FOREIGN KEY (childBirthVisitId) REFERENCES childBirthVisit(id)
+	visitId BIGINT(20) UNSIGNED AUTO_INCREMENT,
+	patientMID BIGINT(20) UNSIGNED NOT NULL,
+	hcpMID BIGINT(20) UNSIGNED NOT NULL,
+	obstetricRecordID BIGINT(20) NOT NULL,
+	weight FLOAT,
+	bloodPressure FLOAT,
+	fetalHeartRate FLOAT,
+	lowLyingPlacentaObserved INT,
+	numberOfBabies INT,
+	visitDate DATETIME,
+	PRIMARY KEY (visitId),
+	FOREIGN KEY (obstetricRecordID) REFERENCES obstetricsInfo(recordId),
+	FOREIGN KEY (patientMID) REFERENCES patients(MID),
+	FOREIGN KEY	(hcpMID) REFERENCES personnel(MID)
 ) ENGINE=MyISAM;

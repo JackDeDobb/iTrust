@@ -62,8 +62,8 @@ public class PatientBean implements Serializable, Comparable<PatientBean> {
 	private String spiritualPractices = "";
 	private String alternateName = "";
 	private String dateOfDeactivationStr = "";
-	private boolean RH = false;
-	private boolean RHImmunization = false;
+	private Boolean RH = false;
+	private Boolean RHImmunization = false;
 	private boolean obstetricEligibility = false;
 
 

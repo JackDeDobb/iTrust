@@ -23,7 +23,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 	String pidString = (String) session.getAttribute("pid");
 	if (pidString == null || pidString.equals("") || 1 > pidString.length()) {
 		out.println("pidstring is null");
-		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/viewObstetricOfficeVisit.jsp");
+		response.sendRedirect("/iTrust/auth/getPatientID.jsp?forward=hcp/viewObstetricOfficeVisits.jsp");
 		return;
 	}
 	List<ObstetricOfficeVisitBean> visits = new ArrayList<ObstetricOfficeVisitBean>();
@@ -42,7 +42,7 @@ pageTitle = "iTrust - View Obsetric Office Visits";
 		PatientBean pb = paction.getPatient();
 		isEligible = pb.getObstetricEligibility();
 	} catch (DBException ex) {
-	    System.err.println("Uncaught DBException i viewObstetricOfficeVisit.jsp");
+	    System.err.println("Uncaught DBException i viewObstetricOfficeVisits.jsp");
 	    ex.printStackTrace();
 	}
 	

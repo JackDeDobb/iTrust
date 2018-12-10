@@ -365,7 +365,20 @@
 	<servlet-mapping>
 		<servlet-name>FindExpertServlet</servlet-name>
 		<url-pattern>/auth/patient/FindExpertServlet</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
+	<servlet>
+		<description>
+			Servlet for handling ultrasound file uploads.
+		</description>
+		<display-name>UltrasoundServlet</display-name>
+		<servlet-name>UltrasoundServlet</servlet-name>
+		<servlet-class>edu.ncsu.csc.itrust.server.UltrasoundServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UltrasoundServlet</servlet-name>
+		<url-pattern>/auth/hcp/UltrasoundServlet</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
 
