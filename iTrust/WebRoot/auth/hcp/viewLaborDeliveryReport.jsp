@@ -82,7 +82,7 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 		
 		List<ObstetricOfficeVisitBean> oVisits = reportAction.getAllObstetricsOfficeVisits();
 		
-		List<ObstetricInfoBean> pastPregancies = reportAction.getPriorPregnancies();
+		List<ObstetricInfoBean> pastPregnancies = reportAction.getPriorPregnancies();
 %>
 	<div align=center>
 		<h1>Labor & Delivery Report</h1>
@@ -96,20 +96,26 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 			</tr>
 <%
 
-		for(ObstetricInfoBean pastPreg: pastPregancies){
+		for(ObstetricInfoBean pastPreg: pastPregnancies) {
 			String deliveryType = pastPreg.getDeliveryType().name();
 			long conceptionYear = pastPreg.getYearsOfConception();
+			
 			Date edd = pastPreg.getEDD();
-			SimpleDateFormat eddDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-			String eddDateString  = eddDateFormat.format(edd);
-		}
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			String eddDateString  = dateFormat.format(edd);
+			Date lmp = pastPreg.getLMP();
+			String lmpDateString = dateFormat.format(lmp);
+
 %>
 			<tr>
-				<td></td>
+				<td><%= StringEscapeUtils.escapeHtml(lmpDateString + " - " + eddDateString) %></td>
 				<td><%= StringEscapeUtils.escapeHtml(deliveryType)%></td>
 				<td><%= StringEscapeUtils.escapeHtml("" + conceptionYear)%></td>
 				<td><%= StringEscapeUtils.escapeHtml(eddDateString)%></td>
-			</tr>		
+			</tr>	
+<%
+		}
+%>	
 		</table>
 		<h3>Obstetric Office Visits</h3>
 		<table class="fTable">
@@ -127,15 +133,16 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 		for(ObstetricOfficeVisitBean visit : oVisits) {
 			Date date = new Date();
 			date.setTime(visit.getVisitDate().getTime());
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			String dateString  = dateFormat.format(date);
 			
 			ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 			ObstetricInfoBean r = obstetricInfoAction.getRecordById(visit.getObstetricRecordID());
+			String timePregnantAtVisit = reportAction.getTimePregnantAtVisit(visit, r);
 %>
 			<tr>
 				<td><%= StringEscapeUtils.escapeHtml("" + dateString)%></td>
-				<td><%= StringEscapeUtils.escapeHtml("" + r.getTimePregnant())%></td>
+				<td><%= StringEscapeUtils.escapeHtml("" + timePregnantAtVisit)%></td>
 				<td><%= StringEscapeUtils.escapeHtml("" + visit.getWeight())%></td>
 				<td><%= StringEscapeUtils.escapeHtml("" + visit.getBloodPressure())%></td>
 				<td><%= StringEscapeUtils.escapeHtml("" + visit.getFetalHeartRate())%></td>

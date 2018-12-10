@@ -1,5 +1,6 @@
 package edu.ncsu.csc.itrust.action;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.AllergyBean;
@@ -162,6 +164,14 @@ public class LaborDeliveryReportAction {
 			allergies.add(allergy.getDescription());
 		}
 		return allergies;
+	}
+	
+	public String getTimePregnantAtVisit(ObstetricOfficeVisitBean visit, ObstetricInfoBean obsInfo) throws DBException {
+		Date visitDate = new Date(visit.getVisitDate().getTime());
+		Date LMP = obsInfo.getLMP();
+		int weeks =  TimeUtilityFunctions.getNumberOfWeeksBetween(LMP, visitDate);
+
+		return String.valueOf(weeks) + " weeks";
 	}
 	
 	

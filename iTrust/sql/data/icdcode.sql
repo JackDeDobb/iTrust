@@ -998,5 +998,7 @@ INSERT INTO icdcode (code, name, is_chronic) VALUES
 ('B889', 'Infestation', 0),
 ('B89', 'Unspecified parasitic disease', 0),
 ('B900', 'Sequelae of central nervous sy', 1),
-('B901', 'Sequelae of genitourinary tube', 1)
+('B901', 'Sequelae of genitourinary tube', 1),
+('O211', 'Hyperemesis gravidarum', 0),
+('E039', 'Hypothyroidism', 1)
 ON duplicate key update code=code;
