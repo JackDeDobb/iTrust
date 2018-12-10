@@ -49,7 +49,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setPatientMID(patientMID);
 		newVisit.setHcpMID(hcp.getMID());
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
-		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
+		newVisit.setSystolicBloodPressure(Float.valueOf(request.getParameter("systolicBP")));
+		newVisit.setDiastolicBloodPressure(Float.valueOf(request.getParameter("diastolicBP")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
@@ -144,8 +145,12 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td><input type="number" name="weight"></td>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="number" name="bloodPressure"></td>
+		<td class="subHeaderVertical">Systolic Blood Pressure:</td>
+		<td><input type="number" name="systolicBP"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Diastolic Blood Pressure:</td>
+		<td><input type="number" name="diastolicBP"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>

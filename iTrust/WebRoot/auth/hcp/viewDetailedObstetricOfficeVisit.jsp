@@ -83,7 +83,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setHcpMID(visit.getHcpMID());
 		newVisit.setObstetricRecordID(0);
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
-		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
+		newVisit.setSystolicBloodPressure(Float.valueOf(request.getParameter("systolicBP")));
+		newVisit.setDiastolicBloodPressure(Float.valueOf(request.getParameter("diastolicBP")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
@@ -135,8 +136,14 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getWeight())) %>" name="weight"></td>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getBloodPressure())) %>" name="bloodPressure"></td>
+		<td class="subHeaderVertical">Systolic Blood Pressure:</td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getSystolicBloodPressure())) %>"
+				   name="systolicBP"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Diastolic Blood Pressure:</td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getDiastolicBloodPressure())) %>"
+				   name="diastolicBP"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>

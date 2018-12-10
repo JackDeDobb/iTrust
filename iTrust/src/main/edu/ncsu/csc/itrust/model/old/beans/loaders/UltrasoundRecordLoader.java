@@ -78,4 +78,25 @@ public class UltrasoundRecordLoader implements BeanLoader<UltrasoundRecordBean> 
 		return ps;
 	}
 
+	/**
+	 * loadEditParameters
+	 * @throws SQLException
+	 */
+	public PreparedStatement loadEditParameters(PreparedStatement ps, UltrasoundRecordBean ur) throws SQLException {
+		int i = 1;
+		ps.setLong(i++, ur.getId());
+		ps.setLong(i++, ur.getVisitID());
+		ps.setFloat(i++, ur.getCrownRumpLength());
+		ps.setFloat(i++, ur.getBiparietalDiameter());
+		ps.setFloat(i++, ur.getHeadCircumference());
+		ps.setFloat(i++, ur.getFemurLength());
+		ps.setFloat(i++, ur.getOccipitofrontalDiameter());
+		ps.setFloat(i++, ur.getAbdominalCircumference());
+		ps.setFloat(i++, ur.getHumerusLength());
+		ps.setFloat(i++, ur.getEstimatedFetalWeight());
+		ps.setString(i++, ur.getImagePath());
+		ps.setLong(i++, ur.getId());
+		return ps;
+	}
+
 }

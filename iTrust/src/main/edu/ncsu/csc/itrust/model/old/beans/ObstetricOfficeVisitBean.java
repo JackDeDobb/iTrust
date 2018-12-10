@@ -9,7 +9,8 @@ public class ObstetricOfficeVisitBean {
 	private long hcpMID; // Doctor's MID.
 	private long obstetricRecordID;
 	private float weight;
-	private float bloodPressure;
+	private float systolicBloodPressure;
+	private float diastolicBloodPressure;
 	private float fetalHeartRate;
 	private int lowLyingPlacentaObserved;
 	private int numberOfBabies;
@@ -42,12 +43,20 @@ public class ObstetricOfficeVisitBean {
 		this.weight = weight;
 	}
 
-	public float getBloodPressure() {
-		return bloodPressure;
+	public float getSystolicBloodPressure() {
+		return systolicBloodPressure;
 	}
 
-	public void setBloodPressure(float bloodPressure) {
-		this.bloodPressure = bloodPressure;
+	public void setSystolicBloodPressure(float systolicBloodPressure) {
+		this.systolicBloodPressure = systolicBloodPressure;
+	}
+
+	public float getDiastolicBloodPressure() {
+		return diastolicBloodPressure;
+	}
+
+	public void setDiastolicBloodPressure(float diastolicBloodPressure) {
+		this.diastolicBloodPressure = diastolicBloodPressure;
 	}
 
 	public float getFetalHeartRate() {
@@ -106,7 +115,8 @@ public class ObstetricOfficeVisitBean {
 				", hcpMID=" + hcpMID +
 				", obstetricRecordID=" + obstetricRecordID +
 				", weight=" + weight +
-				", bloodPressure=" + bloodPressure +
+				", systolicBloodPressure=" + systolicBloodPressure +
+				", diastolicBloodPressure=" + diastolicBloodPressure +
 				", fetalHeartRate=" + fetalHeartRate +
 				", lowLyingPlacentaObserved=" + lowLyingPlacentaObserved +
 				", numberOfBabies=" + numberOfBabies +

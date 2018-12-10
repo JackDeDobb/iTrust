@@ -78,11 +78,12 @@ public class UltrasoundRecordDAO {
 	public void editUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ultrasoundLoader.loadParameters(conn.prepareStatement("UPDATE ultrasoundRecord SET "
-																							+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
-																							+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
-																							+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
-																							+"WHERE id=?"), ultrasoundBean)) {
+				PreparedStatement ps = ultrasoundLoader.loadEditParameters(conn.prepareStatement(
+						"UPDATE ultrasoundRecord SET "
+								+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
+								+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
+								+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
+								+"WHERE id=?"), ultrasoundBean)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);

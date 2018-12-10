@@ -36,7 +36,8 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 		oov.setHcpMID(rs.getLong("hcpMID"));
 		oov.setObstetricRecordID(rs.getLong("obstetricRecordID"));
 		oov.setWeight(rs.getFloat("weight"));
-		oov.setBloodPressure(rs.getFloat("bloodPressure"));
+		oov.setSystolicBloodPressure(rs.getFloat("systolicBP"));
+		oov.setDiastolicBloodPressure(rs.getFloat("diastolicBP"));
 		oov.setFetalHeartRate(rs.getFloat("fetalHeartRate"));
 		oov.setLowLyingPlacentaObserved(rs.getInt("lowLyingPlacentaObserved"));
 		oov.setNumberOfBabies(rs.getInt("numberOfBabies"));
@@ -66,7 +67,8 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 		ps.setLong(i++, oov.getPatientMID());
 		ps.setLong(i++, oov.getHcpMID());
 		ps.setFloat(i++, oov.getWeight());
-		ps.setFloat(i++, oov.getBloodPressure());
+		ps.setFloat(i++, oov.getSystolicBloodPressure());
+		ps.setFloat(i++, oov.getDiastolicBloodPressure());
 		ps.setFloat(i++, oov.getFetalHeartRate());
 		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
 		ps.setInt(i++, oov.getNumberOfBabies());
@@ -84,7 +86,8 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 		ps.setLong(i++, oov.getPatientMID());
 		ps.setLong(i++, oov.getHcpMID());
 		ps.setFloat(i++, oov.getWeight());
-		ps.setFloat(i++, oov.getBloodPressure());
+		ps.setFloat(i++, oov.getSystolicBloodPressure());
+		ps.setFloat(i++, oov.getDiastolicBloodPressure());
 		ps.setFloat(i++, oov.getFetalHeartRate());
 		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
 		ps.setInt(i++, oov.getNumberOfBabies());
@@ -105,7 +108,8 @@ public class ObstetricOfficeVisitLoader implements BeanLoader<ObstetricOfficeVis
 		ps.setLong(i++, oov.getHcpMID());
 		ps.setLong(i++, oov.getObstetricRecordID());
 		ps.setFloat(i++, oov.getWeight());
-		ps.setFloat(i++, oov.getBloodPressure());
+		ps.setFloat(i++, oov.getSystolicBloodPressure());
+		ps.setFloat(i++, oov.getDiastolicBloodPressure());
 		ps.setFloat(i++, oov.getFetalHeartRate());
 		ps.setInt(i++, oov.getLowLyingPlacentaObserved());
 		ps.setInt(i++, oov.getNumberOfBabies());
