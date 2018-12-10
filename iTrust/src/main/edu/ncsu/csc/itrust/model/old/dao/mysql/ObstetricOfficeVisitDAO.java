@@ -164,4 +164,30 @@ public class ObstetricOfficeVisitDAO {
 			throw new DBException(e);
 		}	
 	}
+	
+	/**
+	 * Returns the most recent visit for a given patient by date
+	 * 
+	 * @param patientMID
+	 *            The patientMID of the ObstetricOfficeVisits to retrieve
+	 * @return A list of ObstetricOfficeVisitBeans 
+	 * @throws DBException
+	 */
+	public ObstetricOfficeVisitBean getMostRecentObstetricOfficeVisitsByPatientMID(long patientMID) throws DBException {
+		
+		try (Connection conn = factory.getConnection();
+				PreparedStatement ps = conn.prepareStatement(
+						"SELECT * FROM obstetricOfficeVisit WHERE patientMID = ? "
+						+ "ORDER BY visitDate DESC LIMIT 1"))
+		{
+			ps.setLong(1, patientMID);
+			ResultSet rs = ps.executeQuery();
+			ObstetricOfficeVisitBean obsVisitBean = rs.next() ? ObsVisitLoader.loadSingle(rs) : null;
+			
+			rs.close();
+			return obsVisitBean;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}	
+	}
 }

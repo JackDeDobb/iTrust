@@ -38,7 +38,7 @@ pageTitle = "iTrust - View My Messages";
 			<td><%= StringEscapeUtils.escapeHtml("" + ( message.getSentDate() )) %></td>
 			<td><a href="reply.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( index )) %>">Reply</a></td>
 		</tr>
-<%			index ++; %>
+<%			index++; %>
 <%		} %>
 	</table>
 <%	} else { %>
