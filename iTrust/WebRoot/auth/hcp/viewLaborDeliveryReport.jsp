@@ -81,7 +81,8 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 		boolean atypicalWeightChange = reportAction.hasAtypicalWeightChange();
 		
 		List<ObstetricOfficeVisitBean> oVisits = reportAction.getAllObstetricsOfficeVisits();
-		//List<ObstetricInfoBean> 
+		
+		List<ObstetricInfoBean> pastPregancies = reportAction.getPriorPregnancies();
 %>
 	<div align=center>
 		<h1>Labor & Delivery Report</h1>
@@ -91,8 +92,24 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 				<th>Pregnancy Term</th>
 				<th>Delivery Type</th>
 				<th>Conception Year</th>
+				<th>Estimated Delivery Date</th>
 			</tr>
-		
+<%
+
+		for(ObstetricInfoBean pastPreg: pastPregancies){
+			String deliveryType = pastPreg.getDeliveryType().name();
+			long conceptionYear = pastPreg.getYearsOfConception();
+			Date edd = pastPreg.getEDD();
+			SimpleDateFormat eddDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			String eddDateString  = eddDateFormat.format(edd);
+		}
+%>
+			<tr>
+				<td></td>
+				<td><%= StringEscapeUtils.escapeHtml(deliveryType)%></td>
+				<td><%= StringEscapeUtils.escapeHtml("" + conceptionYear)%></td>
+				<td><%= StringEscapeUtils.escapeHtml(eddDateString)%></td>
+			</tr>		
 		</table>
 		<h3>Obstetric Office Visits</h3>
 		<table class="fTable">
