@@ -21,22 +21,6 @@ public class ChildBirthVisitDAO {
 		this.loader = new ChildBirthVisitLoader();
 	}
 
-	public ChildBirthVisitBean getMostRecentChildBirthVisitForMID(long mid) throws DBException {
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE MID = ? ORDER BY" +
-						"id DESC LIMIT 1")) {
-
-			ps.setLong(1, mid);
-			ResultSet rs = ps.executeQuery();
-			ChildBirthVisitBean record = loader.loadSingle(rs);
-			rs.close();
-
-			return record;
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-
 	public List<ChildBirthVisitBean> getChildBirthVisitsForMID(long mid) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM childBirthVisit WHERE MID = ? ORDER BY " +
