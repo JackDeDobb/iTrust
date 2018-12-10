@@ -586,5 +586,5 @@ CREATE TABLE childBirthVisit
 	magnesiumSulfateDosage FLOAT,
 	rhImmuneGlobulinDosage FLOAT,
 	PRIMARY KEY(id),
-	FOREIGN KEY (visitId) REFERENCES officeVisit(visitID)
+	FOREIGN KEY (visitId) REFERENCES obstetricOfficeVisit(visitID)
 ) ENGINE=MyISAM;
