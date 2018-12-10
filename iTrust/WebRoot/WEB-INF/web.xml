@@ -379,6 +379,18 @@
 		<servlet-name>UltrasoundServlet</servlet-name>
 		<url-pattern>/auth/hcp/UltrasoundServlet</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<description>
+			Servlet for displaying image files.
+		</description>
+		<display-name>DisplayImageServlet</display-name>
+		<servlet-name>DisplayImageServlet</servlet-name>
+		<servlet-class>edu.ncsu.csc.itrust.server.DisplayImageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DisplayImageServlet</servlet-name>
+		<url-pattern>/tmp/iTrustImages/*</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
 

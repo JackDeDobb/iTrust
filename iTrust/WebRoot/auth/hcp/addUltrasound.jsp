@@ -125,6 +125,7 @@
                 }
             },
             error: function(msg) {
+                alert("Couldn't upload file");
                 $("#upload-error").text("Couldn't upload file");
             }
         });
