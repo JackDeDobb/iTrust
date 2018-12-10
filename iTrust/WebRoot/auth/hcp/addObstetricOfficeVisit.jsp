@@ -42,6 +42,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	boolean isEligible = pb.getObstetricEligibility();
 	
 	AddObstetricOfficeVisitAction addOOVisitAction = new AddObstetricOfficeVisitAction(prodDAO, loggedInMID);
+
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 
 	if (formIsFilled) {
@@ -54,39 +55,24 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
+		pb.setRHImmunization(Boolean.parseBoolean(request.getParameter("RHImmunization")));
+		paction.updateInformation(pb);
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
 
-
-//		String addUltra = request.getParameter("ultrasound");
-//		UltrasoundRecordBean ultrasound = null;
-//		if(addUltra.equals("true")){
-//			ultrasound = new UltrasoundRecordBean();
-//			ultrasound.setAbdominalCircumference(Float.valueOf(request.getParameter("abdominalCircumference")));
-//			ultrasound.setBiparietalDiameter(Float.valueOf(request.getParameter("biparietalDiameter")));
-//			ultrasound.setCrownRumpLength(Float.valueOf(request.getParameter("crownRumpLength")));
-//			ultrasound.setEstimatedFetalWeight(Float.valueOf(request.getParameter("estimatedFetalWeight")));
-//			ultrasound.setFemurLength(Float.valueOf(request.getParameter("femurLength")));
-//			ultrasound.setHeadCircumference(Float.valueOf(request.getParameter("headCircumference")));
-//			ultrasound.setHumerusLength(Float.valueOf(request.getParameter("humerusLength")));
-//			ultrasound.setOccipitofrontalDiameter(Float.valueOf(request.getParameter("occipitofrontalDiameter")));
-//
-//
-//			// TODO: have to add image data
-//		}
 		
 		try{
 			long visitId = addOOVisitAction.addObstetricOfficeVisit(newVisit);
+			if (addOOVisitAction.needsRHImmunization(newVisit)) {
+			    System.out.println("Patient needs to be RH Immunized");
+			    // TODO: Add some js alert.
+			}
 			String ultrasoundUrl = "addUltrasound.jsp?visitId=" + visitId;
 			session.setAttribute("visitId", "" + visitId);
 			response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
-//			// Obs Office visit added. Add Ultrasound record
-//			if(addUltra.equals("true")){
-//				ultrasound.setVisitID(visitId);
-//			}
 			
 %>
 
@@ -105,23 +91,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	
 	if(isOBGYN) {
 %>
-
-<script>
-	function toggleUltrasoundVisibilty(){
-		var tableRows = document.getElementsByClassName("ultra");
-		var ultrasound = document.getElementById("ultrasound")
-		for(i=0; i < tableRows.length; i++){
-			if(tableRows[i].style.display == 'none'){
-				tableRows[i].style.display = 'table-row';
-				ultrasound.value = "true";
-			}
-			else{
-				tableRows[i].style.display = 'none'
-				ultrasound.value = "false";
-			}
-		}
-	}
-</script>
 
 <div align=center>
 <p style="width: 50%; text-align:left;">Enter the following information to add a new obstetric office visit.</p>
@@ -163,6 +132,16 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	<tr>
 		<td class="subHeaderVertical">Number of Babies:</td>
 		<td><input type="number" step="1" name="numberOfBabies"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Is patient RH- immunized?:</td>
+		<td><select name="RHImmunization">
+			<option value="true"
+					<%= StringEscapeUtils.escapeHtml(pb.isRHImmunization() ? "selected=selected" : "")%>>Yes</option>
+			<option value="false"
+					<%= StringEscapeUtils.escapeHtml(!pb.isRHImmunization() ? "selected=selected" : "")%>>No
+			</option>
+		</select>
 	</tr>
 
 </table>

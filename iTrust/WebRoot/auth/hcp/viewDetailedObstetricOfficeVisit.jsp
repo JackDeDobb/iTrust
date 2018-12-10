@@ -88,7 +88,9 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
-		
+		pb.setRHImmunization(Boolean.parseBoolean(request.getParameter("RHImmunization")));
+		paction.updateInformation(pb);
+
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
@@ -192,6 +194,14 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	<tr class="ultra" >
 		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
 		<td><input type="number" name="estimatedFetalWeight" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getEstimatedFetalWeight())%>"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Is patient RH- immunized?:</td>
+		<td><select name="RHImmunization">
+			<option value="true" <%= StringEscapeUtils.escapeHtml(p.isRH() ? "selected=selected" : "")%>>Yes</option>
+			<option value="false" <%= StringEscapeUtils.escapeHtml(!p.isRH() ? "selected=selected" : "")%>>No
+			</option>
+		</select>
 	</tr>
 	<% } %>
 </table>

@@ -36,6 +36,7 @@ public class AddObstetricOfficeVisitAction {
     private TransactionDAO transactionDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
     private ObstetricOfficeVisitValidator obsOfficeVisitValidator;
+
     private long loggedInMID;
 
     public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
