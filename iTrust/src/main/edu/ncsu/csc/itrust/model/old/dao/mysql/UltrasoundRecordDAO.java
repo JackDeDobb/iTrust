@@ -101,13 +101,14 @@ public class UltrasoundRecordDAO {
 	public List<UltrasoundRecordBean> getUltrasoundRecordsByVisitID(long visitID) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM ultrasoundRecord "
-						+ "WHERE visitId=?")) {
+						+ "WHERE visitId=? ORDER BY id DESC")) {
 			ps.setLong(1, visitID);
 			ResultSet rs = ps.executeQuery();
 			List<UltrasoundRecordBean> loadlist = ultrasoundLoader.loadList(rs);
 			rs.close();
 			return loadlist;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}

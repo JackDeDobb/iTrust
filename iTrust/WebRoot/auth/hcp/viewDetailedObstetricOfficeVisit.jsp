@@ -14,7 +14,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
+<%@page import="edu.ncsu.csc.itrust.server.ImageStore"%>
 <%@page import="java.util.List"%>
+<%@page import="java.io.File"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.Date"%>
@@ -188,7 +190,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 </table>
 <br />
 <% if (ultrasoundRec != null) { %>
-	<img src="/iTrust/image/ultrasounds/<%=ultrasoundRec.getImagePath()%>"
+	<img src="<%="/iTrust" + ImageStore.baseFilePath + File.separator + ultrasoundRec.getImagePath()%>" />
+	<br />
 <% } %>
 <br />
 </form>

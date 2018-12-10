@@ -5,9 +5,11 @@ import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
 import edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
+import edu.ncsu.csc.itrust.model.old.dao.mysql.UltrasoundRecordDAO;
 import edu.ncsu.csc.itrust.model.old.validate.UltrasoundRecordValidator;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -28,6 +30,7 @@ public class UltrasoundServlet extends HttpServlet {
 
     // Add obs office visit action.
     private AddObstetricOfficeVisitAction addObstetricOfficeVisitAction;
+    private UltrasoundRecordDAO ultrasoundRecordDAO;
 
     // File upload constants.
     private int maxFileSize = 100000 * 1024;
@@ -40,16 +43,19 @@ public class UltrasoundServlet extends HttpServlet {
         super.init();
         // TODO: Replace hardcoded path with system-independent HOME/temp based path.
         baseFilePath = ImageStore.baseFilePath;
+        new File(baseFilePath).mkdirs();
         validator = new UltrasoundRecordValidator();
     }
 
     public UltrasoundServlet() {
         super();
+        ultrasoundRecordDAO = DAOFactory.getProductionInstance().getUltrasoundRecordDAO();
         addObstetricOfficeVisitAction = new AddObstetricOfficeVisitAction(DAOFactory.getProductionInstance(), -1);
     }
 
     protected UltrasoundServlet(DAOFactory factory) {
         super();
+        ultrasoundRecordDAO = DAOFactory.getProductionInstance().getUltrasoundRecordDAO();
         addObstetricOfficeVisitAction = new AddObstetricOfficeVisitAction(factory, -1);
     }
 
@@ -82,8 +88,10 @@ public class UltrasoundServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Ultrasound record entry filled with form details.
+        // New ultrasound record entry filled with form details.
         UltrasoundRecordBean ultrasoundRecord = createUltrasoundRecord(request);
+
+        System.out.println("New ultrasound record: " + ultrasoundRecord.toString());
 
         // Get logged in mid, and update the action.
         Long loggedInMID = Long.parseLong(request.getParameter("loggedInMID"));
@@ -99,6 +107,7 @@ public class UltrasoundServlet extends HttpServlet {
             validator.validate(ultrasoundRecord);
         } catch (FormValidationException ex) {
             out.println("Form validation exception: " + ex.getMessage());
+//            response.sendError(404, "Form validation exception: " + ex.getMessage());
             return;
         }
 
@@ -106,7 +115,8 @@ public class UltrasoundServlet extends HttpServlet {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
         if (!isMultipart) {
-            out.println("Incorrect request type: Request type must be multipart.");
+            out.println("Incorrect request type exception: Request type must be multipart.");
+//            response.sendError(404, "Incorrect request type: Request type must be multipart.");
             return;
         }
 
@@ -121,21 +131,21 @@ public class UltrasoundServlet extends HttpServlet {
 
         } else {
             // If file is provided.
+
+            System.out.println("Streaming file to server.");
+
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
+            System.out.println("Filename: " + fileName);
+
+            String extension = FilenameUtils.getExtension(fileName);
+
             // Create relative image path.
-            String relImagePath = Paths.get(ultrasoundRecord.getVisitID() + "", fileName).toString();
+            String relImagePath = String.valueOf(ultrasoundRecord.getVisitID()) + "." + extension;
 
             // Create absolute path.
             Path absolutePath = Paths.get(baseFilePath, relImagePath);
             System.out.println(absolutePath.toString());
-
-            // Create visitId dir.
-            File visitIdDir = absolutePath.toFile().getParentFile();
-            visitIdDir.mkdirs();
-
-            // Clear visitId directory.
-            FileUtils.cleanDirectory(visitIdDir);
 
             // Write file.
             try (InputStream fileContent = filePart.getInputStream()) {
@@ -146,12 +156,12 @@ public class UltrasoundServlet extends HttpServlet {
             ultrasoundRecord.setImagePath(relImagePath);
         }
 
-
         try {
             addObstetricOfficeVisitAction.addUltrasoundRecord(patientMID, ultrasoundRecord);
             out.println("Successfully added ultrasound record.");
         } catch (FormValidationException | DBException ex) {
             out.println("Encountered exception on adding record: " + ex.getMessage());
+//            response.sendError(404, "Encountered exception on adding record: " + ex.getMessage());
             ex.printStackTrace();
         }
 
