@@ -91,6 +91,11 @@ public class AddObstetricOfficeVisitAction {
         // Fetch the obstetric info bean.
         ObstetricInfoBean patientInfo = obstetricInfoDAO.getMostRecentObstetricInfoForMID(obsOfficeVisit.getPatientMID());
 
+        if (patientInfo == null) {
+            // Patient was not initialized correctly.
+            return -1;
+        }
+
         // Link obstetric record id to office visit.
         obsOfficeVisit.setObstetricRecordID(patientInfo.getRecordId());
 

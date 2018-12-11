@@ -46,6 +46,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 
 	boolean formIsFilled = request.getParameter("formIsFilled") != null && request.getParameter("formIsFilled").equals("true");
 
+	boolean isObstetricPatient = true;
+
 	if (formIsFilled) {
 		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
 		newVisit.setPatientMID(patientMID);
@@ -67,21 +69,24 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		
 		try{
 			long visitId = addOOVisitAction.addObstetricOfficeVisit(newVisit);
-			String ultrasoundUrl = "addUltrasound.jsp";
-			if (addOOVisitAction.needsRHImmunization(newVisit)) {
-			    System.out.println("Patient needs to be RH Immunized");
-			    session.setAttribute("needsToBeRHImmunized", true);
-			    ultrasoundUrl += "?needsToBeRHImmunized=true";
-			}
-			session.setAttribute("visitId", "" + visitId);
-			response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
-			
+			if (visitId < 0) {
+			    isObstetricPatient = false;
+			} else {
+				String ultrasoundUrl = "addUltrasound.jsp";
+				if (addOOVisitAction.needsRHImmunization(newVisit)) {
+					System.out.println("Patient needs to be RH Immunized");
+					session.setAttribute("needsToBeRHImmunized", true);
+					ultrasoundUrl += "?needsToBeRHImmunized=true";
+				}
+				session.setAttribute("visitId", "" + visitId);
+				response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
 %>
 
-	<div align=center>
-		<span class="iTrustMessage">New Obstetric Office Visit added!</span>
-	</div>
+<div align=center>
+	<span class="iTrustMessage">New Obstetric Office Visit added!</span>
+</div>
 <%
+			}
 		} catch(FormValidationException e){
 %>
 	<div align=center>
@@ -90,7 +95,17 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <%
 		}
 	}
-	
+
+	if(!isObstetricPatient) {
+%>
+<div align=center>
+	<h1>Patient does not have a valid obstetric record on file. Patient must first be initialized as an obstetric
+		patient.
+	</h1>
+</div>
+<%
+	}
+
 	if(isOBGYN) {
 %>
 
