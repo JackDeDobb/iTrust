@@ -99,11 +99,10 @@ public class LaborDeliveryReportAction {
 	/*
 	 * checks if high blood pressure
 	 */
-	public boolean hasHighBloodPressure() throws DBException{
+	public boolean hasHighBloodPressure() throws DBException {
 		ObstetricOfficeVisitBean obsVisitBean = this.obstetricOfficeVisitDAO.getMostRecentObstetricOfficeVisitsByPatientMID(this.pid);
-		return false;
+		return obsVisitBean.getSystolicBloodPressure() >= 140.0 || obsVisitBean.getDiastolicBloodPressure() >= 90.0;
 	}
-	
 	
 	/*
 	 * If the patient is older than 35 at the estimated date of delivery return true
