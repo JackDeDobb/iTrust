@@ -71,6 +71,11 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 		if(allergies.isEmpty()) { 
 			allergies.add("None");
 		}
+		List<String> conditions = reportAction.getConditions();
+		if(conditions.isEmpty()) { 
+			conditions.add("None");
+		}
+		
 		String bloodType = reportAction.getBloodType();
 		boolean rhFlag = reportAction.hasRHFlag();
 		boolean highBloodPressure = reportAction.hasHighBloodPressure();
@@ -198,6 +203,10 @@ pageTitle = "iTrust - View Labor & Delivery Report";
 			<tr>
 				<td>Allergies</td>
 				<td><%= StringEscapeUtils.escapeHtml("" + String.join(", ", allergies)) %></td>
+			</tr>
+			<tr>
+				<td>Conditions</td>
+				<td><%= StringEscapeUtils.escapeHtml("" + String.join(", ", conditions)) %></td>
 			</tr>
 		</table>
 	</div>

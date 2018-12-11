@@ -10,7 +10,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import edu.ncsu.csc.itrust.controller.diagnosis.DiagnosisController;
+import edu.ncsu.csc.itrust.controller.officeVisit.OfficeVisitController;
 import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.model.diagnosis.Diagnosis;
+import edu.ncsu.csc.itrust.model.officeVisit.OfficeVisit;
 import edu.ncsu.csc.itrust.model.old.beans.AllergyBean;
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
@@ -166,12 +170,31 @@ public class LaborDeliveryReportAction {
 		return allergies;
 	}
 	
+	/*
+	 * Returns amount of time pregnant at visit
+	 */
 	public String getTimePregnantAtVisit(ObstetricOfficeVisitBean visit, ObstetricInfoBean obsInfo) throws DBException {
 		Date visitDate = new Date(visit.getVisitDate().getTime());
 		Date LMP = obsInfo.getLMP();
 		int weeks =  TimeUtilityFunctions.getNumberOfWeeksBetween(LMP, visitDate);
 
 		return String.valueOf(weeks) + " weeks";
+	}
+	
+	/*
+	 * Returns list of conditions patient may have
+	 */
+	public List<String> getConditions() throws DBException {
+		List<String> conditions = new ArrayList<String>();
+		OfficeVisitController officeVisitController = new OfficeVisitController();
+		List<OfficeVisit> officeVisits = officeVisitController.getOfficeVisitsForPatient(String.valueOf(this.pid));
+		DiagnosisController diagController = new DiagnosisController();
+		for(OfficeVisit visit: officeVisits){
+			long officeVisitID = visit.getVisitID();
+			List<Diagnosis> diagnosis = diagController.getDiagnosesByOfficeVisit(officeVisitID);
+			diagnosis.forEach(diag -> conditions.add(diag.getName()));
+		}
+		return conditions;
 	}
 	
 	
