@@ -29,6 +29,15 @@
         response.sendRedirect("iTrust/auth/hcp/addObstetricOfficeVisit.jsp?forward=hcp/addUltrasound.jsp");
     }
 
+    String RHImmunizedStr = request.getParameter("needsToBeRHImmunized");
+    if (RHImmunizedStr != null && Boolean.parseBoolean(RHImmunizedStr)) {
+%>
+<div align=center>
+    <span class="iTrustMessage">Patient needs to be RH- immunized. </span>
+</div>
+<%
+    }
+
     Long patientMID = Long.parseLong(patientMIDString);
     Long visitId = Long.parseLong(visitIdString);
 

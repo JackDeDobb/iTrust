@@ -198,8 +198,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	<tr>
 		<td class="subHeaderVertical">Is patient RH- immunized?:</td>
 		<td><select name="RHImmunization">
-			<option value="true" <%= StringEscapeUtils.escapeHtml(p.isRH() ? "selected=selected" : "")%>>Yes</option>
-			<option value="false" <%= StringEscapeUtils.escapeHtml(!p.isRH() ? "selected=selected" : "")%>>No
+			<option value="true" <%= StringEscapeUtils.escapeHtml(pb.isRH() ? "selected=selected" : "")%>>Yes</option>
+			<option value="false" <%= StringEscapeUtils.escapeHtml(!pb.isRH() ? "selected=selected" : "")%>>No
 			</option>
 		</select>
 	</tr>
@@ -207,7 +207,9 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 </table>
 <br />
 <% if (ultrasoundRec != null) { %>
-	<img src="<%="/iTrust" + ImageStore.baseFilePath + File.separator + ultrasoundRec.getImagePath()%>" />
+	<%--<img src="<%="/iTrust" + ImageStore.baseFilePath + File.separator + ultrasoundRec.getImagePath()%>" />--%>
+	<a href="<%="/iTrust" + ImageStore.baseFilePath + File.separator + ultrasoundRec.getImagePath()%>">View
+		Ultrasound Image</a>
 	<br />
 <% } %>
 <br />

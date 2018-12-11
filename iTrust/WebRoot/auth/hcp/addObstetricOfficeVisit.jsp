@@ -17,6 +17,7 @@
 <%@include file="/global.jsp"%>
 
 <%
+
 pageTitle = "iTrust - Add Obsetric Office Visit";
 %>
 
@@ -66,11 +67,12 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		
 		try{
 			long visitId = addOOVisitAction.addObstetricOfficeVisit(newVisit);
+			String ultrasoundUrl = "addUltrasound.jsp";
 			if (addOOVisitAction.needsRHImmunization(newVisit)) {
 			    System.out.println("Patient needs to be RH Immunized");
-			    // TODO: Add some js alert.
+			    session.setAttribute("needsToBeRHImmunized", true);
+			    ultrasoundUrl += "?needsToBeRHImmunized=true";
 			}
-			String ultrasoundUrl = "addUltrasound.jsp?visitId=" + visitId;
 			session.setAttribute("visitId", "" + visitId);
 			response.sendRedirect(StringEscapeUtils.escapeHtml(ultrasoundUrl));
 			
@@ -166,5 +168,9 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <%
 	}
 %>
+
+<script type="text/javascript">
+	window.onload = RHAlert();
+</script>
 
 <%@include file="/footer.jsp" %>
