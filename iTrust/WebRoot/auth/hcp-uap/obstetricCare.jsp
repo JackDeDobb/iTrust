@@ -7,7 +7,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.DAOFactory"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
+<%@page import="edu.ncsu.csc.itrust.action.AddBabyDeliveryInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricInfoAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewChildBirthVisit"%>
@@ -83,6 +85,14 @@
 	else{
 		
 		
+		%>
+		<div align=center>
+			<h2>Obstetric Records</h2>
+		</div>
+		<%
+		
+		
+		
 		ViewObstetricInfoAction obstetricInfoAction = new ViewObstetricInfoAction(prodDAO, loggedInMID.longValue(), pidString);
 		List<ObstetricInfoBean> list = obstetricInfoAction.getAllRecords(pidString);
 		
@@ -109,29 +119,6 @@
 	        </tr>
 	        <%			index ++; %>
 	        <%		} %>
-	        <%		} %>
-	    </table>
-	     <%
-	    ViewChildBirthVisit childBirthVisitAction = new ViewChildBirthVisit(prodDAO, loggedInMID.longValue(), pidString);
-		List<ChildBirthVisitBean> cb = childBirthVisitAction.getAllRecords(pidString);
-		
-		if (cb != null && cb.size() > 0) { 
-		%>
-		<div align=center>
-	    <br />
-	    <table class="fancyTable">
-	        <tr>
-	            <th>Record ID</th>
-	            <th></th>
-	        </tr>
-	        <%		int index = 0; %>
-	        <%		for(ChildBirthVisitBean record : cb) { %>
-	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
-	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getId())) %></td>
-	            <td><a href="viewIndividualChildBirthVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( record.getId() )) %>">View</a></td>
-	        </tr>
-	        <%			index ++; %>
-	        <%		} %>
 	    </table>
 	    <%	} else { %>
 	    <div align=center>
@@ -143,10 +130,104 @@
 	    
 	    
 	    
+	    
+
+		<div align=center>
+			<h2>Child Birth Visit Records</h2>
+		</div>
+	    
+	     <%
+	    ViewChildBirthVisit childBirthVisitAction = new ViewChildBirthVisit(prodDAO, loggedInMID.longValue(), pidString);
+		List<ChildBirthVisitBean> cb = childBirthVisitAction.getAllRecords(pidString);
+		
+		if (cb != null && cb.size() > 0) { 
+		%>
+		<div align=center>
+	    <br />
+	    <table class="fancyTable">
+	        <tr>
+	            <th>Record ID</th>
+	            <th>Previously Scheduled</th>
+	            <th>Delivered</th>
+	            <th></th>
+	        </tr>
+	        <%		int index = 0; %>
+	        <%		for(ChildBirthVisitBean record : cb) { %>
+	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getId())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.isPreviouslyScheduled()? "Yes" : "No")) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.isDelivered() ? "Yes" : "No")) %></td>
+	            <td><a href="viewIndividualChildBirthVisit.jsp?msg=<%= StringEscapeUtils.escapeHtml("" + ( record.getId() )) %>">View</a></td>
+	        </tr>
+	        <%			index ++; %>
+	        <%		} %>
+	    </table>
+	    <%	} else { %>
+	    <div align=center>
+	        <i>You have no child birth records for this patient!</i>
+	    </div>
+	    <%	} %>
+	    <br />
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    <div align=center>
+			<h2>Baby Records</h2>
+		</div>
+	    
+	     <%
+	    AddBabyDeliveryInfoAction babyAction = new AddBabyDeliveryInfoAction(prodDAO, loggedInMID.longValue(), pidString);
+		List<BabyDeliveryInfoBean> bb = babyAction.getAllRecords(pidString);
+		
+		if (bb != null && bb.size() > 0) { 
+		%>
+		<div align=center>
+	    <br />
+	    <table class="fancyTable">
+	        <tr>
+	            <th>Record ID</th>
+	            <th>Birth Time</th>
+	            <th>Gender</th>
+	            <th>Delivery Type</th>
+	            <th></th>
+	        </tr>
+	        <%		int index = 0; %>
+	        <%		for(BabyDeliveryInfoBean record : bb) { %>
+	        <tr <%=(index%2 == 1)?"class=\"alt\"":"" %>>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getId())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getBirthTime())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getGender())) %></td>
+	            <td><%= StringEscapeUtils.escapeHtml("" + ( record.getDeliveryType())) %></td>
+	        </tr>
+	        <%			index ++; %>
+	        <%		} %>
+	    </table>
+	    <%	} else { %>
+	    <div align=center>
+	        <i>You have no baby records for this patient!</i>
+	    </div>
+	    <%	} %>
+	    <br />
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
 	    <%	if (isOBGYN) { %>
 	    	<a href="addNewObstetricRecord.jsp" style="font-size: 16pt; font-weight: bold;">Add Obstetric Record</a>
 	    	<br/>
-	    	<a href="addNewChildBirthVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add New Child Birth Record</a>
+	    	<a href="addNewChildBirthVisit.jsp" style="font-size: 16pt; font-weight: bold;">Add New Child Birth Visit Record</a>
 	    	<br/>
 	    	<a href="addNewBabyDeliveryInfo.jsp" style="font-size: 16pt; font-weight: bold;">Add New Baby</a>
 	    <%	} %>
