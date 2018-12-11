@@ -58,6 +58,10 @@ public class ObstetricOfficeVisitBean {
 	public void setDiastolicBloodPressure(float diastolicBloodPressure) {
 		this.diastolicBloodPressure = diastolicBloodPressure;
 	}
+	
+	public String getBloodPressure() {
+		return Math.round(this.systolicBloodPressure) + "/" + Math.round(this.diastolicBloodPressure);
+	}
 
 	public float getFetalHeartRate() {
 		return fetalHeartRate;
