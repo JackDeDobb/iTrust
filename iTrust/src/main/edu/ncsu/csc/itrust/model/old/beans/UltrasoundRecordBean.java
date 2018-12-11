@@ -107,4 +107,21 @@ public class UltrasoundRecordBean {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+
+	@Override
+	public String toString() {
+		return "UltrasoundRecordBean{" +
+				"id=" + id +
+				", visitID=" + visitID +
+				", crownRumpLength=" + crownRumpLength +
+				", biparietalDiameter=" + biparietalDiameter +
+				", headCircumference=" + headCircumference +
+				", femurLength=" + femurLength +
+				", occipitofrontalDiameter=" + occipitofrontalDiameter +
+				", abdominalCircumference=" + abdominalCircumference +
+				", humerusLength=" + humerusLength +
+				", estimatedFetalWeight=" + estimatedFetalWeight +
+				", imagePath='" + imagePath + '\'' +
+				'}';
+	}
 }

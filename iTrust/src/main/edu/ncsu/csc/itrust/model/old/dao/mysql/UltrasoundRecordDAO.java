@@ -78,11 +78,12 @@ public class UltrasoundRecordDAO {
 	public void editUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
 		
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ultrasoundLoader.loadParameters(conn.prepareStatement("UPDATE ultrasoundRecord SET "
-																							+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
-																							+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
-																							+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
-																							+"WHERE id=?"), ultrasoundBean)) {
+				PreparedStatement ps = ultrasoundLoader.loadEditParameters(conn.prepareStatement(
+						"UPDATE ultrasoundRecord SET "
+								+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
+								+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
+								+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
+								+"WHERE id=?"), ultrasoundBean)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
@@ -101,13 +102,14 @@ public class UltrasoundRecordDAO {
 	public List<UltrasoundRecordBean> getUltrasoundRecordsByVisitID(long visitID) throws DBException {
 		try (Connection conn = factory.getConnection();
 				PreparedStatement ps = conn.prepareStatement("SELECT * FROM ultrasoundRecord "
-						+ "WHERE visitId=?")) {
+						+ "WHERE visitId=? ORDER BY id DESC")) {
 			ps.setLong(1, visitID);
 			ResultSet rs = ps.executeQuery();
 			List<UltrasoundRecordBean> loadlist = ultrasoundLoader.loadList(rs);
 			rs.close();
 			return loadlist;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}

@@ -34,6 +34,14 @@ public class ObstetricOfficeVisitValidator extends BeanValidator<ObstetricOffice
 			errorList.addIfNotNull("Weight must be greater than 0!");
 		}
 
+		if(oov.getSystolicBloodPressure() <= 0) {
+			errorList.addIfNotNull("Systolic blood pressure must be greater than 0!");
+		}
+
+		if(oov.getDiastolicBloodPressure() <= 0) {
+			errorList.addIfNotNull("Diastolic blood pressure must be greater than 0!");
+		}
+
 		if (errorList.hasErrors())
 			throw new FormValidationException(errorList);
 	}

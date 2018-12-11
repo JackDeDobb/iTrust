@@ -21,9 +21,7 @@ public class UpdateRecordsTest extends TestCase {
         info.setNumberOfHoursInLabor(8);
         info.setYearsOfConception(8);
         obstetricInfoDAO.updateObstetricInfo(info);
-        int size = list.size();
         long mid = info.getMID();
-
 
         list = obstetricInfoDAO.getObstetricInfoForMID(mid);
         info = list.get(0);
@@ -39,7 +37,6 @@ public class UpdateRecordsTest extends TestCase {
         assertEquals(info.getWeightGainDuringPregnancy(), 5);
         assertEquals(info.getNumBirths(), 6);
         assertEquals(info.getYearsOfConception(), 8);
-
     }
 }
 

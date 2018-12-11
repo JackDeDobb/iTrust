@@ -45,5 +45,39 @@ public class AddRecordTest extends TestCase {
         assertEquals(info.getNumBirths(), 6);
         assertEquals(info.getYearsOfConception(), 2);
 
+        ObstetricInfoBean recent = obstetricInfoDAO.getMostRecentObstetricInfoForMID(1);
+        assertEquals(recent.getRecordId(), info.getRecordId());
+    }
+
+    public void testGetById() throws Exception {
+        ObstetricInfoBean info = new ObstetricInfoBean();
+        info.setMID(1);
+        info.setYearsOfConception(2);
+        info.setNumberOfHoursInLabor(4);
+        info.setWeightGainDuringPregnancy(5);
+        info.setDeliveryType(DeliveryType.NS.getName());
+        info.setNumBirths(6);
+        info.setLMP(new Date());
+        info.setEDD();
+        info.setInitDate(new Date());
+        obstetricInfoDAO.addObstetricInfo(info);
+
+        List<ObstetricInfoBean> list = obstetricInfoDAO.getObstetricInfoForMID(1);
+        assertFalse(list.size() == 0);
+        info = list.get(0);
+        long id = info.getRecordId();
+        info = obstetricInfoDAO.getRecordById(id);
+        assertEquals(info.getInitDate().toString(), (new java.sql.Date(new Date().getTime())).toString());
+        assertEquals(info.getMID(), 1);
+        assertEquals(info.getLMP().toString(), (new java.sql.Date(new Date().getTime())).toString());
+        assertEquals(info.getDeliveryType().getName(), DeliveryType.NS.getName());
+        Calendar c = Calendar.getInstance();
+        c.setTime(info.getLMP());
+        c.add(Calendar.DAY_OF_YEAR, 280);
+        assertEquals(info.getEDD(), c.getTime());
+        assertEquals(info.getNumberOfHoursInLabor(), 4);
+        assertEquals(info.getWeightGainDuringPregnancy(), 5);
+        assertEquals(info.getNumBirths(), 6);
+        assertEquals(info.getYearsOfConception(), 2);
     }
 }

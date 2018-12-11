@@ -14,7 +14,9 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
+<%@page import="edu.ncsu.csc.itrust.server.ImageStore"%>
 <%@page import="java.util.List"%>
+<%@page import="java.io.File"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.util.Date"%>
@@ -81,11 +83,14 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setHcpMID(visit.getHcpMID());
 		newVisit.setObstetricRecordID(0);
 		newVisit.setWeight(Float.valueOf(request.getParameter("weight")));
-		newVisit.setBloodPressure(Float.valueOf(request.getParameter("bloodPressure")));
+		newVisit.setSystolicBloodPressure(Float.valueOf(request.getParameter("systolicBP")));
+		newVisit.setDiastolicBloodPressure(Float.valueOf(request.getParameter("diastolicBP")));
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
-		
+		pb.setRHImmunization(Boolean.parseBoolean(request.getParameter("RHImmunization")));
+		paction.updateInformation(pb);
+
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
 		newVisit.setVisitDate(visitTimestamp);
@@ -133,8 +138,14 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getWeight())) %>" name="weight"></td>
 	</tr>
 	<tr>
-		<td class="subHeaderVertical">Blood Pressure:</td>
-		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getBloodPressure())) %>" name="bloodPressure"></td>
+		<td class="subHeaderVertical">Systolic Blood Pressure:</td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getSystolicBloodPressure())) %>"
+				   name="systolicBP"></td>
+	</tr>
+	<tr>
+		<td class="subHeaderVertical">Diastolic Blood Pressure:</td>
+		<td><input type="number" value="<%= StringEscapeUtils.escapeHtml("" + (visit.getDiastolicBloodPressure())) %>"
+				   name="diastolicBP"></td>
 	</tr>
 	<tr>
 		<td class="subHeaderVertical">Fetal Heart Rate:</td>
@@ -184,11 +195,20 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		<td class="subHeaderVertical">Estimated Fetal Weight:</td>
 		<td><input type="number" name="estimatedFetalWeight" value="<%= StringEscapeUtils.escapeHtml("" + ultrasoundRec.getEstimatedFetalWeight())%>"></td>
 	</tr>
+	<tr>
+		<td class="subHeaderVertical">Is patient RH- immunized?:</td>
+		<td><select name="RHImmunization">
+			<option value="true" <%= StringEscapeUtils.escapeHtml(p.isRH() ? "selected=selected" : "")%>>Yes</option>
+			<option value="false" <%= StringEscapeUtils.escapeHtml(!p.isRH() ? "selected=selected" : "")%>>No
+			</option>
+		</select>
+	</tr>
 	<% } %>
 </table>
 <br />
 <% if (ultrasoundRec != null) { %>
-	<img src="/iTrust/image/ultrasounds/<%=ultrasoundRec.getImagePath()%>"
+	<img src="<%="/iTrust" + ImageStore.baseFilePath + File.separator + ultrasoundRec.getImagePath()%>" />
+	<br />
 <% } %>
 <br />
 </form>
