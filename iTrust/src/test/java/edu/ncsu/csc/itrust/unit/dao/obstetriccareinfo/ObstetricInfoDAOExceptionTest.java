@@ -1,14 +1,10 @@
-package edu.ncsu.csc.itrust.unit.dao.Obstetric;
+package edu.ncsu.csc.itrust.unit.dao.obstetriccareinfo;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO;
-import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
 import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
-import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 import junit.framework.TestCase;
-
-import java.util.Date;
 
 public class ObstetricInfoDAOExceptionTest extends TestCase {
     private ObstetricInfoDAO evilDAO = EvilDAOFactory.getEvilInstance().getObstetricInfoDAO();

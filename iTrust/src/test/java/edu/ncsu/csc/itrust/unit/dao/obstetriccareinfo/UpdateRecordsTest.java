@@ -1,9 +1,8 @@
-package edu.ncsu.csc.itrust.unit.dao.Obstetric;
+package edu.ncsu.csc.itrust.unit.dao.obstetriccareinfo;
 
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO;
 import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
-import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 import junit.framework.TestCase;
 
