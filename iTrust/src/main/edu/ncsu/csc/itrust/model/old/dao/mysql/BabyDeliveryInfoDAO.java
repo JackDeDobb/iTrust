@@ -9,7 +9,6 @@ import java.util.List;
 import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean;
-import edu.ncsu.csc.itrust.model.old.beans.ChildBirthVisitBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.BabyDeliveryInfoLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 
@@ -46,29 +45,7 @@ public class BabyDeliveryInfoDAO {
 			throw new DBException(e);
 		}
 	}
-	
-	/**
-	 * Updates a baby's delivery information for the given bean
-	 * 
-	 * @param bdInfoBean
-	 *            The BabyDeliveryInfo bean representing the new information for the
-	 *            delivery.
-	 * @throws DBException
-	 */
-	public void updateBabyDeliveryInfo(BabyDeliveryInfoBean bdInfoBean) throws DBException {
-		
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = loader.loadParameters(
-						conn.prepareStatement("UPDATE babyDeliveryInfo SET "
-							+"MID=?, childBirthVisitId=?, gender=?, birthTime=?, deliveryType=?, isEstimated=?  "
-							+"WHERE id=?"), bdInfoBean))
-		{
-			ps.setLong(7, bdInfoBean.getId());
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
+
 	/**
 	 * Returns a list of BabyDeliveryInfo given by the childBirthVisitId
 	 * @return A java.util.List of BabyDeliveryInfo Beans.
@@ -82,19 +59,6 @@ public class BabyDeliveryInfoDAO {
 			List<BabyDeliveryInfoBean> records = rs.next() ? loader.loadList(rs) : null;
 			rs.close();
 			return records;
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	public BabyDeliveryInfoBean getRecordById(long id) throws DBException {
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM babyDeliveryInfo WHERE id = ?")) {
-			ps.setLong(1, id);
-			ResultSet rs = ps.executeQuery();
-			BabyDeliveryInfoBean record = rs.next() ? loader.loadSingle(rs) : null;
-			rs.close();
-			return record;
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}

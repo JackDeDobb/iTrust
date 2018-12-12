@@ -81,7 +81,6 @@ public class UltrasoundRecordDAO {
 			rs.close();
 			return loadlist;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
