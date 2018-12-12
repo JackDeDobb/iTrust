@@ -52,11 +52,6 @@ public class AddRecordTest extends TestCase {
         assertEquals(info.getYearsOfConception(), 2);
 
         ObstetricInfoBean recent = obstetricInfoDAO.getMostRecentObstetricInfoForMID(1);
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getInitDate().getTime() > info.getInitDate().getTime()) {
-                info = list.get(i);
-            }
-        }
         assertEquals(recent.getRecordId(), info.getRecordId());
     }
 

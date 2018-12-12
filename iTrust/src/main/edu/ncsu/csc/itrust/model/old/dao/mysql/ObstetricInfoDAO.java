@@ -30,7 +30,7 @@ public class ObstetricInfoDAO {
     public ObstetricInfoBean getMostRecentObstetricInfoForMID(long mid) throws DBException {
         try (Connection conn = factory.getConnection();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM obstetricsInfo WHERE MID = ? ORDER BY " +
-                     " initDate DESC LIMIT 1")) {
+                     " recordID DESC LIMIT 1")) {
 
             ps.setLong(1, mid);
             ResultSet rs = ps.executeQuery();
