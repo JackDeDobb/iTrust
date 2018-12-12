@@ -147,6 +147,13 @@ public class UltrasoundServlet extends HttpServlet {
             Path absolutePath = Paths.get(baseFilePath, relImagePath);
             System.out.println(absolutePath.toString());
 
+            File fileHandle = absolutePath.toFile();
+
+            // Delete file if already exists.
+            if (fileHandle.exists()) {
+                fileHandle.delete();
+            }
+
             // Write file.
             try (InputStream fileContent = filePart.getInputStream()) {
                 Files.copy(fileContent, absolutePath);

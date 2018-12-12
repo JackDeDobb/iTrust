@@ -1,6 +1,7 @@
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
@@ -8,10 +9,7 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.server.ImageStore"%>
@@ -41,19 +39,13 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	
 	long patientMID = Long.parseLong(pidString);
 
-	System.out.println("Parsed patient MID");
-
 	ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
 	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
 	boolean isOBGYN = hcp.getSpecialty().equals("OB/GYN");
-
-	System.out.println("Fetched personnel details");
 	
 	EditPatientAction paction = new EditPatientAction(prodDAO,loggedInMID.longValue(), pidString);
 	PatientBean pb = paction.getPatient();
 	boolean isEligible = pb.getObstetricEligibility();
-
-	System.out.println("Fetched eligibility");
 
 	long visitId = 0;
 	if (request.getParameter("id") != null) {
@@ -69,8 +61,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	    return;
 	}
 
-	System.out.println("Parsed visit id");
-
 	ViewObstetricOfficeVisitAction viewVisitAction = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
 	EditObstetricOfficeVisitAction editVisitAction = new EditObstetricOfficeVisitAction(prodDAO, loggedInMID);
 	ObstetricOfficeVisitBean visit = viewVisitAction.getObstetricOfficeVisitByVisitId(visitId);
@@ -80,8 +70,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	if (!ultrasoundRecords.isEmpty()) {
 		ultrasoundRec = ultrasoundRecords.get(0);
 	}
-
-	System.out.println("Received ultrasound");
 
 	
 	// get visit date
