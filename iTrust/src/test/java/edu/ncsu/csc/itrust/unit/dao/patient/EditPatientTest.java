@@ -34,6 +34,7 @@ public class EditPatientTest extends TestCase {
 		p.setTopicalNotes("some topical notes");
 		p.setDateOfBirthStr("05/20/1984");
 		p.setDateOfDeactivationStr("05/21/1984");
+		p.setObstetricEligibility(true);
 		patientDAO.editPatient(p, 9000000003L);
 
 		p = patientDAO.getPatient(2);
@@ -65,6 +66,7 @@ public class EditPatientTest extends TestCase {
 		assertEquals("O-", p.getBloodType().getName());
 		assertEquals(Ethnicity.Caucasian, p.getEthnicity());
 		assertEquals(Gender.Male, p.getGender());
+		assertTrue(p.getObstetricEligibility());
 	}
 
 	public void testGetEmpty() throws Exception {
