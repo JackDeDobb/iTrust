@@ -1,10 +1,8 @@
 package edu.ncsu.csc.itrust.model.old.dao.mysql;
 
 import java.sql.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.time.temporal.TemporalUnit;
 import java.util.List;
 
@@ -12,7 +10,6 @@ import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.model.old.beans.ApptBean;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.ApptBeanLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
-import edu.ncsu.csc.itrust.model.personnel.Speciality;
 
 public class ApptDAO {
 

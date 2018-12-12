@@ -6,23 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import edu.ncsu.csc.itrust.DBUtil;
 import edu.ncsu.csc.itrust.exception.DBException;
-import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
 import edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean;
-import edu.ncsu.csc.itrust.model.old.beans.loaders.ObstetricOfficeVisitLoader;
 import edu.ncsu.csc.itrust.model.old.beans.loaders.UltrasoundRecordLoader;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 
 
 /**
  * Used for managing all static information related to a UltrasoundRecord. 
- * 
+ *
  * DAO stands for Database Access Object. All DAOs are intended to be
  * reflections of the database, that is, one DAO per table in the database (most
  * of the time). For more complex sets of queries, extra DAOs are added. DAOs
  * can assume that all data has been validated and is correct.
- * 
+ *
  * DAOs should never have setters or any other parameter to the constructor than
  * a factory. All DAOs should be accessed by DAOFactory (@see
  * {@link DAOFactory}) and every DAO should have a factory - for obtaining JDBC
@@ -31,10 +28,10 @@ import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
 public class UltrasoundRecordDAO {
 	private DAOFactory factory;
 	private UltrasoundRecordLoader ultrasoundLoader;
-	
+
 	/**
 	 * The typical constructor.
-	 * 
+	 *
 	 * @param factory
 	 *            The {@link DAOFactory} associated with this DAO, which is used
 	 *            for obtaining SQL connections, etc.
@@ -43,57 +40,32 @@ public class UltrasoundRecordDAO {
 		this.factory = factory;
 		this.ultrasoundLoader = new UltrasoundRecordLoader();
 	}
-	
-	
+
+
 	/**
 	 * Adds a ultrasound record into the ultrasoundRecord table
-	 * 
+	 *
 	 * @param ultrasoundBean
 	 *            The ultrasoundBean bean representing the new information to be added
 	 * @throws DBException
 	 */
 	public void addUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
-		
+
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ultrasoundLoader.loadParameters(conn.prepareStatement("INSERT INTO ultrasoundRecord"
-																							+"(id,visitId,crownRumpLength,biparietalDiameter,"
-																							+"headCircumference,femurLength,occipitofrontalDiameter,abdominalCircumference,"
-																							+"humerusLength,estimatedFetalWeight,imagePath)"
-																							+"VALUES(?,?,?,?,?,?,?,?,?,?,?)"), ultrasoundBean)) {
+			 PreparedStatement ps = ultrasoundLoader.loadParameters(conn.prepareStatement("INSERT INTO ultrasoundRecord"
+					 +"(id,visitId,crownRumpLength,biparietalDiameter,"
+					 +"headCircumference,femurLength,occipitofrontalDiameter,abdominalCircumference,"
+					 +"humerusLength,estimatedFetalWeight,imagePath)"
+					 +"VALUES(?,?,?,?,?,?,?,?,?,?,?)"), ultrasoundBean)) {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			throw new DBException(e);
 		}
 	}
-	
-	
-	/**
-	 * Updates a ultrasoundRecord information for the given id
-	 * 
-	 * @param ultrasoundBean
-	 *            The ultrasoundRecord bean representing the new information for the
-	 *            ultrasoundRecord.
-	 * @throws DBException
-	 */
-	public void editUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
-		
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ultrasoundLoader.loadEditParameters(conn.prepareStatement(
-						"UPDATE ultrasoundRecord SET "
-								+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
-								+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
-								+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
-								+"WHERE id=?"), ultrasoundBean)) {
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	
+
 	/**
 	 * Returns a list of UltrasoundRecords given by the visitID
-	 * 
+	 *
 	 * @param visitID
 	 *            The visitID of the ultrasoundRecords in question.
 	 * @return A java.util.List of Personnel Beans.
@@ -101,15 +73,14 @@ public class UltrasoundRecordDAO {
 	 */
 	public List<UltrasoundRecordBean> getUltrasoundRecordsByVisitID(long visitID) throws DBException {
 		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = conn.prepareStatement("SELECT * FROM ultrasoundRecord "
-						+ "WHERE visitId=? ORDER BY id DESC")) {
+			 PreparedStatement ps = conn.prepareStatement("SELECT * FROM ultrasoundRecord "
+					 + "WHERE visitId=? ORDER BY id DESC")) {
 			ps.setLong(1, visitID);
 			ResultSet rs = ps.executeQuery();
 			List<UltrasoundRecordBean> loadlist = ultrasoundLoader.loadList(rs);
 			rs.close();
 			return loadlist;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
