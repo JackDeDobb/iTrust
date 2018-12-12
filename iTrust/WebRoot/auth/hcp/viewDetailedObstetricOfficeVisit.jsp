@@ -1,7 +1,6 @@
 <%@page import="edu.ncsu.csc.itrust.BeanBuilder"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
-<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditObstetricOfficeVisitAction"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO"%>
@@ -9,7 +8,10 @@
 <%@page import="edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO"%>
 <%@page import="edu.ncsu.csc.itrust.exception.FormValidationException"%>
 <%@page import="edu.ncsu.csc.itrust.action.AddObstetricOfficeVisitAction"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.PatientBean"%>
 <%@page import="edu.ncsu.csc.itrust.model.old.beans.PersonnelBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean"%>
+<%@page import="edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean"%>
 <%@page import="edu.ncsu.csc.itrust.action.ViewPersonnelAction"%>
 <%@page import="edu.ncsu.csc.itrust.action.EditPatientAction"%>
 <%@page import="edu.ncsu.csc.itrust.server.ImageStore"%>
@@ -38,7 +40,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	}
 	
 	long patientMID = Long.parseLong(pidString);
-
+	
 	ViewPersonnelAction hcpAction = new ViewPersonnelAction(prodDAO, loggedInMID.longValue());
 	PersonnelBean hcp = hcpAction.getPersonnel(String.valueOf(loggedInMID.longValue()));
 	boolean isOBGYN = hcp.getSpecialty().equals("OB/GYN");
@@ -46,7 +48,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	EditPatientAction paction = new EditPatientAction(prodDAO,loggedInMID.longValue(), pidString);
 	PatientBean pb = paction.getPatient();
 	boolean isEligible = pb.getObstetricEligibility();
-
+	
 	long visitId = 0;
 	if (request.getParameter("id") != null) {
         String idParameter = request.getParameter("id");
@@ -54,13 +56,9 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
             visitId = Long.parseLong(idParameter);
         } catch (NumberFormatException nfe) {
             response.sendRedirect("viewObstetricOfficeVisits.jsp");
-            return;
         }
-	} else {
-	    response.sendRedirect("viewObstetricOfficeVisits.jsp");
-	    return;
 	}
-
+	
 	ViewObstetricOfficeVisitAction viewVisitAction = new ViewObstetricOfficeVisitAction(prodDAO, loggedInMID, patientMID);
 	EditObstetricOfficeVisitAction editVisitAction = new EditObstetricOfficeVisitAction(prodDAO, loggedInMID);
 	ObstetricOfficeVisitBean visit = viewVisitAction.getObstetricOfficeVisitByVisitId(visitId);
@@ -81,7 +79,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	
 	if (formIsFilled) {
 		ObstetricOfficeVisitBean newVisit = new ObstetricOfficeVisitBean();
-		newVisit.setVisitId(visitId);
 		newVisit.setPatientMID(visit.getPatientMID());
 		newVisit.setHcpMID(visit.getHcpMID());
 		newVisit.setObstetricRecordID(0);
@@ -91,6 +88,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		newVisit.setFetalHeartRate(Float.valueOf(request.getParameter("fetalHeartRate")));
 		newVisit.setLowLyingPlacentaObserved(Integer.valueOf(request.getParameter("lowLyingPlacentaObserved")));
 		newVisit.setNumberOfBabies(Integer.valueOf(request.getParameter("numberOfBabies")));
+		pb.setRHImmunization(Boolean.parseBoolean(request.getParameter("RHImmunization")));
+		paction.updateInformation(pb);
 
 		Date date = (Date) format.parse(request.getParameter("visitDate"));
 		Timestamp visitTimestamp = new Timestamp(date.getTime());
@@ -98,7 +97,6 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 		
 		try{
 			editVisitAction.updateVisitInformation(newVisit);
-			visit = newVisit;
 %>
 
 	<div align=center>
@@ -121,7 +119,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <div align=center>
 <p style="width: 50%; text-align:left;">Enter the following information to add a new obstetric office visit.</p>
 
-<form action="viewDetailedObstetricOfficeVisit.jsp?id=<%="" + visitId%>" method="post">
+<form action="addObstetricOfficeVisit.jsp" method="post">
 <input type="hidden" name="formIsFilled" value="true"><br />
 <table class="fTable">
 	<tr>
@@ -215,11 +213,10 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 	<br />
 <% } %>
 <br />
-<div align="center">
-	<input type="submit" name="editObstetricOfficeVisitAction" style="font-size: 16pt; font-weight: bold;"
-		   value="Save Obstetric Visit">
-</div>
 </form>
+<div align="center">
+	<input type="submit" name="editOfficeVisitAction" style="font-size: 16pt; font-weight: bold;" value="Save Obstetric Visit">
+</div>
 </div>
 <%
 	} 

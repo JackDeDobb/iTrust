@@ -2,6 +2,7 @@ package edu.ncsu.csc.itrust.action;
 
 import java.util.List;
 
+import edu.ncsu.csc.itrust.Messages;
 import edu.ncsu.csc.itrust.action.base.PatientBaseAction;
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.ITrustException;
@@ -40,7 +41,7 @@ public class AddBabyDeliveryInfoAction extends PatientBaseAction {
 		this.viewer = babyDeliveryInfoDAO.getBabyDeliveryInfosForMID(loggedInMID);
 		TransactionLogger.getInstance().logTransaction(TransactionType.ACTIVITY_FEED_VIEW, loggedInMID, 0L , "");
 	}
-
+	
 	/**
 	 * getViewablePateints returns a list of patient beans that should be viewed by this
 	 * patient.
@@ -56,12 +57,30 @@ public class AddBabyDeliveryInfoAction extends PatientBaseAction {
 		}
 		return result;
 	}
-
-	/**Add a baby delivery info
-	 *
-	 * @param info
-	 * @throws ITrustException
-	 */
+	
+	
+	
+	
+	public BabyDeliveryInfoBean getRecordById(long input) throws ITrustException{
+		BabyDeliveryInfoBean result;
+		try {
+			result = babyDeliveryInfoDAO.getRecordById(input);
+		} catch (DBException e) {
+			throw new ITrustException("Invalid Record");
+		}
+		return result;
+	}
+	
+	
+	public void updateRecord(BabyDeliveryInfoBean info) throws ITrustException{
+		try {
+			babyDeliveryInfoDAO.updateBabyDeliveryInfo(info);
+		} catch (DBException e) {
+			throw new ITrustException("Invalid Record");
+		}
+	}
+	
+	
 	public void addBabyDeliveryInfo(BabyDeliveryInfoBean info) throws ITrustException{
 		try {
 			babyDeliveryInfoDAO.addBabyDeliveryInfo(info);
@@ -69,5 +88,15 @@ public class AddBabyDeliveryInfoAction extends PatientBaseAction {
 			e.printStackTrace();
 			throw new ITrustException("Invalid Record");
 		}
+	}
+	
+	
+
+	public void logViewDemographics(Long mid, Long secondaryMID) {
+		TransactionLogger.getInstance().logTransaction(TransactionType.DEMOGRAPHICS_VIEW, mid, secondaryMID, "");
+	}
+	
+	public void logEditDemographics(Long mid, Long secondaryMID) {
+		TransactionLogger.getInstance().logTransaction(TransactionType.DEMOGRAPHICS_EDIT, mid, secondaryMID, "");
 	}
 }

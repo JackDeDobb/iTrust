@@ -45,6 +45,19 @@ public class EditObstetricOfficeVisitAction  {
 		transactionDAO.logTransaction(TransactionType.EDIT_OBSTETRIC_OFFICE_VISIT, loggedInMID, obsOfficeVisit.getPatientMID(),
 				obsOfficeVisit.getVisitId() + "");
 	}
+
+	public void updateUltrasoundInformation(ObstetricOfficeVisitBean obsOfficeVisit,
+											UltrasoundRecordBean ultrasoundRecord) throws DBException {
+		this.ultrasoundRecordDAO.editUltrasoundRecord(ultrasoundRecord);
+		transactionDAO.logTransaction(TransactionType.ULTRASOUND,
+				loggedInMID,
+				obsOfficeVisit.getPatientMID(),
+				obsOfficeVisit.getVisitId() + "");
+	}
+
+
+
+	
 }
 
 	

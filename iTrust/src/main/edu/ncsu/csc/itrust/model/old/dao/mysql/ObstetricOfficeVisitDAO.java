@@ -63,6 +63,7 @@ public class ObstetricOfficeVisitDAO {
 			ps.executeUpdate();
 			return DBUtil.getLastInsert(conn);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
@@ -81,7 +82,7 @@ public class ObstetricOfficeVisitDAO {
 		try (Connection conn = factory.getConnection();
 			 PreparedStatement ps = ObsVisitLoader.loadUpdateParameters(
 					 conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-							 +"obstetricRecordID=?, patientMID=?, hcpMID=?, weight=?, systolicBP=?, diastolicBP=?, "
+							 +"obstetricRecordID=?, patientMID=?, hcpMID=?, weight=?, systolicBP=?, diastolicBP=? "
 							 +"fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
 							 +"WHERE visitId=?"), ObsVisitBean))
 		{
@@ -90,6 +91,32 @@ public class ObstetricOfficeVisitDAO {
 			throw new DBException(e);
 		}
 	}
+
+
+	/**
+	 * Returns a list of ObstetricOfficeVisit given by the obstetricRecordID
+	 *
+	 * @param obstetricInitID
+	 *            The obstetricInitID of the visits in question.
+	 * @return A java.util.List of Personnel Beans.
+	 * @throws DBException
+	 */
+	public List<ObstetricOfficeVisitBean> getObstetricOfficeVisitByInitRecord(long obstetricInitID) throws DBException {
+		try (Connection conn = factory.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(
+					 "SELECT * FROM obstetricOfficeVisit "
+							 + "WHERE obstetricRecordID=?"))
+		{
+			ps.setLong(1, obstetricInitID);
+			ResultSet rs = ps.executeQuery();
+			List<ObstetricOfficeVisitBean> loadlist = ObsVisitLoader.loadList(rs);
+			rs.close();
+			return loadlist;
+		} catch (SQLException e) {
+			throw new DBException(e);
+		}
+	}
+
 
 	/**
 	 * Returns the visit's information for a given visitID
