@@ -66,31 +66,6 @@ public class UltrasoundRecordDAO {
 		}
 	}
 	
-	
-	/**
-	 * Updates a ultrasoundRecord information for the given id
-	 * 
-	 * @param ultrasoundBean
-	 *            The ultrasoundRecord bean representing the new information for the
-	 *            ultrasoundRecord.
-	 * @throws DBException
-	 */
-	public void editUltrasoundRecord(UltrasoundRecordBean ultrasoundBean) throws DBException {
-		
-		try (Connection conn = factory.getConnection();
-				PreparedStatement ps = ultrasoundLoader.loadEditParameters(conn.prepareStatement(
-						"UPDATE ultrasoundRecord SET "
-								+"id=?,visitId=?,crownRumpLength=?,biparietalDiameter=?,"
-								+"headCircumference=?,femurLength=?,occipitofrontalDiameter=?,abdominalCircumference=?,"
-								+"humerusLength=?,estimatedFetalWeight=?,imagePath=?"
-								+"WHERE id=?"), ultrasoundBean)) {
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new DBException(e);
-		}
-	}
-	
-	
 	/**
 	 * Returns a list of UltrasoundRecords given by the visitID
 	 * 
