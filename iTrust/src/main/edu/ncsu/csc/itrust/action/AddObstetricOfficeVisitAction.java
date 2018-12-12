@@ -2,28 +2,14 @@ package edu.ncsu.csc.itrust.action;
 
 import edu.ncsu.csc.itrust.exception.DBException;
 import edu.ncsu.csc.itrust.exception.FormValidationException;
-import edu.ncsu.csc.itrust.model.old.beans.ApptBean;
-import edu.ncsu.csc.itrust.model.old.beans.ApptTypeBean;
-import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
-import edu.ncsu.csc.itrust.model.old.beans.ObstetricOfficeVisitBean;
-import edu.ncsu.csc.itrust.model.old.beans.PatientBean;
-import edu.ncsu.csc.itrust.model.old.beans.UltrasoundRecordBean;
+import edu.ncsu.csc.itrust.model.old.beans.*;
 import edu.ncsu.csc.itrust.model.old.dao.DAOFactory;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.ApptDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.ApptTypeDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricOfficeVisitDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.PatientDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.TransactionDAO;
-import edu.ncsu.csc.itrust.model.old.dao.mysql.UltrasoundRecordDAO;
+import edu.ncsu.csc.itrust.model.old.dao.mysql.*;
 import edu.ncsu.csc.itrust.model.old.enums.AppointmentType;
 import edu.ncsu.csc.itrust.model.old.enums.TransactionType;
 import edu.ncsu.csc.itrust.model.old.validate.ObstetricOfficeVisitValidator;
 import edu.ncsu.csc.itrust.model.old.validate.UltrasoundRecordValidator;
 
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
@@ -31,13 +17,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
  * Class that defines the new obstetric office visit `document` action.
  */
 public class AddObstetricOfficeVisitAction {
+    private final static Map<DayOfWeek, Integer> DAY_OFFSET = new HashMap<>();
+
+    static {
+        DAY_OFFSET.put(DayOfWeek.SUNDAY, 1);
+        DAY_OFFSET.put(DayOfWeek.THURSDAY, 4);
+        DAY_OFFSET.put(DayOfWeek.FRIDAY, 3);
+    }
+
     private ObstetricOfficeVisitDAO obstetricOfficeVisitDAO;
     private ApptDAO apptDAO;
     private PatientDAO patientDAO;
@@ -47,7 +43,6 @@ public class AddObstetricOfficeVisitAction {
     private TransactionDAO transactionDAO;
     private ObstetricInfoDAO obstetricInfoDAO;
     private ObstetricOfficeVisitValidator obsOfficeVisitValidator;
-
     private long loggedInMID;
 
     public AddObstetricOfficeVisitAction(DAOFactory factory, long loggedInMID) {
@@ -68,17 +63,9 @@ public class AddObstetricOfficeVisitAction {
         this.loggedInMID = loggedInMID;
     }
 
-    private final static Map<DayOfWeek, Integer> DAY_OFFSET = new HashMap<>();
-    static {
-        DAY_OFFSET.put(DayOfWeek.SUNDAY, 1);
-        DAY_OFFSET.put(DayOfWeek.THURSDAY, 4);
-        DAY_OFFSET.put(DayOfWeek.FRIDAY, 3);
-    }
-
     /**
      * Add obstetric office visit,
      * and schedules next office visit.
-     *
      */
     public long addObstetricOfficeVisit(ObstetricOfficeVisitBean obsOfficeVisit) throws DBException,
             FormValidationException {
