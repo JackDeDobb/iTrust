@@ -82,12 +82,13 @@ public class ObstetricOfficeVisitDAO {
 		try (Connection conn = factory.getConnection();
 			 PreparedStatement ps = ObsVisitLoader.loadUpdateParameters(
 					 conn.prepareStatement("UPDATE obstetricOfficeVisit SET "
-							 +"obstetricRecordID=?, patientMID=?, hcpMID=?, weight=?, systolicBP=?, diastolicBP=? "
+							 +"obstetricRecordID=?, patientMID=?, hcpMID=?, weight=?, systolicBP=?, diastolicBP=?, "
 							 +"fetalHeartRate=?, lowLyingPlacentaObserved=?, numberOfBabies=?, visitDate=? "
 							 +"WHERE visitId=?"), ObsVisitBean))
 		{
 			ps.executeUpdate();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DBException(e);
 		}
 	}
