@@ -116,7 +116,7 @@ public class ObstetricCareRecordTest extends iTrustSeleniumTest{
 		driver.findElement(By.name("editRecordAction")).click();
 		
 		System.out.println(driver.getCurrentUrl());
-		System.out.println(driver.getPageSource().contains("Invalid LMP Date"));
+		System.out.println(driver.getPageSource());
 		try {
 			assertEquals("http://localhost:8080/iTrust/auth/getPatientID.jsp?forward=hcp-uap/obstetricCare.jsp", driver.getCurrentUrl());
 		} catch (Error e) {

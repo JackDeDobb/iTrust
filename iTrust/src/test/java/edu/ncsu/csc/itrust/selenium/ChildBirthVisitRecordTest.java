@@ -105,7 +105,7 @@ public class ChildBirthVisitRecordTest extends iTrustSeleniumTest{
 			driver.findElement(By.xpath("//input[@value='10']")).submit();
 		}
 		
-		assertTrue(driver.getPageSource().contains("Add New Child Birth Record"));
+		assertTrue(driver.getPageSource().contains("Add New Child Birth Visit Record"));
 		Boolean noNewRecords = false;
 		if(driver.getPageSource().contains("You have no obstetric records for this patient!")) {
 			noNewRecords = true;
@@ -128,9 +128,5 @@ public class ChildBirthVisitRecordTest extends iTrustSeleniumTest{
 
 	}
 
-	
-	
-	
-	
 
 }
