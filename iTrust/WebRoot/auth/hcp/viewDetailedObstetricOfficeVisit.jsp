@@ -119,7 +119,7 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <div align=center>
 <p style="width: 50%; text-align:left;">Enter the following information to add a new obstetric office visit.</p>
 
-<form action="addObstetricOfficeVisit.jsp" method="post">
+<form action="viewDetailedObstetricOfficeVisit.jsp" method="post">
 <input type="hidden" name="formIsFilled" value="true"><br />
 <table class="fTable">
 	<tr>
@@ -215,7 +215,8 @@ pageTitle = "iTrust - Add Obsetric Office Visit";
 <br />
 </form>
 <div align="center">
-	<input type="submit" name="editOfficeVisitAction" style="font-size: 16pt; font-weight: bold;" value="Save Obstetric Visit">
+	<input type="submit" name="editObstetricOfficeVisitAction" style="font-size: 16pt; font-weight: bold;"
+		   value="Save Obstetric Visit">
 </div>
 </div>
 <%
