@@ -3,6 +3,7 @@ package edu.ncsu.csc.itrust.unit.dao.obstetriccareinfo;
 import edu.ncsu.csc.itrust.model.old.beans.ObstetricInfoBean;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.ObstetricInfoDAO;
 import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 import junit.framework.TestCase;
 
@@ -12,6 +13,13 @@ import java.util.List;
 
 public class AddRecordTest extends TestCase {
     private ObstetricInfoDAO obstetricInfoDAO = TestDAOFactory.getTestInstance().getObstetricInfoDAO();
+
+    @Override
+    protected void setUp() throws Exception {
+        TestDataGenerator gen = new TestDataGenerator();
+        gen.clearAllTables();
+        gen.appointmentType();
+    }
 
 
     public void testAddRecord() throws Exception {
@@ -44,8 +52,8 @@ public class AddRecordTest extends TestCase {
         assertEquals(info.getYearsOfConception(), 2);
 
         ObstetricInfoBean recent = obstetricInfoDAO.getMostRecentObstetricInfoForMID(1);
-        for(int i = 0; i < list.size(); i++) {
-            if (list.get(i).getInitDate().getTime() >= info.getInitDate().getTime()) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getInitDate().getTime() > info.getInitDate().getTime()) {
                 info = list.get(i);
             }
         }

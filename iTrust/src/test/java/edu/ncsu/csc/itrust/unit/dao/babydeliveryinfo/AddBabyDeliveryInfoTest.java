@@ -1,12 +1,10 @@
 package edu.ncsu.csc.itrust.unit.dao.babydeliveryinfo;
 
-import com.sun.jna.platform.win32.Sspi;
-import cucumber.api.java.it.Ma;
 import edu.ncsu.csc.itrust.model.old.beans.BabyDeliveryInfoBean;
-import edu.ncsu.csc.itrust.model.old.beans.ChildBirthVisitBean;
 import edu.ncsu.csc.itrust.model.old.dao.mysql.BabyDeliveryInfoDAO;
 import edu.ncsu.csc.itrust.model.old.enums.DeliveryType;
 import edu.ncsu.csc.itrust.model.old.enums.Gender;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
 import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
 import junit.framework.TestCase;
 
@@ -15,6 +13,13 @@ import java.util.List;
 
 public class AddBabyDeliveryInfoTest extends TestCase {
     BabyDeliveryInfoDAO babyDeliveryInfoDAO = TestDAOFactory.getTestInstance().getBabyDeliveryInfoDAO();
+
+    @Override
+    protected void setUp() throws Exception {
+        TestDataGenerator gen = new TestDataGenerator();
+        gen.clearAllTables();
+        gen.appointmentType();
+    }
 
     public void testAddRecord() throws Exception {
         BabyDeliveryInfoBean d = new BabyDeliveryInfoBean();
@@ -33,7 +38,7 @@ public class AddBabyDeliveryInfoTest extends TestCase {
         assertEquals(DeliveryType.Miscarriage.getName(), d.getDeliveryType().toString());
         assertEquals(888, d.getChildBirthVisitId());
         //ignore millisecond
-        assertEquals(Math.rint(curr.getTime()/1000.0), Math.rint(d.getBirthTime().getTime()/1000.0));
+        assertEquals(Math.rint(curr.getTime() / 1000.0), Math.rint(d.getBirthTime().getTime() / 1000.0));
         assertEquals(Gender.Female.getName(), d.getGender().toString());
         assertTrue(d.isEstimated());
     }

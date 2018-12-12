@@ -152,9 +152,9 @@ public class ApptDAOTest extends TestCase {
 	public void testGetRemindersInNDays() throws Exception {
 		List<ApptBean> list = apptDAO.getApptForReminders(10);
 		assertEquals(list.size(), 0);
-		list = apptDAO.getApptForReminders(10);
 		apptDAO.scheduleAppt(a2);
 		apptDAO.scheduleAppt(a3);
-		assertNotSame(list.size(), 2);
+		list = apptDAO.getApptForReminders(10);
+		assertEquals(list.size(), 2);
 	}
 }
